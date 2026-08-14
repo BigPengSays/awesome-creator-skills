@@ -154,12 +154,20 @@ function coverageLine(skills: Skill[], taxonomy: Taxonomy): string {
     .filter(([key]) => typeKeys.has(key))
     .map(([, meta]) => meta.label);
   const platformPart = platforms.length
-    ? `覆盖${platforms.join("、")}`
-    : "按发布渠道整理";
-  const typePart = types.length
-    ? `内容形态包括${types.join("、")}。`
-    : "";
-  return `当前精选 **${skills.length}** 项，${platformPart}。${typePart ? `\n\n${typePart}` : ""}`;
+    ? platforms.join(" · ")
+    : "多平台";
+  const typePart = types.length ? types.join(" · ") : "";
+  return `**${skills.length}** 个精选 skill · ${platformPart}${typePart ? `\n\n${typePart}` : ""}`;
+}
+
+function introBlock(skills: Skill[], taxonomy: Taxonomy): string {
+  return `> 内容创作者的一站式 **Agent Skills 精选目录** — 写文章、做封面、发视频、做 PPT，一条命令装进 Cursor、Claude Code 等环境。
+
+手工筛选真正服务于**内容生产**的 skill，按发布渠道与创作形态整理，帮你少踩坑、少搜 repo。
+
+${coverageLine(skills, taxonomy)}
+
+> **持续更新中** · [**欢迎投稿**](CONTRIBUTING.md)（发现好用的创作 skill？提 Issue 或 PR）`;
 }
 
 export function renderReadme(): string {
@@ -238,9 +246,7 @@ export function renderReadme(): string {
 
 # 创作技能合集
 
-面向内容创作者的 **精选 Agent Skills** 目录。只收录与内容生产直接相关、可一键安装到 Cursor、Claude Code 等环境的技能，按发布渠道与内容形态整理。
-
-${coverageLine(platformSkills, taxonomy)}
+${introBlock(skills, taxonomy)}
 
 \`\`\`bash
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
