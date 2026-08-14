@@ -128,27 +128,17 @@ function flatSectionFor(
 
 function renderToc(sections: TocSection[]): string {
   const lines = ["## 目录", ""];
-  const leafSections: TocSection[] = [];
 
   for (const section of sections) {
-    if (section.subsections.length === 0) {
-      leafSections.push(section);
-      continue;
-    }
     lines.push(`**[${section.label}](#${section.anchor})**`);
-    const subs = section.subsections
-      .map((sub) => `[${sub.label}](#${sub.anchor})`)
-      .join(" · ");
-    lines.push(subs, "");
-  }
-
-  if (leafSections.length > 0) {
-    lines.push(
-      leafSections
-        .map((section) => `**[${section.label}](#${section.anchor})**`)
-        .join(" · "),
-      "",
-    );
+    if (section.subsections.length > 0) {
+      const subs = section.subsections
+        .map((sub) => `[${sub.label}](#${sub.anchor})`)
+        .join(" · ");
+      lines.push("");
+      lines.push(`> ${subs}`);
+    }
+    lines.push("");
   }
 
   return lines.join("\n");
