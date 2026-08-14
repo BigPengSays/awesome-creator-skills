@@ -235,6 +235,24 @@ skills:
     license: AGPL-3.0
     sync: true
     status: active
+  - id: ian-xiaohei-illustrations
+    name: ian-xiaohei-illustrations
+    summary: 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/helloianneo/ian-xiaohei-illustrations
+      path: ian-xiaohei-illustrations
+      ref: main
+      pinned_commit: 91b560849e8f883922cc2fa8a358a668caa94105
+    license: MIT
+    sync: true
+    status: active
   - id: md2wechat
     name: md2wechat
     summary: 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。

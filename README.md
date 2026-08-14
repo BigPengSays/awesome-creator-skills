@@ -4,7 +4,7 @@
 
 面向内容创作者的 **精选 Agent Skills** 目录。只收录与内容生产直接相关、可一键安装到 Cursor、Claude Code 等环境的技能，按发布渠道与内容形态整理。
 
-当前精选 **21** 项，覆盖微信公众号、小红书、YouTube、哔哩哔哩。
+当前精选 **22** 项，覆盖微信公众号、小红书、YouTube、哔哩哔哩。
 
 内容形态包括文章、图片、图文、视频、幻灯片、漫画、信息图。
 
@@ -73,6 +73,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-infographic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-infographic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
 - [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
+- [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
 - [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
 ## 按创作类型
 
@@ -84,6 +85,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 - [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。
 - [baoyu-cover-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-cover-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。
+- [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
 - [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
 - [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
 - [oil-cover](https://github.com/oil-oil/oil-cover) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-cover)](https://github.com/oil-oil/oil-cover) — 生成小红书和 B 站 AI 工具实操视频封面，支持脚本模式与 Agent 自主模式、真实视频证据、三画幅输出和可选创作者头像。
@@ -158,6 +160,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill '*'
 - https://github.com/JimLiu/baoyu-skills
 - https://github.com/geekjourneyx/md2wechat-skill
 - https://github.com/gnipbao/story-to-handdrawn-video
+- https://github.com/helloianneo/ian-xiaohei-illustrations
 - https://github.com/liyue-aigc/xianxia-visual-director
 - https://github.com/oil-oil/oil-cover
 - https://github.com/oil-oil/oil-tone
