@@ -1,4 +1,40 @@
 skills:
+  - id: baoyu-article-illustrator
+    name: baoyu-article-illustrator
+    summary: 为文章配图
+    platforms:
+      - generic
+    content_types:
+      - article
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-article-illustrator
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-comic
+    name: baoyu-comic
+    summary: 生成知识漫画
+    platforms:
+      - generic
+    content_types:
+      - comic
+    formats:
+      - storytelling
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-comic
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
   - id: baoyu-cover-image
     name: baoyu-cover-image
     summary: 生成文章封面图
@@ -11,6 +47,23 @@ skills:
       type: git
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-cover-image
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-infographic
+    name: baoyu-infographic
+    summary: 生成高密度信息图
+    platforms:
+      - generic
+    content_types:
+      - infographic
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-infographic
       ref: main
       pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
     license: MIT
@@ -34,6 +87,24 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: baoyu-post-to-weibo
+    name: baoyu-post-to-weibo
+    summary: 发布微博与头条文章
+    platforms:
+      - weibo
+    content_types:
+      - article
+      - image-text
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-post-to-weibo
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
   - id: baoyu-post-to-x
     name: baoyu-post-to-x
     summary: 发布推文与 X Articles
@@ -46,6 +117,23 @@ skills:
       type: git
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-post-to-x
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-slide-deck
+    name: baoyu-slide-deck
+    summary: 生成幻灯片
+    platforms:
+      - generic
+    content_types:
+      - slides
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-slide-deck
       ref: main
       pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
     license: MIT
@@ -85,6 +173,41 @@ skills:
       path: skills/baoyu-youtube-transcript
       ref: main
       pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: md2wechat
+    name: md2wechat
+    summary: Markdown 转微信公众号排版
+    platforms:
+      - wechat-oa
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/geekjourneyx/md2wechat-skill
+      path: skills/md2wechat
+      ref: main
+      pinned_commit: d656438f1e9994fb7f4560c43d51eb7fd0a1ceb3
+    license: MIT
+    sync: true
+    status: active
+  - id: youtube-clipper
+    name: youtube-clipper
+    summary: YouTube 视频切片
+    platforms:
+      - youtube
+    content_types:
+      - video
+    formats:
+      - tutorial
+    source:
+      type: git
+      repo: https://github.com/op7418/youtube-clipper-skill
+      path: .
+      ref: main
+      pinned_commit: f31f077ee0905c95a510a6f34bbd0c3c85b15129
     license: MIT
     sync: true
     status: active

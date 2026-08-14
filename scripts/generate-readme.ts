@@ -2,21 +2,8 @@ import { writeFileSync } from "node:fs";
 import { loadCatalog, loadStars, loadTaxonomy } from "./lib/catalog.ts";
 import { githubRepoKey, parseGithubRepo } from "./lib/github.ts";
 import { README_MD } from "./lib/paths.ts";
+import { sortSkills } from "./lib/rank.ts";
 import type { Skill, StarsCache, Taxonomy } from "./lib/types.ts";
-
-function starsFor(skill: Skill, stars: StarsCache): number {
-  const key = githubRepoKey(skill.source.repo);
-  if (!key) return 0;
-  return stars[key]?.stars ?? 0;
-}
-
-function sortSkills(skills: Skill[], stars: StarsCache): Skill[] {
-  return [...skills].sort((a, b) => {
-    const starDiff = starsFor(b, stars) - starsFor(a, stars);
-    if (starDiff !== 0) return starDiff;
-    return a.id.localeCompare(b.id);
-  });
-}
 
 function displaySummary(text: string): string {
   const one = text.replace(/\s+/g, " ").trim();
@@ -102,7 +89,7 @@ export function renderReadme(): string {
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 \`\`\`
 
-镜像版权仍归原作者。GitHub 来源用 [badgen](https://badgen.net) star 徽章展示源仓库实时 star；分类内仍按缓存的 star 数从高到低排列。
+镜像版权仍归原作者。GitHub 来源用 [badgen](https://badgen.net) star 徽章展示源仓库实时 star；分类内按 **star × 时间衰减** 排序（约 21 天半衰期：1k star 且 7 天内有提交，会排在 4k star 但已两个月未更新的前面）。
 
 ${toc}
 

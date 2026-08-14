@@ -59,10 +59,64 @@ export async function githubJson<T>(url: string): Promise<T | null> {
 }
 
 export async function getRepoStars(owner: string, repo: string): Promise<number | null> {
-  const data = await githubJson<{ stargazers_count: number }>(
+  const stats = await getRepoStats(owner, repo);
+  return stats?.stars ?? null;
+}
+
+export interface RepoStats {
+  stars: number;
+  pushed_at?: string;
+}
+
+export async function getRepoStats(owner: string, repo: string): Promise<RepoStats | null> {
+  const data = await githubJson<{ stargazers_count: number; pushed_at?: string }>(
     `https://api.github.com/repos/${owner}/${repo}`,
   );
-  return data?.stargazers_count ?? null;
+  if (data && typeof data.stargazers_count === "number") {
+    return { stars: data.stargazers_count, pushed_at: data.pushed_at };
+  }
+  const [stars, pushed_at] = await Promise.all([
+    fetchShieldsStars(owner, repo),
+    fetchLatestCommitDate(owner, repo),
+  ]);
+  if (stars == null && !pushed_at) return null;
+  return { stars: stars ?? 0, pushed_at };
+}
+
+async function fetchShieldsStars(owner: string, repo: string): Promise<number | null> {
+  try {
+    const res = await fetch(`https://img.shields.io/github/stars/${owner}/${repo}.json`, {
+      headers: { "User-Agent": "awesome-creator-skills" },
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { value?: string; message?: string };
+    const raw = data.value ?? data.message ?? "";
+    const match = raw.trim().match(/^([\d.]+)\s*([kKmMbB])?$/);
+    if (!match) {
+      const n = Number(raw.replace(/,/g, ""));
+      return Number.isFinite(n) ? n : null;
+    }
+    const base = Number(match[1]);
+    const suffix = (match[2] || "").toLowerCase();
+    const factor = suffix === "k" ? 1_000 : suffix === "m" ? 1_000_000 : suffix === "b" ? 1_000_000_000 : 1;
+    return Math.round(base * factor);
+  } catch {
+    return null;
+  }
+}
+
+async function fetchLatestCommitDate(owner: string, repo: string): Promise<string | undefined> {
+  try {
+    const res = await fetch(`https://github.com/${owner}/${repo}/commits.atom`, {
+      headers: { "User-Agent": "awesome-creator-skills", Accept: "application/atom+xml" },
+    });
+    if (!res.ok) return undefined;
+    const xml = await res.text();
+    const match = xml.match(/<updated>([^<]+)<\/updated>/);
+    return match?.[1];
+  } catch {
+    return undefined;
+  }
 }
 
 export async function getRepoLicense(owner: string, repo: string): Promise<string | undefined> {

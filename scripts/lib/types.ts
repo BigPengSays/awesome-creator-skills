@@ -37,6 +37,7 @@ export interface Taxonomy {
 
 export interface StarRecord {
   stars: number;
+  pushed_at?: string;
   fetched_at: string;
 }
 

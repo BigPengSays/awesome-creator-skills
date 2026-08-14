@@ -10,7 +10,7 @@
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 ```
 
-镜像版权仍归原作者。GitHub 来源用 [badgen](https://badgen.net) star 徽章展示源仓库实时 star；分类内仍按缓存的 star 数从高到低排列。
+镜像版权仍归原作者。GitHub 来源用 [badgen](https://badgen.net) star 徽章展示源仓库实时 star；分类内按 **star × 时间衰减** 排序（约 21 天半衰期：1k star 且 7 天内有提交，会排在 4k star 但已两个月未更新的前面）。
 
 - [按平台](#按平台)
 - [按创作类型](#按创作类型)
@@ -24,6 +24,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 ### 微信公众号
 
 - [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
+- [md2wechat](skills/md2wechat/) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — Markdown 转微信公众号排版
 
 ### 小红书
 
@@ -32,38 +33,62 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 ### YouTube
 
 - [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
+- [youtube-clipper](skills/youtube-clipper/) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — YouTube 视频切片
 
 ### X
 
 - [baoyu-post-to-x](skills/baoyu-post-to-x/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布推文与 X Articles
 
+### 微博
+
+- [baoyu-post-to-weibo](skills/baoyu-post-to-weibo/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博与头条文章
+
 ### 通用
 
+- [baoyu-article-illustrator](skills/baoyu-article-illustrator/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为文章配图
+- [baoyu-comic](skills/baoyu-comic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成知识漫画
 - [baoyu-cover-image](skills/baoyu-cover-image/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成文章封面图
+- [baoyu-infographic](skills/baoyu-infographic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成高密度信息图
+- [baoyu-slide-deck](skills/baoyu-slide-deck/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成幻灯片
 
 ## 按创作类型
 
 ### 文章
 
+- [baoyu-article-illustrator](skills/baoyu-article-illustrator/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为文章配图
 - [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
+- [baoyu-post-to-weibo](skills/baoyu-post-to-weibo/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博与头条文章
 - [baoyu-post-to-x](skills/baoyu-post-to-x/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布推文与 X Articles
+- [md2wechat](skills/md2wechat/) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — Markdown 转微信公众号排版
 
 ### 图片
 
+- [baoyu-article-illustrator](skills/baoyu-article-illustrator/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为文章配图
 - [baoyu-cover-image](skills/baoyu-cover-image/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成文章封面图
 - [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
 
 ### 图文
 
 - [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
+- [baoyu-post-to-weibo](skills/baoyu-post-to-weibo/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博与头条文章
 - [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
 
 ### 视频
 
 - [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
+- [youtube-clipper](skills/youtube-clipper/) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — YouTube 视频切片
+
+### 幻灯片
+
+- [baoyu-slide-deck](skills/baoyu-slide-deck/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成幻灯片
+
+### 漫画
+
+- [baoyu-comic](skills/baoyu-comic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成知识漫画
 
 ### 信息图
 
+- [baoyu-infographic](skills/baoyu-infographic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成高密度信息图
 - [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
 
 ## 按创作形式
@@ -71,6 +96,11 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 ### 教程
 
 - [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
+- [youtube-clipper](skills/youtube-clipper/) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — YouTube 视频切片
+
+### 叙事
+
+- [baoyu-comic](skills/baoyu-comic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成知识漫画
 
 ## 安装
 
@@ -93,12 +123,14 @@ npx skills add BigPengSays/awesome-creator-skills --skill '*'
 - 分类标签、收录标准见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 - 目录由 `catalog/skills.yaml` + `catalog/stars.yaml` 生成，请勿手改本 README 的分类列表。
 
-源仓库 star 缓存更新于 `2026-08-14T02:14:17.184Z`。
+源仓库 star 缓存更新于 `2026-08-14T03:02:38.115Z`。
 
 ## 上游归属
 
 Vendored skills remain the work of their original authors. See each skill's `SOURCE.md` and:
 
 - https://github.com/JimLiu/baoyu-skills
+- https://github.com/geekjourneyx/md2wechat-skill
+- https://github.com/op7418/youtube-clipper-skill
 
 This repository's own scripts and catalog are MIT licensed. Third-party skills keep their upstream licenses.
