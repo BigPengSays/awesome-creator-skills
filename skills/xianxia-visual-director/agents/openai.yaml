@@ -1,0 +1,4 @@
+interface:
+  display_name: "东方仙侠视觉导演"
+  short_description: "继承统一仙界总则，生成多画幅仙侠场景、神域城市与东方苍穹巨构提示词"
+  default_prompt: "使用 $xianxia-visual-director 按共享仙界总则，将我的场景构想扩展为指定画幅的东方仙侠电影提示词。"

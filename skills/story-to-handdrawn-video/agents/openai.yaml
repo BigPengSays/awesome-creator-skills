@@ -1,0 +1,4 @@
+interface:
+  display_name: "故事转手绘动画"
+  short_description: "把中文故事或有序图片转换成 20 种风格的静音手绘动画"
+  default_prompt: "使用 $story-to-handdrawn-video 从内置 20 种风格中选择最适合的一种，把这段故事生成静音手绘动画。"

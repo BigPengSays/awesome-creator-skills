@@ -176,6 +176,70 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: guizang-material-illustration
+    name: guizang-material-illustration
+    summary: 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
+    platforms:
+      - wechat-oa
+      - xiaohongshu
+      - generic
+    content_types:
+      - image
+      - article
+      - infographic
+    formats:
+      - tutorial
+    source:
+      type: git
+      repo: https://github.com/op7418/guizang-material-illustration
+      path: .
+      ref: main
+      pinned_commit: cf26e194ce075cd205329abab29cc71fda3e78b2
+    sync: true
+    status: active
+  - id: guizang-ppt-skill
+    name: guizang-ppt-skill
+    summary: 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
+    platforms:
+      - generic
+    content_types:
+      - infographic
+      - slides
+      - image-text
+      - image
+      - article
+    formats:
+      - storytelling
+    source:
+      type: git
+      repo: https://github.com/op7418/guizang-ppt-skill
+      path: .
+      ref: main
+      pinned_commit: c91369c449d34755d320a8b81d0734000d99d1ab
+    license: AGPL-3.0
+    sync: true
+    status: active
+  - id: guizang-social-card-skill
+    name: guizang-social-card-skill
+    summary: 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
+    platforms:
+      - wechat-oa
+      - xiaohongshu
+    content_types:
+      - image-text
+      - image
+      - video
+    formats:
+      - tutorial
+    source:
+      type: git
+      repo: https://github.com/op7418/guizang-social-card-skill
+      path: .
+      ref: main
+      pinned_commit: cf4b810fac1c73fb65a2bb31d8c9278d82cbc4c5
+    license: AGPL-3.0
+    sync: true
+    status: active
   - id: md2wechat
     name: md2wechat
     summary: 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。
@@ -190,6 +254,84 @@ skills:
       path: skills/md2wechat
       ref: main
       pinned_commit: d656438f1e9994fb7f4560c43d51eb7fd0a1ceb3
+    license: MIT
+    sync: true
+    status: active
+  - id: oil-cover
+    name: oil-cover
+    summary: 生成小红书和 B 站 AI 工具实操视频封面，支持脚本模式与 Agent 自主模式、真实视频证据、三画幅输出和可选创作者头像。
+    platforms:
+      - xiaohongshu
+    content_types:
+      - image
+      - video
+      - article
+    formats:
+      - talking-head
+    source:
+      type: git
+      repo: https://github.com/oil-oil/oil-cover
+      path: .
+      ref: main
+      pinned_commit: 3a882c051532b7225879079117c0efbed5e1b5dd
+    license: MIT
+    sync: true
+    status: active
+  - id: oil-tone
+    name: oil-tone
+    summary: 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
+    platforms:
+      - wechat-oa
+      - xiaohongshu
+    content_types:
+      - slides
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/oil-oil/oil-tone
+      path: skills/oil-tone
+      ref: main
+      pinned_commit: 07eb56baddf5e0b7dd33a09cfd93bfc48b1e81c3
+    license: MIT
+    sync: true
+    status: active
+  - id: story-to-handdrawn-video
+    name: story-to-handdrawn-video
+    summary: 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
+    platforms:
+      - generic
+    content_types:
+      - comic
+      - image
+      - video
+    formats:
+      - whiteboard-video
+    source:
+      type: git
+      repo: https://github.com/gnipbao/story-to-handdrawn-video
+      path: skill-package/story-to-handdrawn-video
+      ref: main
+      pinned_commit: fbab5b27f4f0db61739d86f78000a39eeaa692d3
+    license: MIT
+    sync: true
+    status: active
+  - id: video-publisher
+    name: video-publisher
+    summary: 用 Ego Lite 把同一视频包并行投递到小红书、抖音、B 站与视频号草稿，含文案、标签、封面与发布前校验。
+    platforms:
+      - wechat-oa
+      - xiaohongshu
+      - bilibili
+    content_types:
+      - video
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/oil-oil/video-publisher-skill
+      path: video-publisher
+      ref: main
+      pinned_commit: eb297bc1c1c5a61d46fb2e04453cbeeeebb1de59
     license: MIT
     sync: true
     status: active
@@ -209,6 +351,23 @@ skills:
       ref: main
       pinned_commit: 5c730c688f2c7e64f798d611608997ffba43813d
     license: MIT
+    sync: true
+    status: active
+  - id: xianxia-visual-director
+    name: xianxia-visual-director
+    summary: 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats:
+      - storytelling
+    source:
+      type: git
+      repo: https://github.com/liyue-aigc/xianxia-visual-director
+      path: xianxia-visual-director
+      ref: main
+      pinned_commit: bd886174f4d84659f2381c4f5baa610003c5bdda
     sync: true
     status: active
   - id: youtube-clipper
