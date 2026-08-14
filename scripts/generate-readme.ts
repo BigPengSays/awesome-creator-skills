@@ -28,7 +28,7 @@ function starBadge(repoUrl: string): string {
 
 function skillLine(skill: Skill): string {
   const badge = skill.source.type === "git" ? starBadge(skill.source.repo) : "";
-  return `- [${skill.name}](${sourceSkillUrl(skill)})${badge} — ${displaySummary(skill.summary)} · [镜像](skills/${skill.id}/)`;
+  return `- [${skill.name}](${sourceSkillUrl(skill)})${badge} — ${displaySummary(skill.summary)}`;
 }
 
 function sectionFor(
@@ -97,8 +97,6 @@ export function renderReadme(): string {
 面向内容创作者的 **精选 Agent Skills** 目录。只收录与内容生产直接相关、可一键安装到 Cursor、Claude Code 等环境的技能，按发布渠道与内容形态整理。
 
 ${coverageLine(skills, taxonomy)}
-
-名称指向源技能原文，star 徽章指向源仓库，\`镜像\` 为本目录中的可安装拷贝。
 
 \`\`\`bash
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
