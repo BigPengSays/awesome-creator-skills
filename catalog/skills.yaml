@@ -262,6 +262,7 @@ skills:
     summary: 生成小红书和 B 站 AI 工具实操视频封面，支持脚本模式与 Agent 自主模式、真实视频证据、三画幅输出和可选创作者头像。
     platforms:
       - xiaohongshu
+      - bilibili
     content_types:
       - image
       - video

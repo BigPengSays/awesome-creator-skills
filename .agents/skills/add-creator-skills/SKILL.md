@@ -77,6 +77,10 @@ Keep a skill only if name, description, path, or body match creator platforms/ty
 
 Infer `platforms` / `content_types` / `formats` from [`catalog/taxonomy.yaml`](../../../catalog/taxonomy.yaml). If no platform matches, use `generic`. Write `summary` as one Chinese sentence when you can; the script shortens frontmatter description as a fallback.
 
+**Platform inference:** treat `B站`, `b站`, `哔哩`, and `bilibili` as the same platform (`bilibili`). If a skill summary or body mentions multiple channels, include every matching platform in `platforms` — do not rely on a single primary platform. After import, verify `platforms` against the skill text; README generation also merges platforms inferred from the catalog summary.
+
+**Publishing vs creation:** skills whose main job is posting or uploading drafts (`post-to-*`, `video-publisher`, WeChat draft upload, etc.) are listed under README **内容发布** and excluded from **按平台** to avoid duplicate browsing. Creation/design skills (covers, cards, transcripts) stay under **按平台** and may appear under multiple platforms when relevant.
+
 ### License gate
 
 GitHub: use the repo SPDX license. If missing/`NOASSERTION`, **do not vendor**. Report `blocked` and wait for the user (or `--allow-unknown-license` after they confirm redistribution).

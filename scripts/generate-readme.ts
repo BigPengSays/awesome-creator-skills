@@ -1,4 +1,5 @@
 import { writeFileSync } from "node:fs";
+import { isPublishingSkill, mergePlatforms } from "./lib/creator-match.ts";
 import { loadCatalog, loadStars, loadTaxonomy } from "./lib/catalog.ts";
 import { parseGithubRepo } from "./lib/github.ts";
 import { README_MD } from "./lib/paths.ts";
@@ -31,31 +32,90 @@ function skillLine(skill: Skill): string {
   return `- [${skill.name}](${sourceSkillUrl(skill)})${badge} — ${displaySummary(skill.summary)}`;
 }
 
+function githubHeadingAnchor(label: string, used: Map<string, number>): string {
+  const slug = label
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, "")
+    .replace(/\s+/g, "-");
+  const count = used.get(slug) ?? 0;
+  used.set(slug, count + 1);
+  return count === 0 ? slug : `${slug}-${count}`;
+}
+
+interface TocSubsection {
+  label: string;
+  anchor: string;
+}
+
+interface TocSection {
+  label: string;
+  anchor: string;
+  subsections: TocSubsection[];
+}
+
+interface SectionResult {
+  body: string;
+  toc: TocSection;
+}
+
+function effectivePlatforms(skill: Skill): string[] {
+  const text = `${skill.name} ${skill.summary}`;
+  return mergePlatforms(skill.platforms, text);
+}
+
 function sectionFor(
   title: string,
   taxonomy: Record<string, { label: string }>,
   skills: Skill[],
   pick: (skill: Skill) => string[],
   stars: StarsCache,
-): string {
+  anchorUsed: Map<string, number>,
+  options?: { exclude?: (skill: Skill) => boolean },
+): SectionResult {
+  const sectionAnchor = githubHeadingAnchor(title, anchorUsed);
+  const subsections: TocSubsection[] = [];
   const chunks: string[] = [`## ${title}`, ""];
   let any = false;
+
   for (const [key, meta] of Object.entries(taxonomy)) {
     const matched = sortSkills(
-      skills.filter((skill) => pick(skill).includes(key)),
+      skills.filter((skill) => {
+        if (options?.exclude?.(skill)) return false;
+        return pick(skill).includes(key);
+      }),
       stars,
     );
     if (matched.length === 0) continue;
     any = true;
+    const subAnchor = githubHeadingAnchor(meta.label, anchorUsed);
+    subsections.push({ label: meta.label, anchor: subAnchor });
     chunks.push(`#### ${meta.label}`, "");
     for (const skill of matched) chunks.push(skillLine(skill));
     chunks.push("");
   }
+
   if (!any) {
     chunks.push("_暂无。_");
     chunks.push("");
   }
-  return chunks.join("\n");
+
+  return {
+    body: chunks.join("\n"),
+    toc: { label: title, anchor: sectionAnchor, subsections },
+  };
+}
+
+function renderToc(sections: TocSection[]): string {
+  const lines = ["## 目录", ""];
+  for (const section of sections) {
+    lines.push(`- [${section.label}](#${section.anchor})`);
+    for (const sub of section.subsections) {
+      lines.push(`  - [${section.label} · ${sub.label}](#${sub.anchor})`);
+    }
+  }
+  lines.push("");
+  return lines.join("\n");
 }
 
 function uniqueRepos(skills: Skill[]): string[] {
@@ -63,7 +123,9 @@ function uniqueRepos(skills: Skill[]): string[] {
 }
 
 function coverageLine(skills: Skill[], taxonomy: Taxonomy): string {
-  const platformKeys = new Set(skills.flatMap((skill) => skill.platforms));
+  const platformKeys = new Set(
+    skills.flatMap((skill) => effectivePlatforms(skill)),
+  );
   const typeKeys = new Set(skills.flatMap((skill) => skill.content_types));
   const platforms = Object.entries(taxonomy.platforms)
     .filter(([key]) => platformKeys.has(key) && key !== "generic")
@@ -85,6 +147,67 @@ export function renderReadme(): string {
   const taxonomy = loadTaxonomy();
   const stars = loadStars();
   const skills = catalog.skills.filter((skill) => skill.status === "active");
+  const anchorUsed = new Map<string, number>();
+
+  const publishingSkills = skills.filter(isPublishingSkill);
+  const platformSkills = skills.map((skill) => ({
+    ...skill,
+    platforms: effectivePlatforms(skill),
+  }));
+
+  const publishingSection = sectionFor(
+    "内容发布",
+    taxonomy.platforms,
+    publishingSkills,
+    (skill) => effectivePlatforms(skill),
+    stars,
+    anchorUsed,
+  );
+
+  const platformSection = sectionFor(
+    "按平台",
+    taxonomy.platforms,
+    platformSkills,
+    (skill) => skill.platforms,
+    stars,
+    anchorUsed,
+    { exclude: isPublishingSkill },
+  );
+
+  const typeSection = sectionFor(
+    "按创作类型",
+    taxonomy.content_types,
+    skills,
+    (skill) => skill.content_types,
+    stars,
+    anchorUsed,
+  );
+
+  const formatSection = sectionFor(
+    "按创作形式",
+    taxonomy.formats,
+    skills,
+    (skill) => skill.formats,
+    stars,
+    anchorUsed,
+  );
+
+  const toc = renderToc([
+    publishingSection.toc,
+    platformSection.toc,
+    typeSection.toc,
+    formatSection.toc,
+    {
+      label: "安装",
+      anchor: githubHeadingAnchor("安装", anchorUsed),
+      subsections: [],
+    },
+    {
+      label: "版权归属",
+      anchor: githubHeadingAnchor("版权归属", anchorUsed),
+      subsections: [],
+    },
+  ]);
 
   const repoList = uniqueRepos(skills)
     .map((repo) => `- ${repo}`)
@@ -96,16 +219,16 @@ export function renderReadme(): string {
 
 面向内容创作者的 **精选 Agent Skills** 目录。只收录与内容生产直接相关、可一键安装到 Cursor、Claude Code 等环境的技能，按发布渠道与内容形态整理。
 
-${coverageLine(skills, taxonomy)}
+${coverageLine(platformSkills, taxonomy)}
 
 \`\`\`bash
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 \`\`\`
 
-${sectionFor("按平台", taxonomy.platforms, skills, (skill) => skill.platforms, stars)}
-${sectionFor("按创作类型", taxonomy.content_types, skills, (skill) => skill.content_types, stars)}
-${sectionFor("按创作形式", taxonomy.formats, skills, (skill) => skill.formats, stars)}
-## 安装
+${toc}
+
+${publishingSection.body}
+${platformSection.body}${typeSection.body}${formatSection.body}## 安装
 
 安装单个技能：
 

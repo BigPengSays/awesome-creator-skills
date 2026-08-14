@@ -11,7 +11,7 @@ const PLATFORM_RULES: Array<{ key: string; re: RegExp }> = [
   { key: "x", re: /twitter|\btweets?\b|推文|x articles?/i },
   { key: "weibo", re: /weibo|微博/i },
   { key: "linkedin", re: /linkedin/i },
-  { key: "bilibili", re: /bilibili|哔哩/i },
+  { key: "bilibili", re: /bilibili|哔哩|[Bb]\s*站/i },
 ];
 
 const CONTENT_TYPE_RULES: Array<{ key: string; re: RegExp }> = [
@@ -66,6 +66,30 @@ export function inferTaxonomy(text: string): {
     content_types: matchKeys(text, CONTENT_TYPE_RULES),
     formats: matchKeys(text, FORMAT_RULES),
   };
+}
+
+export const PUBLISHING_RE =
+  /post-to-|publisher|publish(?:ing)?|发布|草稿上传|发到|投递到|post to /i;
+
+export function isPublishingSkill(skill: {
+  id: string;
+  name: string;
+  summary: string;
+}): boolean {
+  return PUBLISHING_RE.test(`${skill.id} ${skill.name} ${skill.summary}`);
+}
+
+/** Merge catalog platforms with any platforms inferred from summary/name text. */
+export function mergePlatforms(
+  declared: string[],
+  text: string,
+): string[] {
+  const inferred = matchKeys(text, PLATFORM_RULES);
+  const merged = [...declared];
+  for (const key of inferred) {
+    if (!merged.includes(key)) merged.push(key);
+  }
+  return merged.length > 0 ? merged : ["generic"];
 }
 
 export function shortenSummary(text: string): string {
