@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
   <title id="title">创作技能合集</title>
-  <desc id="desc">面向内容创作者的可安装 Agent Skills 精选目录，覆盖微信公众号、小红书、YouTube、X 与微博。</desc>
+  <desc id="desc">面向内容创作者的精选、可安装 Agent Skills 目录，覆盖微信公众号、小红书、YouTube、X 与微博。</desc>
 
   <defs>
     <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
@@ -21,8 +21,8 @@
 
     <rect x="0" y="136" width="72" height="2" fill="#C9A36A"/>
 
-    <text x="0" y="178" fill="#E7E1D4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif" font-size="20">面向内容创作者的可安装 Agent Skills</text>
-    <text x="0" y="208" fill="#B7B0A3" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif" font-size="18">按发布渠道与内容形态整理，一条命令即可使用</text>
+    <text x="0" y="178" fill="#E7E1D4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif" font-size="20">面向内容创作者的精选 Agent Skills</text>
+    <text x="0" y="208" fill="#B7B0A3" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif" font-size="18">手工筛选、可安装，按渠道与形态归档</text>
 
     <g transform="translate(0 286)">
       <rect x="0" y="0" width="118" height="34" rx="8" fill="#1E1C19" stroke="#2E2B26"/>

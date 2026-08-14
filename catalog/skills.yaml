@@ -1,7 +1,7 @@
 skills:
   - id: baoyu-article-illustrator
     name: baoyu-article-illustrator
-    summary: 为文章配图
+    summary: 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。
     platforms:
       - generic
     content_types:
@@ -19,7 +19,7 @@ skills:
     status: active
   - id: baoyu-comic
     name: baoyu-comic
-    summary: 生成知识漫画
+    summary: 把知识、教程或人物故事做成多格知识漫画，支持多种画风与语气，先分镜再出图。
     platforms:
       - generic
     content_types:
@@ -37,7 +37,7 @@ skills:
     status: active
   - id: baoyu-cover-image
     name: baoyu-cover-image
-    summary: 生成文章封面图
+    summary: 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。
     platforms:
       - generic
     content_types:
@@ -54,7 +54,7 @@ skills:
     status: active
   - id: baoyu-infographic
     name: baoyu-infographic
-    summary: 生成高密度信息图
+    summary: 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。
     platforms:
       - generic
     content_types:
@@ -71,7 +71,7 @@ skills:
     status: active
   - id: baoyu-post-to-wechat
     name: baoyu-post-to-wechat
-    summary: 发布微信公众号文章与贴图
+    summary: 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。
     platforms:
       - wechat-oa
     content_types:
@@ -89,7 +89,7 @@ skills:
     status: active
   - id: baoyu-post-to-weibo
     name: baoyu-post-to-weibo
-    summary: 发布微博与头条文章
+    summary: 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。
     platforms:
       - weibo
     content_types:
@@ -107,7 +107,7 @@ skills:
     status: active
   - id: baoyu-post-to-x
     name: baoyu-post-to-x
-    summary: 发布推文与 X Articles
+    summary: 向 X 发布推文、配图或视频，以及长文 Articles，同时覆盖短帖与长文两种形态。
     platforms:
       - x
     content_types:
@@ -124,7 +124,7 @@ skills:
     status: active
   - id: baoyu-slide-deck
     name: baoyu-slide-deck
-    summary: 生成幻灯片
+    summary: 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
     platforms:
       - generic
     content_types:
@@ -141,7 +141,7 @@ skills:
     status: active
   - id: baoyu-xhs-images
     name: baoyu-xhs-images
-    summary: 生成小红书图文卡片
+    summary: 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。
     platforms:
       - xiaohongshu
     content_types:
@@ -160,7 +160,7 @@ skills:
     status: active
   - id: baoyu-youtube-transcript
     name: baoyu-youtube-transcript
-    summary: 下载 YouTube 字幕与封面
+    summary: 按链接或视频 ID 下载多语言字幕与封面，支持翻译、章节与说话人识别，并缓存原文方便反复排版。
     platforms:
       - youtube
     content_types:
@@ -178,7 +178,7 @@ skills:
     status: active
   - id: md2wechat
     name: md2wechat
-    summary: Markdown 转微信公众号排版
+    summary: 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。
     platforms:
       - wechat-oa
     content_types:
@@ -195,7 +195,7 @@ skills:
     status: active
   - id: xhs-visual-director
     name: xhs-visual-director
-    summary: 规划与审阅小红书图文的视觉方向
+    summary: 以视觉导演而不是文案助手的方式规划小红书图文：封面、3:4 与轮播分页构图、生图提示词、风格一致性与标题标签。
     platforms:
       - xiaohongshu
     content_types:
@@ -213,7 +213,7 @@ skills:
     status: active
   - id: youtube-clipper
     name: youtube-clipper
-    summary: YouTube 视频切片
+    summary: 下载 YouTube 视频与字幕，用 AI 切出精细章节；选定片段后自动剪辑并烧录中英双语字幕，同时生成总结文案。
     platforms:
       - youtube
     content_types:

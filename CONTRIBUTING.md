@@ -42,7 +42,7 @@ npm run vendor -- \
 3. 更新 `catalog/skills.yaml`
 4. 重生成 README
 
-`catalog/skills.yaml` 里的 `summary` 请改成一句中文（技能做什么），不要保留 SKILL.md 里整段触发词。
+`catalog/skills.yaml` 里的 `summary` 请写成一两句中文：技能做什么、相对同类的特点或优点，不要只写四个字，也不要保留 SKILL.md 里整段触发词。
 
 ## 从链接收录
 

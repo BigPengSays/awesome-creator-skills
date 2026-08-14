@@ -2,11 +2,13 @@
 
 # 创作技能合集
 
-面向内容创作者的 Agent Skills **精选目录**。每一项都可直接安装到 Cursor、Claude Code 等环境，并按发布渠道与内容形态检索。
+面向内容创作者的 **精选 Agent Skills** 目录。只收录与内容生产直接相关、可一键安装到 Cursor、Claude Code 等环境的技能，按发布渠道与内容形态整理。
 
-当前收录 **13** 个技能，覆盖微信公众号、小红书、YouTube、X、微博。
+当前精选 **13** 项，覆盖微信公众号、小红书、YouTube、X、微博。
 
 内容形态包括文章、图片、图文、视频、幻灯片、漫画、信息图。
+
+名称指向源技能原文，star 徽章指向源仓库，`镜像` 为本目录中的可安装拷贝。
 
 ```bash
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
@@ -16,87 +18,87 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 #### 微信公众号
 
-- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
-- [md2wechat](skills/md2wechat/) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — Markdown 转微信公众号排版
+- [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。 · [镜像](skills/baoyu-post-to-wechat/)
+- [md2wechat](https://github.com/geekjourneyx/md2wechat-skill/tree/main/skills/md2wechat) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。 · [镜像](skills/md2wechat/)
 
 #### 小红书
 
-- [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
-- [xhs-visual-director](skills/xhs-visual-director/) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 规划与审阅小红书图文的视觉方向
+- [baoyu-xhs-images](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-xhs-images) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。 · [镜像](skills/baoyu-xhs-images/)
+- [xhs-visual-director](https://github.com/ziguishian/xhs-visual-director-skill/tree/main/skill) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 以视觉导演而不是文案助手的方式规划小红书图文：封面、3:4 与轮播分页构图、生图提示词、风格一致性与标题标签。 · [镜像](skills/xhs-visual-director/)
 
 #### YouTube
 
-- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
-- [youtube-clipper](skills/youtube-clipper/) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — YouTube 视频切片
+- [baoyu-youtube-transcript](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-youtube-transcript) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按链接或视频 ID 下载多语言字幕与封面，支持翻译、章节与说话人识别，并缓存原文方便反复排版。 · [镜像](skills/baoyu-youtube-transcript/)
+- [youtube-clipper](https://github.com/op7418/youtube-clipper-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — 下载 YouTube 视频与字幕，用 AI 切出精细章节；选定片段后自动剪辑并烧录中英双语字幕，同时生成总结文案。 · [镜像](skills/youtube-clipper/)
 
 #### X
 
-- [baoyu-post-to-x](skills/baoyu-post-to-x/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布推文与 X Articles
+- [baoyu-post-to-x](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-x) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 向 X 发布推文、配图或视频，以及长文 Articles，同时覆盖短帖与长文两种形态。 · [镜像](skills/baoyu-post-to-x/)
 
 #### 微博
 
-- [baoyu-post-to-weibo](skills/baoyu-post-to-weibo/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博与头条文章
+- [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。 · [镜像](skills/baoyu-post-to-weibo/)
 
 #### 通用
 
-- [baoyu-article-illustrator](skills/baoyu-article-illustrator/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为文章配图
-- [baoyu-comic](skills/baoyu-comic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成知识漫画
-- [baoyu-cover-image](skills/baoyu-cover-image/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成文章封面图
-- [baoyu-infographic](skills/baoyu-infographic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成高密度信息图
-- [baoyu-slide-deck](skills/baoyu-slide-deck/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成幻灯片
+- [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。 · [镜像](skills/baoyu-article-illustrator/)
+- [baoyu-comic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-comic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把知识、教程或人物故事做成多格知识漫画，支持多种画风与语气，先分镜再出图。 · [镜像](skills/baoyu-comic/)
+- [baoyu-cover-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-cover-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。 · [镜像](skills/baoyu-cover-image/)
+- [baoyu-infographic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-infographic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。 · [镜像](skills/baoyu-infographic/)
+- [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。 · [镜像](skills/baoyu-slide-deck/)
 
 ## 按创作类型
 
 #### 文章
 
-- [baoyu-article-illustrator](skills/baoyu-article-illustrator/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为文章配图
-- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
-- [baoyu-post-to-weibo](skills/baoyu-post-to-weibo/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博与头条文章
-- [baoyu-post-to-x](skills/baoyu-post-to-x/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布推文与 X Articles
-- [md2wechat](skills/md2wechat/) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — Markdown 转微信公众号排版
+- [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。 · [镜像](skills/baoyu-article-illustrator/)
+- [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。 · [镜像](skills/baoyu-post-to-wechat/)
+- [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。 · [镜像](skills/baoyu-post-to-weibo/)
+- [baoyu-post-to-x](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-x) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 向 X 发布推文、配图或视频，以及长文 Articles，同时覆盖短帖与长文两种形态。 · [镜像](skills/baoyu-post-to-x/)
+- [md2wechat](https://github.com/geekjourneyx/md2wechat-skill/tree/main/skills/md2wechat) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。 · [镜像](skills/md2wechat/)
 
 #### 图片
 
-- [baoyu-article-illustrator](skills/baoyu-article-illustrator/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为文章配图
-- [baoyu-cover-image](skills/baoyu-cover-image/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成文章封面图
-- [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
-- [xhs-visual-director](skills/xhs-visual-director/) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 规划与审阅小红书图文的视觉方向
+- [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。 · [镜像](skills/baoyu-article-illustrator/)
+- [baoyu-cover-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-cover-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。 · [镜像](skills/baoyu-cover-image/)
+- [baoyu-xhs-images](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-xhs-images) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。 · [镜像](skills/baoyu-xhs-images/)
+- [xhs-visual-director](https://github.com/ziguishian/xhs-visual-director-skill/tree/main/skill) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 以视觉导演而不是文案助手的方式规划小红书图文：封面、3:4 与轮播分页构图、生图提示词、风格一致性与标题标签。 · [镜像](skills/xhs-visual-director/)
 
 #### 图文
 
-- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
-- [baoyu-post-to-weibo](skills/baoyu-post-to-weibo/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博与头条文章
-- [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
-- [xhs-visual-director](skills/xhs-visual-director/) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 规划与审阅小红书图文的视觉方向
+- [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。 · [镜像](skills/baoyu-post-to-wechat/)
+- [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。 · [镜像](skills/baoyu-post-to-weibo/)
+- [baoyu-xhs-images](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-xhs-images) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。 · [镜像](skills/baoyu-xhs-images/)
+- [xhs-visual-director](https://github.com/ziguishian/xhs-visual-director-skill/tree/main/skill) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 以视觉导演而不是文案助手的方式规划小红书图文：封面、3:4 与轮播分页构图、生图提示词、风格一致性与标题标签。 · [镜像](skills/xhs-visual-director/)
 
 #### 视频
 
-- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
-- [youtube-clipper](skills/youtube-clipper/) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — YouTube 视频切片
+- [baoyu-youtube-transcript](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-youtube-transcript) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按链接或视频 ID 下载多语言字幕与封面，支持翻译、章节与说话人识别，并缓存原文方便反复排版。 · [镜像](skills/baoyu-youtube-transcript/)
+- [youtube-clipper](https://github.com/op7418/youtube-clipper-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — 下载 YouTube 视频与字幕，用 AI 切出精细章节；选定片段后自动剪辑并烧录中英双语字幕，同时生成总结文案。 · [镜像](skills/youtube-clipper/)
 
 #### 幻灯片
 
-- [baoyu-slide-deck](skills/baoyu-slide-deck/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成幻灯片
+- [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。 · [镜像](skills/baoyu-slide-deck/)
 
 #### 漫画
 
-- [baoyu-comic](skills/baoyu-comic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成知识漫画
+- [baoyu-comic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-comic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把知识、教程或人物故事做成多格知识漫画，支持多种画风与语气，先分镜再出图。 · [镜像](skills/baoyu-comic/)
 
 #### 信息图
 
-- [baoyu-infographic](skills/baoyu-infographic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成高密度信息图
-- [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
+- [baoyu-infographic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-infographic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。 · [镜像](skills/baoyu-infographic/)
+- [baoyu-xhs-images](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-xhs-images) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。 · [镜像](skills/baoyu-xhs-images/)
 
 ## 按创作形式
 
 #### 教程
 
-- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
-- [youtube-clipper](skills/youtube-clipper/) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — YouTube 视频切片
+- [baoyu-youtube-transcript](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-youtube-transcript) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按链接或视频 ID 下载多语言字幕与封面，支持翻译、章节与说话人识别，并缓存原文方便反复排版。 · [镜像](skills/baoyu-youtube-transcript/)
+- [youtube-clipper](https://github.com/op7418/youtube-clipper-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — 下载 YouTube 视频与字幕，用 AI 切出精细章节；选定片段后自动剪辑并烧录中英双语字幕，同时生成总结文案。 · [镜像](skills/youtube-clipper/)
 
 #### 叙事
 
-- [baoyu-comic](skills/baoyu-comic/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成知识漫画
+- [baoyu-comic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-comic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把知识、教程或人物故事做成多格知识漫画，支持多种画风与语气，先分镜再出图。 · [镜像](skills/baoyu-comic/)
 
 ## 安装
 
