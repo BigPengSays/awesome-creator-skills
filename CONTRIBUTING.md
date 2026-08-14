@@ -66,7 +66,7 @@ npm run vendor -- \
 
 ## Star
 
-README 用 [shields.io](https://shields.io) 的 GitHub stars 徽章展示**源仓库**实时 star。`catalog/stars.yaml` 仍缓存数值，每个分类按这个缓存从高到低排序。非 GitHub 来源不显示徽章，排在分类末尾。
+README 用 [badgen](https://badgen.net) 的 GitHub stars 徽章展示**源仓库**实时 star（与 [awesome-skills-cn](https://github.com/lingxling/awesome-skills-cn) 同类列表一致）。`catalog/stars.yaml` 仍缓存数值，每个分类按这个缓存从高到低排序。非 GitHub 来源不显示徽章，排在分类末尾。
 
 ## 本地命令
 

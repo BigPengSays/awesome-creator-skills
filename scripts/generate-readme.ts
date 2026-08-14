@@ -27,8 +27,8 @@ function displaySummary(text: string): string {
 function starBadge(repoUrl: string): string {
   const parsed = parseGithubRepo(repoUrl);
   if (!parsed) return "";
-  const badge = `https://img.shields.io/github/stars/${parsed.owner}/${parsed.repo}?style=social`;
-  return ` [![GitHub stars](${badge})](${repoUrl})`;
+  const badge = `https://badgen.net/github/stars/${parsed.owner}/${parsed.repo}`;
+  return ` [![GitHub Stars](${badge})](${repoUrl})`;
 }
 
 function skillLine(skill: Skill): string {
@@ -102,7 +102,7 @@ export function renderReadme(): string {
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 \`\`\`
 
-镜像版权仍归原作者。GitHub 来源用 [shields.io](https://shields.io) star 徽章展示源仓库实时 star；分类内仍按缓存的 star 数从高到低排列。
+镜像版权仍归原作者。GitHub 来源用 [badgen](https://badgen.net) star 徽章展示源仓库实时 star；分类内仍按缓存的 star 数从高到低排列。
 
 ${toc}
 
