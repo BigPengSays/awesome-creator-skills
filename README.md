@@ -6,17 +6,19 @@
 
 # 内容创作者 Skill 精选大合集
 
-> **Agent Skills** 精选目录，给内容创作者 — 写文章、做封面、剪视频、做 PPT，一条命令装进 Cursor、Claude Code。
+适用于内容创作的 Skill 合集，都是精选后才加入到仓库中，大部分是我自己也在使用的
 
-按平台和创作类型整理，少踩坑、少搜 repo。
+覆盖微信公众号、小红书、YouTube、哔哩哔哩等平台的内容创作，包含文章、图片、图文、视频等内容形式
 
-> **24** 个技能 · 微信公众号 · 小红书 · YouTube · 哔哩哔哩 · 文章 · 图片 · 图文 · 视频 · 幻灯片 · 漫画 · 信息图
+Skill在持续更新中， [欢迎投稿](CONTRIBUTING.md) · 发现好用的创作 skill，提 Issue 或 PR
+
+一条命令装进 Cursor、Claude Code。
 
 ```bash
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 ```
 
-[欢迎投稿](CONTRIBUTING.md) · 发现好用的创作 skill，提 Issue 或 PR
+
 
 ## 目录
 
