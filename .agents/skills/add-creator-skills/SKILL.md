@@ -22,8 +22,8 @@ User provides one or more links such as:
 3. GitHub: scan every `SKILL.md`, keep creator-aligned skills, skip cataloged/rejected, block unknown licenses.
 4. Article: fetch body, extract GitHub / skills.sh links, then follow the GitHub path. If the page embeds a full skill and has no GitHub source, copy it as `source.type: url`.
 5. Regenerate README. Refresh stars for new git sources.
-6. Polish catalog `summary` into one Chinese sentence and fix tags if the script guessed poorly.
-7. Tell the user what changed (imported / skipped / blocked, plus any summary or tag edits).
+6. Polish catalog `summary` into one Chinese sentence. **Classify tags by reading the skill** — follow [`catalog/classification-guide.md`](../../../catalog/classification-guide.md): one primary `content_types`, necessary `platforms` only, optional single `format`. Do not rely on script regex; ingest leaves tags empty.
+7. Tell the user what changed (imported / skipped / blocked, plus classification and summary edits).
 8. **Commit and push immediately.** Do not wait for another confirmation.
 
 ### After import: report, commit, push
@@ -75,11 +75,17 @@ After git imports, `npm run ingest` already calls `refresh-stars` and `generate-
 
 Keep a skill only if name, description, path, or body match creator platforms/types (WeChat, 小红书, YouTube, X, 微博, 文章/图片/图文/视频/幻灯片/漫画/信息图, etc.). Drop infra/CI/K8s-style skills unless they are clearly for content production.
 
-Infer `platforms` / `content_types` / `formats` from [`catalog/taxonomy.yaml`](../../../catalog/taxonomy.yaml). If no platform matches, use `generic`. Write `summary` as one Chinese sentence when you can; the script shortens frontmatter description as a fallback.
+### Classification (agent, not script)
 
-**Platform inference:** treat `B站`, `b站`, `哔哩`, and `bilibili` as the same platform (`bilibili`). If a skill summary or body mentions multiple channels, include every matching platform in `platforms` — do not rely on a single primary platform. After import, verify `platforms` against the skill text; README generation also merges platforms inferred from the catalog summary.
+After vendor, read `skills/<id>/SKILL.md` and [`catalog/classification-guide.md`](../../../catalog/classification-guide.md). Write **one** primary `content_types` value, only the `platforms` the skill explicitly serves, and at most one `formats` when it is a core selling point. `npm run ingest` no longer auto-fills these fields.
 
-**Publishing vs creation:** skills whose main job is posting or uploading drafts (`post-to-*`, `video-publisher`, WeChat draft upload, etc.) are listed under README **内容发布** and excluded from **按平台** to avoid duplicate browsing. Creation/design skills (covers, cards, transcripts) stay under **按平台** and may appear under multiple platforms when relevant.
+`B站` / `b站` / `哔哩哔哩` → `bilibili`. Multi-platform skills (e.g. covers for 小红书 + B 站) may list multiple platforms, but still only one content type.
+
+Write `summary` as one Chinese sentence when you can; the script shortens frontmatter description as a fallback.
+
+**Publishing vs creation:** skills whose main job is posting or uploading drafts (`post-to-*`, `video-publisher`, WeChat draft upload, etc.) are listed under README **内容发布** (flat list, after **按创作形式**) and excluded from **按平台** to avoid duplicate browsing. Creation/design skills stay under **按平台** and may appear under multiple platforms when relevant.
+
+Do not commit a new skill with empty `platforms` / `content_types`.
 
 ### License gate
 

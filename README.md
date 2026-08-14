@@ -14,58 +14,29 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 ## 目录
 
-- [内容发布](#内容发布)
-  - [内容发布 · 微信公众号](#微信公众号)
-  - [内容发布 · 小红书](#小红书)
-  - [内容发布 · X](#x)
-  - [内容发布 · 微博](#微博)
-  - [内容发布 · 哔哩哔哩](#哔哩哔哩)
 - [按平台](#按平台)
-  - [按平台 · 微信公众号](#微信公众号-1)
-  - [按平台 · 小红书](#小红书-1)
-  - [按平台 · YouTube](#youtube)
-  - [按平台 · 哔哩哔哩](#哔哩哔哩-1)
-  - [按平台 · 通用](#通用)
+  - [微信公众号](#微信公众号)
+  - [小红书](#小红书)
+  - [YouTube](#youtube)
+  - [哔哩哔哩](#哔哩哔哩)
+  - [通用](#通用)
 - [按创作类型](#按创作类型)
-  - [按创作类型 · 文章](#文章)
-  - [按创作类型 · 图片](#图片)
-  - [按创作类型 · 图文](#图文)
-  - [按创作类型 · 视频](#视频)
-  - [按创作类型 · 幻灯片](#幻灯片)
-  - [按创作类型 · 漫画](#漫画)
-  - [按创作类型 · 信息图](#信息图)
+  - [文章](#文章)
+  - [图片](#图片)
+  - [图文](#图文)
+  - [视频](#视频)
+  - [幻灯片](#幻灯片)
+  - [漫画](#漫画)
+  - [信息图](#信息图)
 - [按创作形式](#按创作形式)
-  - [按创作形式 · 白板视频](#白板视频)
-  - [按创作形式 · 口播视频](#口播视频)
-  - [按创作形式 · 教程](#教程)
-  - [按创作形式 · 叙事](#叙事)
+  - [白板视频](#白板视频)
+  - [口播视频](#口播视频)
+  - [教程](#教程)
+  - [叙事](#叙事)
+- [内容发布](#内容发布)
 - [安装](#安装)
 - [版权归属](#版权归属)
 
-
-## 内容发布
-
-#### 微信公众号
-
-- [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。
-- [md2wechat](https://github.com/geekjourneyx/md2wechat-skill/tree/main/skills/md2wechat) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。
-- [video-publisher](https://github.com/oil-oil/video-publisher-skill/tree/main/video-publisher) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/video-publisher-skill)](https://github.com/oil-oil/video-publisher-skill) — 用 Ego Lite 把同一视频包并行投递到小红书、抖音、B 站与视频号草稿，含文案、标签、封面与发布前校验。
-
-#### 小红书
-
-- [video-publisher](https://github.com/oil-oil/video-publisher-skill/tree/main/video-publisher) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/video-publisher-skill)](https://github.com/oil-oil/video-publisher-skill) — 用 Ego Lite 把同一视频包并行投递到小红书、抖音、B 站与视频号草稿，含文案、标签、封面与发布前校验。
-
-#### X
-
-- [baoyu-post-to-x](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-x) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 向 X 发布推文、配图或视频，以及长文 Articles，同时覆盖短帖与长文两种形态。
-
-#### 微博
-
-- [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。
-
-#### 哔哩哔哩
-
-- [video-publisher](https://github.com/oil-oil/video-publisher-skill/tree/main/video-publisher) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/video-publisher-skill)](https://github.com/oil-oil/video-publisher-skill) — 用 Ego Lite 把同一视频包并行投递到小红书、抖音、B 站与视频号草稿，含文案、标签、封面与发布前校验。
 
 ## 按平台
 
@@ -102,40 +73,27 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-infographic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-infographic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
 - [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
-- [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
 - [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
 ## 按创作类型
 
 #### 文章
 
-- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
-- [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。
 - [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。
 - [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。
 - [baoyu-post-to-x](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-x) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 向 X 发布推文、配图或视频，以及长文 Articles，同时覆盖短帖与长文两种形态。
 - [md2wechat](https://github.com/geekjourneyx/md2wechat-skill/tree/main/skills/md2wechat) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。
-- [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
-- [oil-cover](https://github.com/oil-oil/oil-cover) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-cover)](https://github.com/oil-oil/oil-cover) — 生成小红书和 B 站 AI 工具实操视频封面，支持脚本模式与 Agent 自主模式、真实视频证据、三画幅输出和可选创作者头像。
 - [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
 
 #### 图片
 
-- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。
 - [baoyu-cover-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-cover-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。
-- [baoyu-xhs-images](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-xhs-images) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。
-- [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-social-card-skill)](https://github.com/op7418/guizang-social-card-skill) — 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
-- [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
-- [xhs-visual-director](https://github.com/ziguishian/xhs-visual-director-skill/tree/main/skill) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 以视觉导演而不是文案助手的方式规划小红书图文：封面、3:4 与轮播分页构图、生图提示词、风格一致性与标题标签。
 - [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
 - [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
 - [oil-cover](https://github.com/oil-oil/oil-cover) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-cover)](https://github.com/oil-oil/oil-cover) — 生成小红书和 B 站 AI 工具实操视频封面，支持脚本模式与 Agent 自主模式、真实视频证据、三画幅输出和可选创作者头像。
 
 #### 图文
 
-- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
-- [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。
-- [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。
 - [baoyu-xhs-images](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-xhs-images) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。
 - [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-social-card-skill)](https://github.com/op7418/guizang-social-card-skill) — 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
 - [xhs-visual-director](https://github.com/ziguishian/xhs-visual-director-skill/tree/main/skill) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 以视觉导演而不是文案助手的方式规划小红书图文：封面、3:4 与轮播分页构图、生图提示词、风格一致性与标题标签。
@@ -143,29 +101,22 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 #### 视频
 
 - [baoyu-youtube-transcript](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-youtube-transcript) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按链接或视频 ID 下载多语言字幕与封面，支持翻译、章节与说话人识别，并缓存原文方便反复排版。
-- [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-social-card-skill)](https://github.com/op7418/guizang-social-card-skill) — 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
 - [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
 - [video-publisher](https://github.com/oil-oil/video-publisher-skill/tree/main/video-publisher) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/video-publisher-skill)](https://github.com/oil-oil/video-publisher-skill) — 用 Ego Lite 把同一视频包并行投递到小红书、抖音、B 站与视频号草稿，含文案、标签、封面与发布前校验。
-- [oil-cover](https://github.com/oil-oil/oil-cover) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-cover)](https://github.com/oil-oil/oil-cover) — 生成小红书和 B 站 AI 工具实操视频封面，支持脚本模式与 Agent 自主模式、真实视频证据、三画幅输出和可选创作者头像。
 - [youtube-clipper](https://github.com/op7418/youtube-clipper-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — 下载 YouTube 视频与字幕，用 AI 切出精细章节；选定片段后自动剪辑并烧录中英双语字幕，同时生成总结文案。
 
 #### 幻灯片
 
 - [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
-- [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
 
 #### 漫画
 
 - [baoyu-comic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-comic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把知识、教程或人物故事做成多格知识漫画，支持多种画风与语气，先分镜再出图。
-- [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
 
 #### 信息图
 
-- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [baoyu-infographic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-infographic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。
-- [baoyu-xhs-images](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-xhs-images) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。
-- [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
 ## 按创作形式
 
 #### 白板视频
@@ -178,16 +129,19 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 #### 教程
 
-- [baoyu-youtube-transcript](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-youtube-transcript) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按链接或视频 ID 下载多语言字幕与封面，支持翻译、章节与说话人识别，并缓存原文方便反复排版。
-- [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-social-card-skill)](https://github.com/op7418/guizang-social-card-skill) — 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
-- [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
 - [youtube-clipper](https://github.com/op7418/youtube-clipper-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — 下载 YouTube 视频与字幕，用 AI 切出精细章节；选定片段后自动剪辑并烧录中英双语字幕，同时生成总结文案。
 
 #### 叙事
 
-- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [baoyu-comic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-comic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把知识、教程或人物故事做成多格知识漫画，支持多种画风与语气，先分镜再出图。
-- [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
+
+## 内容发布
+
+- [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。
+- [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。
+- [baoyu-post-to-x](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-x) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 向 X 发布推文、配图或视频，以及长文 Articles，同时覆盖短帖与长文两种形态。
+- [md2wechat](https://github.com/geekjourneyx/md2wechat-skill/tree/main/skills/md2wechat) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。
+- [video-publisher](https://github.com/oil-oil/video-publisher-skill/tree/main/video-publisher) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/video-publisher-skill)](https://github.com/oil-oil/video-publisher-skill) — 用 Ego Lite 把同一视频包并行投递到小红书、抖音、B 站与视频号草稿，含文案、标签、封面与发布前校验。
 ## 安装
 
 安装单个技能：

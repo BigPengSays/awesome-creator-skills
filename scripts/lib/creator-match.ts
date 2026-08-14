@@ -14,25 +14,6 @@ const PLATFORM_RULES: Array<{ key: string; re: RegExp }> = [
   { key: "bilibili", re: /bilibili|哔哩|[Bb]\s*站/i },
 ];
 
-const CONTENT_TYPE_RULES: Array<{ key: string; re: RegExp }> = [
-  { key: "infographic", re: /infographic|信息图/i },
-  { key: "comic", re: /comic|漫画/i },
-  { key: "slides", re: /slides?|幻灯|ppt|deck/i },
-  { key: "image-text", re: /图文|image-text|卡片/i },
-  { key: "image", re: /封面|配图|cover image|illustrat/i },
-  { key: "video", re: /video|视频|字幕|切片|transcript|clipper/i },
-  { key: "article", re: /article|文章|markdown|排版/i },
-];
-
-const FORMAT_RULES: Array<{ key: string; re: RegExp }> = [
-  { key: "tutorial", re: /tutorial|教程/i },
-  { key: "storytelling", re: /storytelling|叙事|漫画/i },
-  { key: "whiteboard-video", re: /whiteboard|白板/i },
-  { key: "talking-head", re: /talking-?head|口播/i },
-  { key: "image-text-video", re: /图文视频/i },
-  { key: "english-learning", re: /english learning|英文学习/i },
-];
-
 export function slugId(value: string): string {
   return value
     .toLowerCase()
@@ -55,16 +36,21 @@ function matchKeys(text: string, rules: Array<{ key: string; re: RegExp }>): str
   return keys;
 }
 
-export function inferTaxonomy(text: string): {
+/** Optional hint for agents; never written to catalog automatically. */
+export function suggestPlatforms(text: string): string[] {
+  const keys = matchKeys(text, PLATFORM_RULES);
+  return keys.length > 0 ? keys : ["generic"];
+}
+
+export function inferTaxonomy(_text: string): {
   platforms: string[];
   content_types: string[];
   formats: string[];
 } {
-  const platforms = matchKeys(text, PLATFORM_RULES);
   return {
-    platforms: platforms.length > 0 ? platforms : ["generic"],
-    content_types: matchKeys(text, CONTENT_TYPE_RULES),
-    formats: matchKeys(text, FORMAT_RULES),
+    platforms: [],
+    content_types: [],
+    formats: [],
   };
 }
 
@@ -79,17 +65,9 @@ export function isPublishingSkill(skill: {
   return PUBLISHING_RE.test(`${skill.id} ${skill.name} ${skill.summary}`);
 }
 
-/** Merge catalog platforms with any platforms inferred from summary/name text. */
-export function mergePlatforms(
-  declared: string[],
-  text: string,
-): string[] {
-  const inferred = matchKeys(text, PLATFORM_RULES);
-  const merged = [...declared];
-  for (const key of inferred) {
-    if (!merged.includes(key)) merged.push(key);
-  }
-  return merged.length > 0 ? merged : ["generic"];
+/** @deprecated Classification is agent-driven; see catalog/classification-guide.md */
+export function mergePlatforms(declared: string[], _text: string): string[] {
+  return declared.length > 0 ? declared : ["generic"];
 }
 
 export function shortenSummary(text: string): string {

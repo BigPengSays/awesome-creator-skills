@@ -151,7 +151,7 @@ async function planRepo(
         platforms: tags.platforms,
         contentTypes: tags.content_types,
         formats: tags.formats,
-        reason: shortenSummary(skill.description || skill.name),
+        reason: `${shortenSummary(skill.description || skill.name)} — pending agent classification`,
       };
       decisions.push(decision);
       toImport.push(decision);

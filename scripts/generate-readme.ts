@@ -1,5 +1,5 @@
 import { writeFileSync } from "node:fs";
-import { isPublishingSkill, mergePlatforms } from "./lib/creator-match.ts";
+import { isPublishingSkill } from "./lib/creator-match.ts";
 import { loadCatalog, loadStars, loadTaxonomy } from "./lib/catalog.ts";
 import { parseGithubRepo } from "./lib/github.ts";
 import { README_MD } from "./lib/paths.ts";
@@ -59,11 +59,6 @@ interface SectionResult {
   toc: TocSection;
 }
 
-function effectivePlatforms(skill: Skill): string[] {
-  const text = `${skill.name} ${skill.summary}`;
-  return mergePlatforms(skill.platforms, text);
-}
-
 function sectionFor(
   title: string,
   taxonomy: Record<string, { label: string }>,
@@ -106,12 +101,33 @@ function sectionFor(
   };
 }
 
+function flatSectionFor(
+  title: string,
+  skills: Skill[],
+  stars: StarsCache,
+  anchorUsed: Map<string, number>,
+): SectionResult {
+  const sectionAnchor = githubHeadingAnchor(title, anchorUsed);
+  const sorted = sortSkills(skills, stars);
+  const chunks = [`## ${title}`, ""];
+  if (sorted.length === 0) {
+    chunks.push("_暂无。_", "");
+  } else {
+    for (const skill of sorted) chunks.push(skillLine(skill));
+    chunks.push("");
+  }
+  return {
+    body: chunks.join("\n"),
+    toc: { label: title, anchor: sectionAnchor, subsections: [] },
+  };
+}
+
 function renderToc(sections: TocSection[]): string {
   const lines = ["## 目录", ""];
   for (const section of sections) {
     lines.push(`- [${section.label}](#${section.anchor})`);
     for (const sub of section.subsections) {
-      lines.push(`  - [${section.label} · ${sub.label}](#${sub.anchor})`);
+      lines.push(`  - [${sub.label}](#${sub.anchor})`);
     }
   }
   lines.push("");
@@ -123,9 +139,7 @@ function uniqueRepos(skills: Skill[]): string[] {
 }
 
 function coverageLine(skills: Skill[], taxonomy: Taxonomy): string {
-  const platformKeys = new Set(
-    skills.flatMap((skill) => effectivePlatforms(skill)),
-  );
+  const platformKeys = new Set(skills.flatMap((skill) => skill.platforms));
   const typeKeys = new Set(skills.flatMap((skill) => skill.content_types));
   const platforms = Object.entries(taxonomy.platforms)
     .filter(([key]) => platformKeys.has(key) && key !== "generic")
@@ -150,16 +164,11 @@ export function renderReadme(): string {
   const anchorUsed = new Map<string, number>();
 
   const publishingSkills = skills.filter(isPublishingSkill);
-  const platformSkills = skills.map((skill) => ({
-    ...skill,
-    platforms: effectivePlatforms(skill),
-  }));
+  const platformSkills = skills;
 
-  const publishingSection = sectionFor(
+  const publishingSection = flatSectionFor(
     "内容发布",
-    taxonomy.platforms,
     publishingSkills,
-    (skill) => effectivePlatforms(skill),
     stars,
     anchorUsed,
   );
@@ -193,10 +202,10 @@ export function renderReadme(): string {
   );
 
   const toc = renderToc([
-    publishingSection.toc,
     platformSection.toc,
     typeSection.toc,
     formatSection.toc,
+    publishingSection.toc,
     {
       label: "安装",
       anchor: githubHeadingAnchor("安装", anchorUsed),
@@ -227,8 +236,8 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 ${toc}
 
-${publishingSection.body}
-${platformSection.body}${typeSection.body}${formatSection.body}## 安装
+${platformSection.body}${typeSection.body}${formatSection.body}
+${publishingSection.body}## 安装
 
 安装单个技能：
 

@@ -114,9 +114,9 @@ export async function vendorSkillFromUrl(input: {
     id,
     name: input.name || frontmatter.name || id,
     summary: input.summary || shortenSummary(frontmatter.description || id),
-    platforms: input.platforms?.length ? input.platforms : tags.platforms,
-    content_types: input.contentTypes?.length ? input.contentTypes : tags.content_types,
-    formats: input.formats?.length ? input.formats : tags.formats,
+    platforms: input.platforms ?? tags.platforms,
+    content_types: input.contentTypes ?? tags.content_types,
+    formats: input.formats ?? tags.formats,
     source: {
       type: "url",
       url: input.url,
