@@ -36,6 +36,24 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: baoyu-compress-image
+    name: baoyu-compress-image
+    summary: 把图片压缩为 WebP 或 PNG 并自动选择工具，适合发布前减小体积而不明显损画质。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-compress-image
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
   - id: baoyu-cover-image
     name: baoyu-cover-image
     summary: 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。
@@ -54,6 +72,42 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: baoyu-diagram
+    name: baoyu-diagram
+    summary: 生成深色主题 SVG 架构图、流程图、时序图、思维导图等，适合长文与教程配图。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-diagram
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-format-markdown
+    name: baoyu-format-markdown
+    summary: 为纯文本或 Markdown 补 frontmatter、标题、摘要、层级与代码块，整理成可发布的文章结构。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-format-markdown
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
   - id: baoyu-infographic
     name: baoyu-infographic
     summary: 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。
@@ -67,6 +121,24 @@ skills:
       type: git
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-infographic
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-markdown-to-html
+    name: baoyu-markdown-to-html
+    summary: 把 Markdown 转为带微信主题的 styled HTML，支持代码高亮、数学、PlantUML 与脚注。
+    role: creation
+    platforms:
+      - wechat-oa
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-markdown-to-html
       ref: main
       pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
     license: MIT
@@ -144,6 +216,42 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: baoyu-translate
+    name: baoyu-translate
+    summary: 文章文档三档翻译（quick/normal/refined），适合多语言内容生产而不只是机械直译。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-translate
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-url-to-markdown
+    name: baoyu-url-to-markdown
+    summary: 用 Chrome CDP 抓取任意 URL 并转为 Markdown，内置 X、YouTube、HN 等站点适配与登录等待。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-url-to-markdown
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
   - id: baoyu-xhs-images
     name: baoyu-xhs-images
     summary: 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。
@@ -177,6 +285,60 @@ skills:
       path: skills/baoyu-youtube-transcript
       ref: main
       pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: bilibili-to-doc
+    name: bilibili-to-doc
+    summary: 从 B 站视频提取 AI 字幕并整理成结构化 Markdown 教程或文章文档。
+    role: creation
+    platforms:
+      - bilibili
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/programmerloverun/bilibili-to-doc
+      path: .
+      ref: main
+      pinned_commit: 85ffafa33f8f5b3c269d45e5f1419e87ef4d1f34
+    license: MIT
+    sync: true
+    status: active
+  - id: blog-to-linkedin-post
+    name: blog-to-linkedin-post
+    summary: 把长文博客改写成 LinkedIn 专业帖，含源文 golden quote、近 30 天趋势适配与视觉 brief。
+    role: creation
+    platforms:
+      - linkedin
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JeffLi1993/content-repurposing-skills
+      path: blog-to-linkedin-post
+      ref: main
+      pinned_commit: 64bd0ad95c658412a2a06df133e01f48eef5c210
+    license: MIT
+    sync: true
+    status: active
+  - id: blog-to-twitter-post
+    name: blog-to-twitter-post
+    summary: 把长文博客改写成 X 原生短帖，含推荐角度、趋势桥接与可配图 visual brief。
+    role: creation
+    platforms:
+      - x
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JeffLi1993/content-repurposing-skills
+      path: blog-to-twitter-post
+      ref: main
+      pinned_commit: 64bd0ad95c658412a2a06df133e01f48eef5c210
     license: MIT
     sync: true
     status: active
@@ -268,6 +430,24 @@ skills:
       path: ian-xiaohei-illustrations
       ref: main
       pinned_commit: 91b560849e8f883922cc2fa8a358a668caa94105
+    license: MIT
+    sync: true
+    status: active
+  - id: khazix-writer
+    name: khazix-writer
+    summary: 按卡兹克公众号口吻与节奏写长文，含禁忌词、四层自检与风格示例库。
+    role: creation
+    platforms:
+      - wechat-oa
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/KKKKhazix/khazix-skills
+      path: khazix-writer
+      ref: main
+      pinned_commit: a8744f0c682cac4c8c25f97d5968f3d3e6241e63
     license: MIT
     sync: true
     status: active

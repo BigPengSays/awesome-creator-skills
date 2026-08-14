@@ -6,7 +6,7 @@ platforms:
   youtube:
     label: YouTube
   x:
-    label: X
+    label: X (Twitter)
   weibo:
     label: 微博
   linkedin:

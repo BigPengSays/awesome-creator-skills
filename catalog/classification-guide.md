@@ -44,7 +44,7 @@
 | `wechat-oa` | 微信公众号 |
 | `xiaohongshu` | 小红书 |
 | `youtube` | YouTube |
-| `x` | X / Twitter |
+| `x` | X (Twitter) |
 | `weibo` | 微博 |
 | `bilibili` | 哔哩哔哩 / B 站 |
 | `linkedin` | LinkedIn |

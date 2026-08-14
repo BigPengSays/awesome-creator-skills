@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href="https://github.com/BigPengSays"><img alt="BigPengSays" src="https://img.shields.io/badge/Made%20by%20BigPengSays-000?logoColor=fff" /></a>
-<a href="https://github.com/BigPengSays/awesome-creator-skills"><img alt="Skills" src="https://img.shields.io/badge/skills-24-2ea043?logoColor=fff" /></a>
+<a href="https://github.com/BigPengSays/awesome-creator-skills"><img alt="Skills" src="https://img.shields.io/badge/skills-34-2ea043?logoColor=fff" /></a>
 <a href="https://github.com/BigPengSays/awesome-creator-skills/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/BigPengSays/awesome-creator-skills?color=blue" /></a>
 </p>
 
@@ -14,9 +14,9 @@
 
 面向内容创作的 **Agent Skills** 精选合集。每个 skill 入库前都经过人工筛选与验证，多数也是我日常在用的工具，可以直接装进 Agent 的创作工作流。更多精选Skill 会持续更新
 
-- **平台覆盖：** 微信公众号 · 小红书 · YouTube · 哔哩哔哩
+- **平台覆盖：** 微信公众号 · 小红书 · YouTube · X (Twitter) · LinkedIn · 哔哩哔哩
 - **内容形态：** 文章 · 图片 · 图文 · 视频 · 幻灯片 · 漫画 · 信息图
-- **当前收录：** **24** 个精选 skill，[持续更新中](CONTRIBUTING.md)
+- **当前收录：** **34** 个精选 skill，[持续更新中](CONTRIBUTING.md)
 
 ## 快速开始
 
@@ -36,7 +36,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 **[按平台](#按平台)**
 
-> [微信公众号](#微信公众号) · [小红书](#小红书) · [YouTube](#youtube) · [哔哩哔哩](#哔哩哔哩) · [通用](#通用)
+> [微信公众号](#微信公众号) · [小红书](#小红书) · [YouTube](#youtube) · [X (Twitter)](#x-twitter) · [LinkedIn](#linkedin) · [哔哩哔哩](#哔哩哔哩) · [通用](#通用)
 
 **[按创作类型](#按创作类型)**
 
@@ -57,6 +57,8 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 #### 微信公众号
 
+- [khazix-writer](https://github.com/KKKKhazix/khazix-skills/tree/main/khazix-writer) [![GitHub Stars](https://badgen.net/github/stars/KKKKhazix/khazix-skills)](https://github.com/KKKKhazix/khazix-skills) — 按卡兹克公众号口吻与节奏写长文，含禁忌词、四层自检与风格示例库。
+- [baoyu-markdown-to-html](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-markdown-to-html) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown 转为带微信主题的 styled HTML，支持代码高亮、数学、PlantUML 与脚注。
 - [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-social-card-skill)](https://github.com/op7418/guizang-social-card-skill) — 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
 - [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
 - [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
@@ -75,18 +77,32 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-youtube-transcript](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-youtube-transcript) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按链接或视频 ID 下载多语言字幕与封面，支持翻译、章节与说话人识别，并缓存原文方便反复排版。
 - [youtube-clipper](https://github.com/op7418/youtube-clipper-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — 下载 YouTube 视频与字幕，用 AI 切出精细章节；选定片段后自动剪辑并烧录中英双语字幕，同时生成总结文案。
 
+#### X (Twitter)
+
+- [blog-to-twitter-post](https://github.com/JeffLi1993/content-repurposing-skills/tree/main/blog-to-twitter-post) [![GitHub Stars](https://badgen.net/github/stars/JeffLi1993/content-repurposing-skills)](https://github.com/JeffLi1993/content-repurposing-skills) — 把长文博客改写成 X 原生短帖，含推荐角度、趋势桥接与可配图 visual brief。
+
+#### LinkedIn
+
+- [blog-to-linkedin-post](https://github.com/JeffLi1993/content-repurposing-skills/tree/main/blog-to-linkedin-post) [![GitHub Stars](https://badgen.net/github/stars/JeffLi1993/content-repurposing-skills)](https://github.com/JeffLi1993/content-repurposing-skills) — 把长文博客改写成 LinkedIn 专业帖，含源文 golden quote、近 30 天趋势适配与视觉 brief。
+
 #### 哔哩哔哩
 
 - [oil-cover](https://github.com/oil-oil/oil-cover) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-cover)](https://github.com/oil-oil/oil-cover) — 生成小红书和 B 站 AI 工具实操视频封面，支持脚本模式与 Agent 自主模式、真实视频证据、三画幅输出和可选创作者头像。
+- [bilibili-to-doc](https://github.com/programmerloverun/bilibili-to-doc) [![GitHub Stars](https://badgen.net/github/stars/programmerloverun/bilibili-to-doc)](https://github.com/programmerloverun/bilibili-to-doc) — 从 B 站视频提取 AI 字幕并整理成结构化 Markdown 教程或文章文档。
 
 #### 通用
 
 - [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。
 - [baoyu-comic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-comic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把知识、教程或人物故事做成多格知识漫画，支持多种画风与语气，先分镜再出图。
+- [baoyu-compress-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-compress-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把图片压缩为 WebP 或 PNG 并自动选择工具，适合发布前减小体积而不明显损画质。
 - [baoyu-cover-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-cover-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。
+- [baoyu-diagram](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-diagram) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成深色主题 SVG 架构图、流程图、时序图、思维导图等，适合长文与教程配图。
+- [baoyu-format-markdown](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-format-markdown) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为纯文本或 Markdown 补 frontmatter、标题、摘要、层级与代码块，整理成可发布的文章结构。
 - [baoyu-infographic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-infographic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
+- [baoyu-translate](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-translate) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 文章文档三档翻译（quick/normal/refined），适合多语言内容生产而不只是机械直译。
+- [baoyu-url-to-markdown](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-url-to-markdown) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 用 Chrome CDP 抓取任意 URL 并转为 Markdown，内置 X、YouTube、HN 等站点适配与登录等待。
 - [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
 - [shuorenhua](https://github.com/MrGeDiao/shuorenhua) [![GitHub Stars](https://badgen.net/github/stars/MrGeDiao/shuorenhua)](https://github.com/MrGeDiao/shuorenhua) — 中英文成稿去 AI 味与模板腔，按 chat、docs、公开写作等场景分级改写，保留事实、术语与责任主体。
 - [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
@@ -96,14 +112,24 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 #### 文章
 
+- [khazix-writer](https://github.com/KKKKhazix/khazix-skills/tree/main/khazix-writer) [![GitHub Stars](https://badgen.net/github/stars/KKKKhazix/khazix-skills)](https://github.com/KKKKhazix/khazix-skills) — 按卡兹克公众号口吻与节奏写长文，含禁忌词、四层自检与风格示例库。
+- [baoyu-format-markdown](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-format-markdown) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为纯文本或 Markdown 补 frontmatter、标题、摘要、层级与代码块，整理成可发布的文章结构。
+- [baoyu-markdown-to-html](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-markdown-to-html) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown 转为带微信主题的 styled HTML，支持代码高亮、数学、PlantUML 与脚注。
+- [baoyu-translate](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-translate) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 文章文档三档翻译（quick/normal/refined），适合多语言内容生产而不只是机械直译。
+- [baoyu-url-to-markdown](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-url-to-markdown) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 用 Chrome CDP 抓取任意 URL 并转为 Markdown，内置 X、YouTube、HN 等站点适配与登录等待。
 - [shuorenhua](https://github.com/MrGeDiao/shuorenhua) [![GitHub Stars](https://badgen.net/github/stars/MrGeDiao/shuorenhua)](https://github.com/MrGeDiao/shuorenhua) — 中英文成稿去 AI 味与模板腔，按 chat、docs、公开写作等场景分级改写，保留事实、术语与责任主体。
 - [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
+- [blog-to-linkedin-post](https://github.com/JeffLi1993/content-repurposing-skills/tree/main/blog-to-linkedin-post) [![GitHub Stars](https://badgen.net/github/stars/JeffLi1993/content-repurposing-skills)](https://github.com/JeffLi1993/content-repurposing-skills) — 把长文博客改写成 LinkedIn 专业帖，含源文 golden quote、近 30 天趋势适配与视觉 brief。
+- [blog-to-twitter-post](https://github.com/JeffLi1993/content-repurposing-skills/tree/main/blog-to-twitter-post) [![GitHub Stars](https://badgen.net/github/stars/JeffLi1993/content-repurposing-skills)](https://github.com/JeffLi1993/content-repurposing-skills) — 把长文博客改写成 X 原生短帖，含推荐角度、趋势桥接与可配图 visual brief。
+- [bilibili-to-doc](https://github.com/programmerloverun/bilibili-to-doc) [![GitHub Stars](https://badgen.net/github/stars/programmerloverun/bilibili-to-doc)](https://github.com/programmerloverun/bilibili-to-doc) — 从 B 站视频提取 AI 字幕并整理成结构化 Markdown 教程或文章文档。
 - [humanizer-zh](https://github.com/op7418/humanizer-zh) [![GitHub Stars](https://badgen.net/github/stars/op7418/humanizer-zh)](https://github.com/op7418/humanizer-zh) — 基于维基 AI 写作特征清单，识别并改写中文文本里的 AI 痕迹，让成稿更自然、更像人写。
 
 #### 图片
 
 - [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。
+- [baoyu-compress-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-compress-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把图片压缩为 WebP 或 PNG 并自动选择工具，适合发布前减小体积而不明显损画质。
 - [baoyu-cover-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-cover-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。
+- [baoyu-diagram](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-diagram) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成深色主题 SVG 架构图、流程图、时序图、思维导图等，适合长文与教程配图。
 - [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
 - [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
 - [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
