@@ -1,0 +1,47 @@
+platforms:
+  wechat-oa:
+    label: 微信公众号
+  xiaohongshu:
+    label: 小红书
+  youtube:
+    label: YouTube
+  x:
+    label: X
+  weibo:
+    label: 微博
+  linkedin:
+    label: LinkedIn
+  bilibili:
+    label: 哔哩哔哩
+  generic:
+    label: 通用
+
+content_types:
+  article:
+    label: 文章
+  image:
+    label: 图片
+  image-text:
+    label: 图文
+  video:
+    label: 视频
+  slides:
+    label: 幻灯片
+  comic:
+    label: 漫画
+  infographic:
+    label: 信息图
+
+formats:
+  whiteboard-video:
+    label: 白板视频
+  talking-head:
+    label: 口播视频
+  image-text-video:
+    label: 图文视频
+  english-learning:
+    label: 英文学习
+  tutorial:
+    label: 教程
+  storytelling:
+    label: 叙事

@@ -1,0 +1,44 @@
+name: Sync skills
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Sync from upstream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run sync
+      - name: Open PR if needed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No sync changes"
+            exit 0
+          fi
+          branch="sync/skills-$(date +%Y%m%d)"
+          git checkout -b "$branch"
+          git add catalog/skills.yaml skills README.md
+          git commit -m "chore: sync vendored skills from upstream"
+          git push -u origin "$branch"
+          gh pr create \
+            --title "chore: sync vendored skills from upstream" \
+            --body "Automated content sync from upstream git sources listed in \`catalog/skills.yaml\`. Review diffs and SOURCE.md pins before merging." \
+            --head "$branch"

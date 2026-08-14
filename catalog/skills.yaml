@@ -1,0 +1,90 @@
+skills:
+  - id: baoyu-cover-image
+    name: baoyu-cover-image
+    summary: 生成文章封面图
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-cover-image
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-post-to-wechat
+    name: baoyu-post-to-wechat
+    summary: 发布微信公众号文章与贴图
+    platforms:
+      - wechat-oa
+    content_types:
+      - article
+      - image-text
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-post-to-wechat
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-post-to-x
+    name: baoyu-post-to-x
+    summary: 发布推文与 X Articles
+    platforms:
+      - x
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-post-to-x
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-xhs-images
+    name: baoyu-xhs-images
+    summary: 生成小红书图文卡片
+    platforms:
+      - xiaohongshu
+    content_types:
+      - image
+      - image-text
+      - infographic
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-xhs-images
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active
+  - id: baoyu-youtube-transcript
+    name: baoyu-youtube-transcript
+    summary: 下载 YouTube 字幕与封面
+    platforms:
+      - youtube
+    content_types:
+      - video
+    formats:
+      - tutorial
+    source:
+      type: git
+      repo: https://github.com/JimLiu/baoyu-skills
+      path: skills/baoyu-youtube-transcript
+      ref: main
+      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+    license: MIT
+    sync: true
+    status: active

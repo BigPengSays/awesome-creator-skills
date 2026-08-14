@@ -1,0 +1,23 @@
+{
+  "name": "awesome-creator-skills",
+  "private": true,
+  "type": "module",
+  "description": "Curated, installable mirror of creator-focused agent skills",
+  "scripts": {
+    "vendor": "tsx scripts/vendor-skill.ts",
+    "sync": "tsx scripts/sync-skills.ts",
+    "refresh-stars": "tsx scripts/refresh-stars.ts",
+    "generate-readme": "tsx scripts/generate-readme.ts",
+    "discover": "tsx scripts/discover.ts",
+    "approve": "tsx scripts/approve.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0",
+    "yaml": "^2.8.0"
+  }
+}

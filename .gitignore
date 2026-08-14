@@ -1,0 +1,5 @@
+node_modules/
+.tmp/
+candidates/
+.DS_Store
+*.log

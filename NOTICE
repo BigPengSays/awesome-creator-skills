@@ -1,0 +1,10 @@
+This repository mirrors third-party Agent Skills for convenience.
+
+Each skill under `skills/` remains copyright of its original authors and
+is redistributed under the license recorded in that skill's `SOURCE.md`
+and in `catalog/skills.yaml`.
+
+The catalog, scripts, and documentation in this repository are licensed
+under the MIT License (see `LICENSE`), unless a file says otherwise.
+
+Do not treat a vendored skill as original work of this repository.
