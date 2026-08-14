@@ -6,19 +6,25 @@
 
 # 内容创作者 Skill 精选大合集
 
-适用于内容创作的 Skill 合集，都是精选后才加入到仓库中，大部分是我自己也在使用的
+面向内容创作的 **Agent Skills** 精选合集。每个 skill 入库前都经过人工筛选与验证，多数也是维护者日常在用的工具——不是 star 排行榜，而是可以直接装进 Agent 的创作工作流。
 
-覆盖微信公众号、小红书、YouTube、哔哩哔哩等平台的内容创作，包含文章、图片、图文、视频等内容形式
+- **平台覆盖：** 微信公众号 · 小红书 · YouTube · 哔哩哔哩
+- **内容形态：** 文章 · 图片 · 图文 · 视频 · 幻灯片 · 漫画 · 信息图
+- **当前收录：** **24** 个精选 skill，[持续更新中](CONTRIBUTING.md)
 
-Skill在持续更新中， [欢迎投稿](CONTRIBUTING.md) · 发现好用的创作 skill，提 Issue 或 PR
+## 快速开始
 
-一条命令装进 Cursor、Claude Code。
+支持 [Cursor](https://cursor.com)、[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 等 Agent 环境，一条命令即可安装：
 
 ```bash
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 ```
 
+安装全部 skill 或查看其他安装方式，见下方 [安装](#安装) 章节。
 
+---
+
+发现好用的创作 skill？[欢迎投稿](CONTRIBUTING.md) · 提 Issue 或 PR
 
 ## 目录
 

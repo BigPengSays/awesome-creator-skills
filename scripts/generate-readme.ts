@@ -144,40 +144,53 @@ function renderToc(sections: TocSection[]): string {
   return lines.join("\n");
 }
 
-function coverageLine(skills: Skill[], taxonomy: Taxonomy): string {
+function platformLine(skills: Skill[], taxonomy: Taxonomy): string {
   const creationSkills = skills.filter((skill) => !isPublishingSkill(skill));
   const platformKeys = new Set(creationSkills.flatMap((skill) => skill.platforms));
-  const typeKeys = new Set(creationSkills.flatMap((skill) => skill.content_types));
-  const platforms = Object.entries(taxonomy.platforms)
+  return Object.entries(taxonomy.platforms)
     .filter(([key]) => platformKeys.has(key) && key !== "generic")
-    .map(([, meta]) => meta.label);
-  const types = Object.entries(taxonomy.content_types)
+    .map(([, meta]) => meta.label)
+    .join(" · ");
+}
+
+function typeLine(skills: Skill[], taxonomy: Taxonomy): string {
+  const creationSkills = skills.filter((skill) => !isPublishingSkill(skill));
+  const typeKeys = new Set(creationSkills.flatMap((skill) => skill.content_types));
+  return Object.entries(taxonomy.content_types)
     .filter(([key]) => typeKeys.has(key))
-    .map(([, meta]) => meta.label);
-  const parts = [`**${skills.length}** 个技能`];
-  if (platforms.length) parts.push(platforms.join(" · "));
-  if (types.length) parts.push(types.join(" · "));
-  return parts.join(" · ");
+    .map(([, meta]) => meta.label)
+    .join(" · ");
 }
 
 function renderHeader(skills: Skill[], taxonomy: Taxonomy): string {
+  const platforms = platformLine(skills, taxonomy);
+  const types = typeLine(skills, taxonomy);
+
   return `<p align="center">
   <img src="assets/readme/xiaohei-header.jpg" alt="内容创作者 Skill 精选大合集 — Ian 小黑风格 header 配图" width="100%" />
 </p>
 
 # 内容创作者 Skill 精选大合集
 
-> **Agent Skills** 精选目录，给内容创作者 — 写文章、做封面、剪视频、做 PPT，一条命令装进 Cursor、Claude Code。
+面向内容创作的 **Agent Skills** 精选合集。每个 skill 入库前都经过人工筛选与验证，多数也是维护者日常在用的工具——不是 star 排行榜，而是可以直接装进 Agent 的创作工作流。
 
-按平台和创作类型整理，少踩坑、少搜 repo。
+- **平台覆盖：** ${platforms || "多平台"}
+- **内容形态：** ${types || "多种创作类型"}
+- **当前收录：** **${skills.length}** 个精选 skill，[持续更新中](CONTRIBUTING.md)
 
-> ${coverageLine(skills, taxonomy)}
+## 快速开始
+
+支持 [Cursor](https://cursor.com)、[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 等 Agent 环境，一条命令即可安装：
 
 \`\`\`bash
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 \`\`\`
 
-[欢迎投稿](CONTRIBUTING.md) · 发现好用的创作 skill，提 Issue 或 PR`;
+安装全部 skill 或查看其他安装方式，见下方 [安装](#安装) 章节。
+
+---
+
+发现好用的创作 skill？[欢迎投稿](CONTRIBUTING.md) · 提 Issue 或 PR`;
 }
 
 export function renderReadme(): string {
