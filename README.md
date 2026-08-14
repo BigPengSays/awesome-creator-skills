@@ -10,7 +10,7 @@
 
 手工筛选真正服务于**内容生产**的 skill，按发布渠道与创作形态整理，帮你少踩坑、少搜 repo。
 
-**22** 个精选 skill · 微信公众号 · 小红书 · YouTube · 哔哩哔哩
+**24** 个精选 skill · 微信公众号 · 小红书 · YouTube · 哔哩哔哩
 
 文章 · 图片 · 图文 · 视频 · 幻灯片 · 漫画 · 信息图
 
@@ -81,13 +81,17 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-infographic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-infographic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 从文稿生成可发表的高密度信息图，提供 21 种版式与 22 种视觉风格，并推荐版式与风格组合。
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
 - [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
+- [shuorenhua](https://github.com/MrGeDiao/shuorenhua) [![GitHub Stars](https://badgen.net/github/stars/MrGeDiao/shuorenhua)](https://github.com/MrGeDiao/shuorenhua) — 中英文成稿去 AI 味与模板腔，按 chat、docs、公开写作等场景分级改写，保留事实、术语与责任主体。
 - [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
 - [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
+- [humanizer-zh](https://github.com/op7418/humanizer-zh) [![GitHub Stars](https://badgen.net/github/stars/op7418/humanizer-zh)](https://github.com/op7418/humanizer-zh) — 基于维基 AI 写作特征清单，识别并改写中文文本里的 AI 痕迹，让成稿更自然、更像人写。
 ## 按创作类型
 
 #### 文章
 
+- [shuorenhua](https://github.com/MrGeDiao/shuorenhua) [![GitHub Stars](https://badgen.net/github/stars/MrGeDiao/shuorenhua)](https://github.com/MrGeDiao/shuorenhua) — 中英文成稿去 AI 味与模板腔，按 chat、docs、公开写作等场景分级改写，保留事实、术语与责任主体。
 - [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
+- [humanizer-zh](https://github.com/op7418/humanizer-zh) [![GitHub Stars](https://badgen.net/github/stars/op7418/humanizer-zh)](https://github.com/op7418/humanizer-zh) — 基于维基 AI 写作特征清单，识别并改写中文文本里的 AI 痕迹，让成稿更自然、更像人写。
 
 #### 图片
 
@@ -166,6 +170,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill '*'
 技能版权仍归原作者。本仓库目录与脚本采用 MIT 许可，各技能保留其上游许可证。详见各技能目录中的 `SOURCE.md`，以及：
 
 - https://github.com/JimLiu/baoyu-skills
+- https://github.com/MrGeDiao/shuorenhua
 - https://github.com/geekjourneyx/md2wechat-skill
 - https://github.com/gnipbao/story-to-handdrawn-video
 - https://github.com/helloianneo/ian-xiaohei-illustrations
@@ -176,5 +181,6 @@ npx skills add BigPengSays/awesome-creator-skills --skill '*'
 - https://github.com/op7418/guizang-material-illustration
 - https://github.com/op7418/guizang-ppt-skill
 - https://github.com/op7418/guizang-social-card-skill
+- https://github.com/op7418/humanizer-zh
 - https://github.com/op7418/youtube-clipper-skill
 - https://github.com/ziguishian/xhs-visual-director-skill
