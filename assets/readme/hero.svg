@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">创作技能合集</title>
+  <desc id="desc">面向内容创作者的可安装 Agent Skills 精选目录，覆盖微信公众号、小红书、YouTube、X 与微博。</desc>
+
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171614"/>
+      <stop offset="1" stop-color="#12110F"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="430" rx="28" fill="url(#paper)"/>
+  <rect x="1" y="1" width="1198" height="428" rx="27" fill="none" stroke="#2C2924" stroke-width="1"/>
+
+  <g id="title-block" transform="translate(56 52)">
+    <rect x="0" y="4" width="8" height="8" fill="#C45C3A"/>
+    <text x="18" y="13" fill="#C9A36A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" letter-spacing="3.2">CURATED CATALOG</text>
+
+    <text x="0" y="78" fill="#F3EFE4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif" font-size="52" font-weight="700">创作技能合集</text>
+    <text x="0" y="112" fill="#8E877A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">awesome-creator-skills</text>
+
+    <rect x="0" y="136" width="72" height="2" fill="#C9A36A"/>
+
+    <text x="0" y="178" fill="#E7E1D4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif" font-size="20">面向内容创作者的可安装 Agent Skills</text>
+    <text x="0" y="208" fill="#B7B0A3" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif" font-size="18">按发布渠道与内容形态整理，一条命令即可使用</text>
+
+    <g transform="translate(0 286)">
+      <rect x="0" y="0" width="118" height="34" rx="8" fill="#1E1C19" stroke="#2E2B26"/>
+      <text x="59" y="22" text-anchor="middle" fill="#E7E1D4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif" font-size="16">可安装</text>
+
+      <rect x="128" y="0" width="148" height="34" rx="8" fill="#1E1C19" stroke="#2E2B26"/>
+      <text x="202" y="22" text-anchor="middle" fill="#E7E1D4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif" font-size="16">按渠道归档</text>
+
+      <rect x="286" y="0" width="168" height="34" rx="8" fill="#1E1C19" stroke="#2E2B26"/>
+      <text x="370" y="22" text-anchor="middle" fill="#E7E1D4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif" font-size="16">版权归原作者</text>
+    </g>
+  </g>
+
+  <g id="catalog-index" transform="translate(680 36)">
+    <rect width="464" height="358" rx="18" fill="#1C1A17" stroke="#2E2B26"/>
+    <text x="28" y="38" fill="#8E877A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" letter-spacing="2.4">INDEX</text>
+    <text x="92" y="38" fill="#F3EFE4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif" font-size="18" font-weight="600">目录</text>
+    <line x1="28" y1="54" x2="436" y2="54" stroke="#2E2B26"/>
+
+    <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif" font-size="20">
+      <text x="28" y="92" fill="#C9A36A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">01</text>
+      <text x="72" y="92" fill="#F3EFE4">微信公众号</text>
+      <text x="436" y="92" text-anchor="end" fill="#8E877A" font-size="18">排版 / 发布</text>
+      <line x1="28" y1="108" x2="436" y2="108" stroke="#26231F"/>
+
+      <text x="28" y="140" fill="#C9A36A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">02</text>
+      <text x="72" y="140" fill="#F3EFE4">小红书</text>
+      <text x="436" y="140" text-anchor="end" fill="#8E877A" font-size="18">图文卡片</text>
+      <line x1="28" y1="156" x2="436" y2="156" stroke="#26231F"/>
+
+      <text x="28" y="188" fill="#C9A36A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">03</text>
+      <text x="72" y="188" fill="#F3EFE4">YouTube</text>
+      <text x="436" y="188" text-anchor="end" fill="#8E877A" font-size="18">字幕 / 切片</text>
+      <line x1="28" y1="204" x2="436" y2="204" stroke="#26231F"/>
+
+      <text x="28" y="236" fill="#C9A36A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">04</text>
+      <text x="72" y="236" fill="#F3EFE4">X</text>
+      <text x="436" y="236" text-anchor="end" fill="#8E877A" font-size="18">推文 / 长文</text>
+      <line x1="28" y1="252" x2="436" y2="252" stroke="#26231F"/>
+
+      <text x="28" y="284" fill="#C9A36A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">05</text>
+      <text x="72" y="284" fill="#F3EFE4">微博</text>
+      <text x="436" y="284" text-anchor="end" fill="#8E877A" font-size="18">博文 / 头条</text>
+      <line x1="28" y1="300" x2="436" y2="300" stroke="#26231F"/>
+
+      <text x="28" y="332" fill="#C9A36A" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">06</text>
+      <text x="72" y="332" fill="#F3EFE4">通用</text>
+      <text x="436" y="332" text-anchor="end" fill="#8E877A" font-size="18">配图 / 漫画 / 幻灯片</text>
+    </g>
+  </g>
+</svg>
