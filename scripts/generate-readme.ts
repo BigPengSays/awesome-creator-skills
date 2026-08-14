@@ -165,12 +165,19 @@ function typeLine(skills: Skill[], taxonomy: Taxonomy): string {
 function renderHeader(skills: Skill[], taxonomy: Taxonomy): string {
   const platforms = platformLine(skills, taxonomy);
   const types = typeLine(skills, taxonomy);
+  const repo = "https://github.com/BigPengSays/awesome-creator-skills";
 
-  return `<p align="center">
-  <img src="assets/readme/xiaohei-header.jpg" alt="内容创作者 Skill 精选大合集 — Ian 小黑风格 header 配图" width="100%" />
+  return `<h1 align="center">内容创作者 Skill 精选大合集</h1>
+
+<p align="center">
+<a href="https://github.com/BigPengSays"><img alt="BigPengSays" src="https://img.shields.io/badge/Made%20by%20BigPengSays-000?logoColor=fff" /></a>
+<a href="${repo}"><img alt="Skills" src="https://img.shields.io/badge/skills-${skills.length}-2ea043?logoColor=fff" /></a>
+<a href="${repo}/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/BigPengSays/awesome-creator-skills?color=blue" /></a>
 </p>
 
-# 内容创作者 Skill 精选大合集
+<p align="center">
+  <img src="assets/readme/xiaohei-header.jpg" alt="内容创作者 Skill 精选大合集 — Ian 小黑风格 header 配图" width="100%" />
+</p>
 
 面向内容创作的 **Agent Skills** 精选合集。每个 skill 入库前都经过人工筛选与验证，多数也是维护者日常在用的工具——不是 star 排行榜，而是可以直接装进 Agent 的创作工作流。
 
