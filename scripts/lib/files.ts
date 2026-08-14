@@ -66,7 +66,9 @@ export function fileFingerprint(root: string): string {
 }
 
 export function writeSourceMd(skillDir: string, skill: Skill, extra: { fetchedAt: string; author?: string }): void {
-  const body = `# Source
+  const body =
+    skill.source.type === "git"
+      ? `# Source
 
 This directory is a mirror. Copyright remains with the original authors.
 
@@ -78,6 +80,16 @@ This directory is a mirror. Copyright remains with the original authors.
 - Synced at: ${extra.fetchedAt}
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry \`sync: false\`.
+`
+      : `# Source
+
+This directory was copied from a non-GitHub page. Copyright remains with the original authors.
+
+- Source URL: ${skill.source.url}
+- License: ${skill.license ?? "see original page"}
+- Copied at: ${extra.fetchedAt}
+
+This entry is not synced from git (\`sync: false\`).
 `;
   mkdirSync(skillDir, { recursive: true });
   writeFileSync(join(skillDir, "SOURCE.md"), body);

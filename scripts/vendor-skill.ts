@@ -1,7 +1,9 @@
 import { parseArgs } from "node:util";
-import { join } from "node:path";
+import { existsSync, statSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { loadCatalog, saveCatalog, upsertSkill } from "./lib/catalog.ts";
 import { copySkillTree, parseFrontmatter, readSkillMd, writeSourceMd } from "./lib/files.ts";
+import { inferTaxonomy, shortenSummary, slugId, uniqueSkillId } from "./lib/creator-match.ts";
 import {
   downloadTarball,
   getRepoLicense,
@@ -14,18 +16,16 @@ import type { Skill } from "./lib/types.ts";
 import { generateReadme } from "./generate-readme.ts";
 import { parseCandidateIssue } from "./lib/issue.ts";
 
-function shortenSummary(text: string): string {
-  const trimmed = text.replace(/\s+/g, " ").trim();
-  const cut = trimmed.search(/。|\.(?:\s|$)/);
-  const first = cut > 20 ? trimmed.slice(0, cut + 1).trim() : trimmed;
-  return first.length > 160 ? `${first.slice(0, 157)}…` : first;
-}
-
 function csv(value?: string): string[] {
   return (value ?? "")
     .split(",")
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function resolveSkillDir(inputPath: string): string {
+  if (existsSync(inputPath) && statSync(inputPath).isFile()) return dirname(inputPath);
+  return inputPath;
 }
 
 export async function vendorSkill(input: {
@@ -49,10 +49,11 @@ export async function vendorSkill(input: {
   const tmp = resetTmp("vendor");
   try {
     const extracted = await downloadTarball(parsed.owner, parsed.repo, sha, tmp);
-    const upstreamDir = join(extracted, input.path);
+    const rel = input.path.replace(/^\/+/, "") || ".";
+    const upstreamDir = rel === "." ? extracted : join(extracted, rel);
     const skillMd = readSkillMd(upstreamDir);
     const frontmatter = parseFrontmatter(skillMd);
-    const id = input.id || frontmatter.name || input.path.split("/").filter(Boolean).at(-1);
+    const id = input.id || frontmatter.name || rel.split("/").filter(Boolean).at(-1);
     if (!id) throw new Error("Could not determine skill id");
     const dest = join(SKILLS_DIR, id);
     copySkillTree(upstreamDir, dest);
@@ -67,7 +68,7 @@ export async function vendorSkill(input: {
       source: {
         type: "git",
         repo: repoUrl,
-        path: input.path.replace(/^\/+/, ""),
+        path: rel,
         ref,
         pinned_commit: sha,
       },
@@ -86,6 +87,51 @@ export async function vendorSkill(input: {
   }
 }
 
+export async function vendorSkillFromUrl(input: {
+  url: string;
+  fromDir: string;
+  id?: string;
+  platforms?: string[];
+  contentTypes?: string[];
+  formats?: string[];
+  license?: string;
+  summary?: string;
+  name?: string;
+}): Promise<Skill> {
+  const upstreamDir = resolveSkillDir(input.fromDir);
+  const skillMd = readSkillMd(upstreamDir);
+  const frontmatter = parseFrontmatter(skillMd);
+  const preferred =
+    input.id ||
+    slugId(frontmatter.name || upstreamDir.split("/").filter(Boolean).at(-1) || "skill");
+  const catalog = loadCatalog();
+  const id = uniqueSkillId(new Set(catalog.skills.map((item) => item.id)), preferred, "url");
+  if (!id) throw new Error("Could not determine skill id");
+  const dest = join(SKILLS_DIR, id);
+  copySkillTree(upstreamDir, dest);
+  const tags = inferTaxonomy(`${frontmatter.name ?? ""} ${frontmatter.description ?? ""} ${skillMd}`);
+  const skill: Skill = {
+    id,
+    name: input.name || frontmatter.name || id,
+    summary: input.summary || shortenSummary(frontmatter.description || id),
+    platforms: input.platforms?.length ? input.platforms : tags.platforms,
+    content_types: input.contentTypes?.length ? input.contentTypes : tags.content_types,
+    formats: input.formats?.length ? input.formats : tags.formats,
+    source: {
+      type: "url",
+      url: input.url,
+    },
+    license: input.license,
+    sync: false,
+    status: "active",
+  };
+  writeSourceMd(dest, skill, { fetchedAt: new Date().toISOString() });
+  upsertSkill(catalog, skill);
+  saveCatalog(catalog);
+  console.log(`Copied ${id} from ${input.url}`);
+  return skill;
+}
+
 async function main(): Promise<void> {
   const { values } = parseArgs({
     options: {
@@ -100,6 +146,8 @@ async function main(): Promise<void> {
       summary: { type: "string" },
       name: { type: "string" },
       "from-issue": { type: "string" },
+      "from-url": { type: "string" },
+      "from-dir": { type: "string" },
       "no-sync": { type: "boolean", default: false },
       "skip-readme": { type: "boolean", default: false },
     },
@@ -120,9 +168,23 @@ async function main(): Promise<void> {
       summary: parsed.summary,
       name: parsed.name,
     });
+  } else if (values["from-url"] && values["from-dir"]) {
+    await vendorSkillFromUrl({
+      url: values["from-url"],
+      fromDir: values["from-dir"],
+      id: values.id,
+      platforms: csv(values.platforms),
+      contentTypes: csv(values["content-types"]),
+      formats: csv(values.formats),
+      license: values.license,
+      summary: values.summary,
+      name: values.name,
+    });
   } else {
     if (!values.repo || !values.path) {
-      throw new Error("Usage: npm run vendor -- --repo <url> --path <skill-path> [--id ...] [--from-issue N]");
+      throw new Error(
+        "Usage: npm run vendor -- --repo <url> --path <skill-path> | --from-url <page> --from-dir <skill-dir>",
+      );
     }
     await vendorSkill({
       repo: values.repo,

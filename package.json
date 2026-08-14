@@ -8,6 +8,7 @@
     "sync": "tsx scripts/sync-skills.ts",
     "refresh-stars": "tsx scripts/refresh-stars.ts",
     "generate-readme": "tsx scripts/generate-readme.ts",
+    "ingest": "tsx scripts/ingest-from-urls.ts",
     "discover": "tsx scripts/discover.ts",
     "approve": "tsx scripts/approve.ts"
   },

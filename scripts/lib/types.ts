@@ -1,11 +1,26 @@
 export type SkillStatus = "candidate" | "active" | "deprecated";
 
-export interface SkillSource {
+export interface GitSkillSource {
   type: "git";
   repo: string;
   path: string;
   ref: string;
   pinned_commit?: string;
+}
+
+export interface UrlSkillSource {
+  type: "url";
+  url: string;
+}
+
+export type SkillSource = GitSkillSource | UrlSkillSource;
+
+export function isGitSource(source: SkillSource): source is GitSkillSource {
+  return source.type === "git";
+}
+
+export function sourceAttribution(source: SkillSource): string {
+  return source.type === "git" ? source.repo : source.url;
 }
 
 export interface Skill {

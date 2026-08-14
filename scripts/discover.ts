@@ -10,6 +10,7 @@ import {
   loadSeen,
   saveSeen,
 } from "./lib/catalog.ts";
+import { isCreatorSkillText, slugId } from "./lib/creator-match.ts";
 import { githubJson, githubRepoUrl, parseGithubRepo } from "./lib/github.ts";
 import { CANDIDATES_DIR, ensureDir } from "./lib/paths.ts";
 import type { Candidate } from "./lib/types.ts";
@@ -32,32 +33,12 @@ const CREATOR_QUERIES = [
   "copywriting",
 ];
 
-const CREATOR_RE =
-  /wechat|xiaohongshu|小红书|公众号|微信|youtube|weibo|微博|bilibili|哔哩|linkedin|twitter|tiktok|douyin|抖音|infographic|copywriting|文案|推文|图文|封面|slides?|comic|whiteboard|newsletter|rednote|tweet/i;
-
-const EXCLUDE_RE =
-  /\b(kubernetes|terraform|prisma|docker compose|github actions ci|eslint|webpack|postgres dba)\b/i;
-
 const AWESOME_README_URLS = [
   "https://raw.githubusercontent.com/VoltAgent/awesome-agent-skills/main/README.md",
   "https://raw.githubusercontent.com/heilcheng/awesome-agent-skills/main/README.md",
 ];
 
 const MAX_CANDIDATES = 20;
-
-function slugId(value: string): string {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
-}
-
-function keepText(text: string): boolean {
-  if (!CREATOR_RE.test(text)) return false;
-  if (EXCLUDE_RE.test(text) && !CREATOR_RE.test(text.replace(EXCLUDE_RE, ""))) return false;
-  return true;
-}
 
 async function searchGithub(query: string): Promise<Candidate[]> {
   const q = `${query} filename:SKILL.md`;
@@ -96,7 +77,7 @@ async function searchSkillsSh(query: string): Promise<Candidate[]> {
       skills?: Array<{ id: string; skillId?: string; name: string; source: string; installs?: number }>;
     };
     return (data.skills ?? [])
-      .filter((skill) => keepText(`${skill.name} ${skill.id} ${skill.source} ${query}`))
+      .filter((skill) => isCreatorSkillText(`${skill.name} ${skill.id} ${skill.source} ${query}`))
       .map((skill) => {
         const source = skill.source || skill.id.split("/").slice(0, 2).join("/");
         const parsed = parseGithubRepo(source);
@@ -127,7 +108,7 @@ async function parseAwesomeLists(): Promise<Candidate[]> {
       if (!res.ok) continue;
       const text = await res.text();
       for (const line of text.split("\n")) {
-        if (!keepText(line)) continue;
+        if (!isCreatorSkillText(line)) continue;
         const match = line.match(/https?:\/\/github\.com\/([\w.-]+)\/([\w.-]+)(?:\/tree\/[^)\s]+\/(\S+))?/);
         if (!match) continue;
         const repo = githubRepoUrl(match[1], match[2]);
@@ -208,7 +189,7 @@ export async function discover(): Promise<Candidate[]> {
   const seen = loadSeen();
   const seenKeys = new Set(seen.seen.map((item) => item.key));
   const fresh = dedupe(collected)
-    .filter((candidate) => keepText(`${candidate.id} ${candidate.summary} ${candidate.reason} ${candidate.path}`))
+    .filter((candidate) => isCreatorSkillText(`${candidate.id} ${candidate.summary} ${candidate.reason} ${candidate.path}`))
     .filter((candidate) => !isCataloged(candidate.repo, candidate.path))
     .filter((candidate) => !isRejected(candidate.repo, candidate.path))
     .filter((candidate) => !seenKeys.has(candidateKey(candidate.repo, candidate.path)))

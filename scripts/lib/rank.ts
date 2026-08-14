@@ -17,6 +17,7 @@ export function rankScore(stars: number, pushedAt: string | undefined, now = Dat
 }
 
 export function scoreFor(skill: Skill, cache: StarsCache, now = Date.now()): number {
+  if (skill.source.type !== "git") return 0;
   const key = githubRepoKey(skill.source.repo);
   if (!key) return 0;
   const record = cache[key];
@@ -28,11 +29,15 @@ export function sortSkills(skills: Skill[], cache: StarsCache, now = Date.now())
   return [...skills].sort((a, b) => {
     const scoreDiff = scoreFor(b, cache, now) - scoreFor(a, cache, now);
     if (scoreDiff !== 0) return scoreDiff;
-    const keyA = githubRepoKey(a.source.repo);
-    const keyB = githubRepoKey(b.source.repo);
+    const keyA = sourceKey(a);
+    const keyB = sourceKey(b);
     const starsA = keyA ? (cache[keyA]?.stars ?? 0) : 0;
     const starsB = keyB ? (cache[keyB]?.stars ?? 0) : 0;
     if (starsB !== starsA) return starsB - starsA;
     return a.id.localeCompare(b.id);
   });
+}
+
+function sourceKey(skill: Skill): string | null {
+  return skill.source.type === "git" ? githubRepoKey(skill.source.repo) : null;
 }

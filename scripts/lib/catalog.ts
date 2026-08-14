@@ -82,6 +82,11 @@ export function candidateKey(repo: string, path: string): string {
   return `${repo.replace(/\/+$/, "")}#${path.replace(/^\/+/, "")}`;
 }
 
+export function gitCandidateKey(skill: Skill): string | null {
+  if (skill.source.type !== "git") return null;
+  return candidateKey(skill.source.repo, skill.source.path);
+}
+
 export function isRejected(repo: string, path: string): boolean {
   const key = candidateKey(repo, path);
   return loadRejected().rejected.some((item) => candidateKey(item.repo, item.path) === key);
@@ -89,5 +94,12 @@ export function isRejected(repo: string, path: string): boolean {
 
 export function isCataloged(repo: string, path: string): boolean {
   const key = candidateKey(repo, path);
-  return loadCatalog().skills.some((item) => candidateKey(item.source.repo, item.source.path) === key);
+  return loadCatalog().skills.some((item) => gitCandidateKey(item) === key);
+}
+
+export function isCatalogedUrl(url: string): boolean {
+  const normalized = url.replace(/\/+$/, "");
+  return loadCatalog().skills.some(
+    (item) => item.source.type === "url" && item.source.url.replace(/\/+$/, "") === normalized,
+  );
 }

@@ -44,6 +44,25 @@ npm run vendor -- \
 
 `catalog/skills.yaml` 里的 `summary` 请改成一句中文（技能做什么），不要保留 SKILL.md 里整段触发词。
 
+## 从链接收录
+
+维护者可以把一个或多个链接交给项目内 skill [`.agents/skills/add-creator-skills`](.agents/skills/add-creator-skills/SKILL.md)，或直接跑：
+
+```bash
+npm run ingest -- --dry-run https://github.com/owner/repo
+npm run ingest -- https://github.com/owner/repo https://mp.weixin.qq.com/s/...
+```
+
+脚本会扫描仓库里全部 `SKILL.md`，只导入与本仓库收录标准吻合、且尚未入库的创作向技能，并刷新 star / `pushed_at`。公众号等文章若能解析出 GitHub 链接，会继续走 GitHub 流程；若只有内嵌 skill 正文：
+
+```bash
+npm run ingest -- --from-dir path/to/skill --url https://example.com/article
+```
+
+非 GitHub 拷贝写入 `source.type: url`、`sync: false`，README 不显示 star 徽章。许可无法确认时默认不入库。
+
+不要把 `add-creator-skills` 本身写入公开 catalog。
+
 ## 发现与确认
 
 每日（可手动触发）`discover` 会检索 GitHub、skills.sh 和若干 awesome 列表。新候选会：
@@ -72,6 +91,7 @@ README 用 [badgen](https://badgen.net) 的 GitHub stars 徽章展示**源仓库
 
 | 命令 | 作用 |
 | --- | --- |
+| `npm run ingest -- <url...>` | 从 GitHub 或文章链接收录创作向技能 |
 | `npm run vendor -- --repo ... --path ...` | 入库 |
 | `npm run sync` | 从上游同步 |
 | `npm run refresh-stars` | 刷新 star、最近提交时间并重生成 README |

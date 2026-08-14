@@ -13,6 +13,7 @@ export async function refreshStars(): Promise<boolean> {
   const previous = stringify(loadStars());
   const repos = new Map<string, { owner: string; repo: string }>();
   for (const skill of catalog.skills) {
+    if (skill.source.type !== "git") continue;
     const parsed = parseGithubRepo(skill.source.repo);
     const key = githubRepoKey(skill.source.repo);
     if (!parsed || !key) continue;

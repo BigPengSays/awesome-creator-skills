@@ -11,6 +11,10 @@ export async function syncSkills(): Promise<{ updated: string[] }> {
 
   for (const skill of catalog.skills) {
     if (!skill.sync || skill.status !== "active") continue;
+    if (skill.source.type !== "git") {
+      console.warn(`Skip ${skill.id}: not a GitHub source`);
+      continue;
+    }
     const parsed = parseGithubRepo(skill.source.repo);
     if (!parsed) {
       console.warn(`Skip ${skill.id}: not a GitHub source`);

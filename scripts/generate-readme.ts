@@ -3,7 +3,7 @@ import { loadCatalog, loadStars, loadTaxonomy } from "./lib/catalog.ts";
 import { parseGithubRepo } from "./lib/github.ts";
 import { README_MD } from "./lib/paths.ts";
 import { sortSkills } from "./lib/rank.ts";
-import type { Skill, StarsCache, Taxonomy } from "./lib/types.ts";
+import { sourceAttribution, type Skill, type StarsCache, type Taxonomy } from "./lib/types.ts";
 
 function displaySummary(text: string): string {
   const one = text.replace(/\s+/g, " ").trim();
@@ -19,7 +19,7 @@ function starBadge(repoUrl: string): string {
 }
 
 function skillLine(skill: Skill): string {
-  const badge = starBadge(skill.source.repo);
+  const badge = skill.source.type === "git" ? starBadge(skill.source.repo) : "";
   return `- [${skill.name}](skills/${skill.id}/)${badge} — ${displaySummary(skill.summary)}`;
 }
 
@@ -51,7 +51,7 @@ function sectionFor(
 }
 
 function uniqueRepos(skills: Skill[]): string[] {
-  return [...new Set(skills.map((skill) => skill.source.repo))].sort();
+  return [...new Set(skills.map((skill) => sourceAttribution(skill.source)))].sort();
 }
 
 function coverageLine(skills: Skill[], taxonomy: Taxonomy): string {
