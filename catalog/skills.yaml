@@ -397,6 +397,24 @@ skills:
     license: AGPL-3.0
     sync: true
     status: active
+  - id: gzh-design
+    name: gzh-design
+    summary: 把 Markdown、Word、PDF 或纯文本排成可直接粘贴进公众号编辑器的 HTML，支持多主题、自动章节编号与一键预览复制。
+    role: creation
+    platforms:
+      - wechat-oa
+    content_types:
+      - article
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/isjiamu/gzh-design-skill
+      path: .
+      ref: main
+      pinned_commit: ba1f4175519b481cb3566616c9e5178705067904
+    license: AGPL-3.0
+    sync: true
+    status: active
   - id: humanizer-zh
     name: humanizer-zh
     summary: 基于维基 AI 写作特征清单，识别并改写中文文本里的 AI 痕迹，让成稿更自然、更像人写。

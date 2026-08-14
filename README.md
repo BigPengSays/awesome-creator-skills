@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href="https://github.com/BigPengSays"><img alt="BigPengSays" src="https://img.shields.io/badge/Made%20by%20BigPengSays-000?logoColor=fff" /></a>
-<a href="https://github.com/BigPengSays/awesome-creator-skills"><img alt="Skills" src="https://img.shields.io/badge/skills-34-2ea043?logoColor=fff" /></a>
+<a href="https://github.com/BigPengSays/awesome-creator-skills"><img alt="Skills" src="https://img.shields.io/badge/skills-35-2ea043?logoColor=fff" /></a>
 <a href="https://github.com/BigPengSays/awesome-creator-skills/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/BigPengSays/awesome-creator-skills?color=blue" /></a>
 </p>
 
@@ -16,7 +16,7 @@
 
 - **平台覆盖：** 微信公众号 · 小红书 · YouTube · X (Twitter) · LinkedIn · 哔哩哔哩
 - **内容形态：** 文章 · 图片 · 图文 · 视频 · 幻灯片 · 漫画 · 信息图
-- **当前收录：** **34** 个精选 skill，[持续更新中](CONTRIBUTING.md)
+- **当前收录：** **35** 个精选 skill，[持续更新中](CONTRIBUTING.md)
 
 ## 快速开始
 
@@ -60,6 +60,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [khazix-writer](https://github.com/KKKKhazix/khazix-skills/tree/main/khazix-writer) [![GitHub Stars](https://badgen.net/github/stars/KKKKhazix/khazix-skills)](https://github.com/KKKKhazix/khazix-skills) — 按卡兹克公众号口吻与节奏写长文，含禁忌词、四层自检与风格示例库。
 - [baoyu-markdown-to-html](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-markdown-to-html) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown 转为带微信主题的 styled HTML，支持代码高亮、数学、PlantUML 与脚注。
 - [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-social-card-skill)](https://github.com/op7418/guizang-social-card-skill) — 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
+- [gzh-design](https://github.com/isjiamu/gzh-design-skill) [![GitHub Stars](https://badgen.net/github/stars/isjiamu/gzh-design-skill)](https://github.com/isjiamu/gzh-design-skill) — 把 Markdown、Word、PDF 或纯文本排成可直接粘贴进公众号编辑器的 HTML，支持多主题、自动章节编号与一键预览复制。
 - [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
 - [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
 
@@ -118,6 +119,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-translate](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-translate) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 文章文档三档翻译（quick/normal/refined），适合多语言内容生产而不只是机械直译。
 - [baoyu-url-to-markdown](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-url-to-markdown) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 用 Chrome CDP 抓取任意 URL 并转为 Markdown，内置 X、YouTube、HN 等站点适配与登录等待。
 - [shuorenhua](https://github.com/MrGeDiao/shuorenhua) [![GitHub Stars](https://badgen.net/github/stars/MrGeDiao/shuorenhua)](https://github.com/MrGeDiao/shuorenhua) — 中英文成稿去 AI 味与模板腔，按 chat、docs、公开写作等场景分级改写，保留事实、术语与责任主体。
+- [gzh-design](https://github.com/isjiamu/gzh-design-skill) [![GitHub Stars](https://badgen.net/github/stars/isjiamu/gzh-design-skill)](https://github.com/isjiamu/gzh-design-skill) — 把 Markdown、Word、PDF 或纯文本排成可直接粘贴进公众号编辑器的 HTML，支持多主题、自动章节编号与一键预览复制。
 - [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
 - [blog-to-linkedin-post](https://github.com/JeffLi1993/content-repurposing-skills/tree/main/blog-to-linkedin-post) [![GitHub Stars](https://badgen.net/github/stars/JeffLi1993/content-repurposing-skills)](https://github.com/JeffLi1993/content-repurposing-skills) — 把长文博客改写成 LinkedIn 专业帖，含源文 golden quote、近 30 天趋势适配与视觉 brief。
 - [blog-to-twitter-post](https://github.com/JeffLi1993/content-repurposing-skills/tree/main/blog-to-twitter-post) [![GitHub Stars](https://badgen.net/github/stars/JeffLi1993/content-repurposing-skills)](https://github.com/JeffLi1993/content-repurposing-skills) — 把长文博客改写成 X 原生短帖，含推荐角度、趋势桥接与可配图 visual brief。
