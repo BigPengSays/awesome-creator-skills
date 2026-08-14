@@ -3,3 +3,6 @@ node_modules/
 candidates/
 .DS_Store
 *.log
+
+# Local agent instructions — not for GitHub
+AGENTS.md
