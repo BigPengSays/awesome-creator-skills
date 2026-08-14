@@ -8,7 +8,7 @@
 
 面向内容创作者的 Agent Skills **精选目录**。每一项都可直接安装到 Cursor、Claude Code 等环境，并按发布渠道与内容形态检索。
 
-当前收录 **12** 个技能，覆盖微信公众号、小红书、YouTube、X、微博。
+当前收录 **13** 个技能，覆盖微信公众号、小红书、YouTube、X、微博。
 
 内容形态包括文章、图片、图文、视频、幻灯片、漫画、信息图。
 
@@ -30,6 +30,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 #### 小红书
 
 - [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
+- [xhs-visual-director](skills/xhs-visual-director/) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 规划与审阅小红书图文的视觉方向
 
 #### YouTube
 
@@ -67,12 +68,14 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-article-illustrator](skills/baoyu-article-illustrator/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 为文章配图
 - [baoyu-cover-image](skills/baoyu-cover-image/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成文章封面图
 - [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
+- [xhs-visual-director](skills/xhs-visual-director/) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 规划与审阅小红书图文的视觉方向
 
 #### 图文
 
 - [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
 - [baoyu-post-to-weibo](skills/baoyu-post-to-weibo/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博与头条文章
 - [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
+- [xhs-visual-director](skills/xhs-visual-director/) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 规划与审阅小红书图文的视觉方向
 
 #### 视频
 
@@ -124,3 +127,4 @@ npx skills add BigPengSays/awesome-creator-skills --skill '*'
 - https://github.com/JimLiu/baoyu-skills
 - https://github.com/geekjourneyx/md2wechat-skill
 - https://github.com/op7418/youtube-clipper-skill
+- https://github.com/ziguishian/xhs-visual-director-skill

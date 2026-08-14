@@ -1,0 +1,7 @@
+interface:
+  display_name: "XHS Visual Director"
+  short_description: "小红书高级图文视觉导演"
+  brand_color: "#111827"
+  default_prompt: "Use $xhs-visual-director to first ask 10 Socratic questions, then plan a high-end Xiaohongshu 3:4 carousel, generate one sample image for confirmation, and create the full set after approval."
+policy:
+  allow_implicit_invocation: true

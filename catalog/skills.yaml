@@ -193,6 +193,24 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: xhs-visual-director
+    name: xhs-visual-director
+    summary: 规划与审阅小红书图文的视觉方向
+    platforms:
+      - xiaohongshu
+    content_types:
+      - image-text
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/ziguishian/xhs-visual-director-skill
+      path: skill
+      ref: main
+      pinned_commit: 5c730c688f2c7e64f798d611608997ffba43813d
+    license: MIT
+    sync: true
+    status: active
   - id: youtube-clipper
     name: youtube-clipper
     summary: YouTube 视频切片

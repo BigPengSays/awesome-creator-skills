@@ -22,7 +22,24 @@ User provides one or more links such as:
 3. GitHub: scan every `SKILL.md`, keep creator-aligned skills, skip cataloged/rejected, block unknown licenses.
 4. Article: fetch body, extract GitHub / skills.sh links, then follow the GitHub path. If the page embeds a full skill and has no GitHub source, copy it as `source.type: url`.
 5. Regenerate README. Refresh stars for new git sources.
-6. Do **not** commit or push unless the user asks.
+6. Polish catalog `summary` into one Chinese sentence and fix tags if the script guessed poorly.
+7. Tell the user what changed (imported / skipped / blocked, plus any summary or tag edits).
+8. **Commit and push immediately.** Do not wait for another confirmation.
+
+### After import: report, commit, push
+
+Report in this shape, then git:
+
+```text
+Imported: <id> from <repo or url> (license, platforms, content types)
+Skipped: ...
+Blocked: ...
+Catalog polish: ...
+```
+
+Then add the touched catalog, `skills/<id>/`, README, and star cache. Commit with a message like `Add <skill-id> from <source>.` If you also changed this maintainer skill, include that in the same commit or a second one. Push `HEAD` to `origin/main`.
+
+Follow this repository's existing git author and GitHub push method. Do not update git config. Do not force-push. Strip a `Co-authored-by: Cursor` trailer if a hook adds it.
 
 ### Commands
 

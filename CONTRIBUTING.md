@@ -61,7 +61,7 @@ npm run ingest -- --from-dir path/to/skill --url https://example.com/article
 
 非 GitHub 拷贝写入 `source.type: url`、`sync: false`，README 不显示 star 徽章。许可无法确认时默认不入库。
 
-不要把 `add-creator-skills` 本身写入公开 catalog。
+不要把 `add-creator-skills` 本身写入公开 catalog。收录成功后列出改动，并直接提交、推送到 `main`。
 
 ## 发现与确认
 
