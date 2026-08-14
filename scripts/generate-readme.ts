@@ -162,12 +162,14 @@ function coverageLine(skills: Skill[], taxonomy: Taxonomy): string {
 
 function renderHeader(skills: Skill[], taxonomy: Taxonomy): string {
   return `<p align="center">
-  <img src="assets/readme/hero.svg" alt="创作技能合集 — 面向内容创作者的精选 Agent Skills" width="100%" />
+  <img src="assets/readme/xiaohei-header.jpg" alt="内容创作者 Skill 精选大合集 — Ian 小黑风格 header 配图" width="100%" />
 </p>
 
-<p align="center">
-  <img src="assets/readme/workflow.svg" alt="使用流程：浏览目录、一条命令安装、在 Agent 中调用" width="100%" />
-</p>
+# 内容创作者 Skill 精选大合集
+
+> **Agent Skills** 精选目录，给内容创作者 — 写文章、做封面、剪视频、做 PPT，一条命令装进 Cursor、Claude Code。
+
+按平台和创作类型整理，少踩坑、少搜 repo。
 
 > ${coverageLine(skills, taxonomy)}
 
