@@ -54,22 +54,6 @@ export function inferTaxonomy(_text: string): {
   };
 }
 
-export const PUBLISHING_RE =
-  /post-to-|publisher|publish(?:ing)?|发布|草稿上传|发到|投递到|post to /i;
-
-export function isPublishingSkill(skill: {
-  id: string;
-  name: string;
-  summary: string;
-}): boolean {
-  return PUBLISHING_RE.test(`${skill.id} ${skill.name} ${skill.summary}`);
-}
-
-/** @deprecated Classification is agent-driven; see catalog/classification-guide.md */
-export function mergePlatforms(declared: string[], _text: string): string[] {
-  return declared.length > 0 ? declared : ["generic"];
-}
-
 export function shortenSummary(text: string): string {
   const trimmed = text.replace(/\s+/g, " ").trim();
   const cut = trimmed.search(/。|\.(?:\s|$)/);

@@ -1,4 +1,9 @@
 export type SkillStatus = "candidate" | "active" | "deprecated";
+export type SkillRole = "creation" | "publishing";
+
+export function isPublishingSkill(skill: { role?: SkillRole }): boolean {
+  return skill.role === "publishing";
+}
 
 export interface GitSkillSource {
   type: "git";
@@ -27,6 +32,7 @@ export interface Skill {
   id: string;
   name: string;
   summary: string;
+  role: SkillRole;
   platforms: string[];
   content_types: string[];
   formats: string[];

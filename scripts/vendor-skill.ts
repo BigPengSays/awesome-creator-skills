@@ -12,7 +12,7 @@ import {
   parseGithubRepo,
 } from "./lib/github.ts";
 import { removePath, resetTmp, SKILLS_DIR } from "./lib/paths.ts";
-import type { Skill } from "./lib/types.ts";
+import type { Skill, SkillRole } from "./lib/types.ts";
 import { generateReadme } from "./generate-readme.ts";
 import { parseCandidateIssue } from "./lib/issue.ts";
 
@@ -36,6 +36,7 @@ export async function vendorSkill(input: {
   platforms?: string[];
   contentTypes?: string[];
   formats?: string[];
+  role?: SkillRole;
   license?: string;
   summary?: string;
   name?: string;
@@ -62,6 +63,7 @@ export async function vendorSkill(input: {
       id,
       name: input.name || frontmatter.name || id,
       summary: input.summary || shortenSummary(frontmatter.description || id),
+      role: input.role ?? "creation",
       platforms: input.platforms ?? [],
       content_types: input.contentTypes ?? [],
       formats: input.formats ?? [],
@@ -94,6 +96,7 @@ export async function vendorSkillFromUrl(input: {
   platforms?: string[];
   contentTypes?: string[];
   formats?: string[];
+  role?: SkillRole;
   license?: string;
   summary?: string;
   name?: string;
@@ -114,6 +117,7 @@ export async function vendorSkillFromUrl(input: {
     id,
     name: input.name || frontmatter.name || id,
     summary: input.summary || shortenSummary(frontmatter.description || id),
+    role: input.role ?? "creation",
     platforms: input.platforms ?? tags.platforms,
     content_types: input.contentTypes ?? tags.content_types,
     formats: input.formats ?? tags.formats,

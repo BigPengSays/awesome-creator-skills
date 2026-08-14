@@ -1,10 +1,15 @@
 import { writeFileSync } from "node:fs";
-import { isPublishingSkill } from "./lib/creator-match.ts";
 import { loadCatalog, loadStars, loadTaxonomy } from "./lib/catalog.ts";
 import { parseGithubRepo } from "./lib/github.ts";
 import { README_MD } from "./lib/paths.ts";
 import { sortSkills } from "./lib/rank.ts";
-import { sourceAttribution, type Skill, type StarsCache, type Taxonomy } from "./lib/types.ts";
+import {
+  isPublishingSkill,
+  sourceAttribution,
+  type Skill,
+  type StarsCache,
+  type Taxonomy,
+} from "./lib/types.ts";
 
 function displaySummary(text: string): string {
   const one = text.replace(/\s+/g, " ").trim();
@@ -139,8 +144,9 @@ function uniqueRepos(skills: Skill[]): string[] {
 }
 
 function coverageLine(skills: Skill[], taxonomy: Taxonomy): string {
-  const platformKeys = new Set(skills.flatMap((skill) => skill.platforms));
-  const typeKeys = new Set(skills.flatMap((skill) => skill.content_types));
+  const creationSkills = skills.filter((skill) => !isPublishingSkill(skill));
+  const platformKeys = new Set(creationSkills.flatMap((skill) => skill.platforms));
+  const typeKeys = new Set(creationSkills.flatMap((skill) => skill.content_types));
   const platforms = Object.entries(taxonomy.platforms)
     .filter(([key]) => platformKeys.has(key) && key !== "generic")
     .map(([, meta]) => meta.label);
@@ -190,6 +196,7 @@ export function renderReadme(): string {
     (skill) => skill.content_types,
     stars,
     anchorUsed,
+    { exclude: isPublishingSkill },
   );
 
   const formatSection = sectionFor(
@@ -199,6 +206,7 @@ export function renderReadme(): string {
     (skill) => skill.formats,
     stars,
     anchorUsed,
+    { exclude: isPublishingSkill },
   );
 
   const toc = renderToc([

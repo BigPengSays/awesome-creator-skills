@@ -4,7 +4,7 @@
 
 面向内容创作者的 **精选 Agent Skills** 目录。只收录与内容生产直接相关、可一键安装到 Cursor、Claude Code 等环境的技能，按发布渠道与内容形态整理。
 
-当前精选 **21** 项，覆盖微信公众号、小红书、YouTube、X、微博、哔哩哔哩。
+当前精选 **21** 项，覆盖微信公众号、小红书、YouTube、哔哩哔哩。
 
 内容形态包括文章、图片、图文、视频、幻灯片、漫画、信息图。
 
@@ -78,10 +78,6 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 #### 文章
 
-- [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。
-- [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。
-- [baoyu-post-to-x](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-x) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 向 X 发布推文、配图或视频，以及长文 Articles，同时覆盖短帖与长文两种形态。
-- [md2wechat](https://github.com/geekjourneyx/md2wechat-skill/tree/main/skills/md2wechat) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。
 - [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
 
 #### 图片
@@ -102,7 +98,6 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 - [baoyu-youtube-transcript](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-youtube-transcript) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按链接或视频 ID 下载多语言字幕与封面，支持翻译、章节与说话人识别，并缓存原文方便反复排版。
 - [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
-- [video-publisher](https://github.com/oil-oil/video-publisher-skill/tree/main/video-publisher) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/video-publisher-skill)](https://github.com/oil-oil/video-publisher-skill) — 用 Ego Lite 把同一视频包并行投递到小红书、抖音、B 站与视频号草稿，含文案、标签、封面与发布前校验。
 - [youtube-clipper](https://github.com/op7418/youtube-clipper-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/youtube-clipper-skill)](https://github.com/op7418/youtube-clipper-skill) — 下载 YouTube 视频与字幕，用 AI 切出精细章节；选定片段后自动剪辑并烧录中英双语字幕，同时生成总结文案。
 
 #### 幻灯片

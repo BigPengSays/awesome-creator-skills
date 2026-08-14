@@ -6,7 +6,7 @@
 
 - 磁盘扁平：`skills/<skill-id>/SKILL.md`
 - 不要按平台或类型建物理子目录
-- 标签写在 `catalog/skills.yaml`：`platforms` / `content_types` / `formats`
+- 标签写在 `catalog/skills.yaml`：`role` / `platforms` / `content_types` / `formats`
 - 词表在 [`catalog/taxonomy.yaml`](catalog/taxonomy.yaml)
 - **分类由 agent 主观判断**，规则见 [`catalog/classification-guide.md`](catalog/classification-guide.md)；脚本入库不再自动打标签
 
