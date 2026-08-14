@@ -10,7 +10,7 @@
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 ```
 
-镜像版权仍归原作者。GitHub 来源会显示**源仓库** star，并按 star 从高到低排列；star 由定时任务刷新。
+镜像版权仍归原作者。GitHub 来源用 [shields.io](https://shields.io) star 徽章展示源仓库实时 star；分类内仍按缓存的 star 数从高到低排列。
 
 - [按平台](#按平台)
 - [按创作类型](#按创作类型)
@@ -23,54 +23,54 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 ### 微信公众号
 
-- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) ★ 24,961 — 发布微信公众号文章与贴图 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
 
 ### 小红书
 
-- [baoyu-xhs-images](skills/baoyu-xhs-images/) ★ 24,961 — 生成小红书图文卡片 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
 
 ### YouTube
 
-- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) ★ 24,961 — 下载 YouTube 字幕与封面 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
 
 ### X
 
-- [baoyu-post-to-x](skills/baoyu-post-to-x/) ★ 24,961 — 发布推文与 X Articles · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-post-to-x](skills/baoyu-post-to-x/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 发布推文与 X Articles
 
 ### 通用
 
-- [baoyu-cover-image](skills/baoyu-cover-image/) ★ 24,961 — 生成文章封面图 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-cover-image](skills/baoyu-cover-image/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 生成文章封面图
 
 ## 按创作类型
 
 ### 文章
 
-- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) ★ 24,961 — 发布微信公众号文章与贴图 · [源仓库](https://github.com/JimLiu/baoyu-skills)
-- [baoyu-post-to-x](skills/baoyu-post-to-x/) ★ 24,961 — 发布推文与 X Articles · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
+- [baoyu-post-to-x](skills/baoyu-post-to-x/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 发布推文与 X Articles
 
 ### 图片
 
-- [baoyu-cover-image](skills/baoyu-cover-image/) ★ 24,961 — 生成文章封面图 · [源仓库](https://github.com/JimLiu/baoyu-skills)
-- [baoyu-xhs-images](skills/baoyu-xhs-images/) ★ 24,961 — 生成小红书图文卡片 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-cover-image](skills/baoyu-cover-image/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 生成文章封面图
+- [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
 
 ### 图文
 
-- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) ★ 24,961 — 发布微信公众号文章与贴图 · [源仓库](https://github.com/JimLiu/baoyu-skills)
-- [baoyu-xhs-images](skills/baoyu-xhs-images/) ★ 24,961 — 生成小红书图文卡片 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-post-to-wechat](skills/baoyu-post-to-wechat/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 发布微信公众号文章与贴图
+- [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
 
 ### 视频
 
-- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) ★ 24,961 — 下载 YouTube 字幕与封面 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
 
 ### 信息图
 
-- [baoyu-xhs-images](skills/baoyu-xhs-images/) ★ 24,961 — 生成小红书图文卡片 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-xhs-images](skills/baoyu-xhs-images/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 生成小红书图文卡片
 
 ## 按创作形式
 
 ### 教程
 
-- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) ★ 24,961 — 下载 YouTube 字幕与封面 · [源仓库](https://github.com/JimLiu/baoyu-skills)
+- [baoyu-youtube-transcript](skills/baoyu-youtube-transcript/) [![GitHub stars](https://img.shields.io/github/stars/JimLiu/baoyu-skills?style=social)](https://github.com/JimLiu/baoyu-skills) — 下载 YouTube 字幕与封面
 
 ## 安装
 

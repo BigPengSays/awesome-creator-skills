@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { loadCatalog, loadStars, loadTaxonomy } from "./lib/catalog.ts";
-import { githubRepoKey } from "./lib/github.ts";
+import { githubRepoKey, parseGithubRepo } from "./lib/github.ts";
 import { README_MD } from "./lib/paths.ts";
 import type { Skill, StarsCache, Taxonomy } from "./lib/types.ts";
 
@@ -18,22 +18,22 @@ function sortSkills(skills: Skill[], stars: StarsCache): Skill[] {
   });
 }
 
-function formatStars(count: number): string {
-  return count.toLocaleString("en-US");
-}
-
 function displaySummary(text: string): string {
   const one = text.replace(/\s+/g, " ").trim();
   if (one.length <= 120) return one;
   return `${one.slice(0, 117)}…`;
 }
 
-function skillLine(skill: Skill, stars: StarsCache): string {
-  const key = githubRepoKey(skill.source.repo);
-  const count = key ? stars[key]?.stars : undefined;
-  const starPart = key && typeof count === "number" ? ` ★ ${formatStars(count)}` : "";
-  const sourcePart = `[源仓库](${skill.source.repo})`;
-  return `- [${skill.name}](skills/${skill.id}/)${starPart} — ${displaySummary(skill.summary)} · ${sourcePart}`;
+function starBadge(repoUrl: string): string {
+  const parsed = parseGithubRepo(repoUrl);
+  if (!parsed) return "";
+  const badge = `https://img.shields.io/github/stars/${parsed.owner}/${parsed.repo}?style=social`;
+  return ` [![GitHub stars](${badge})](${repoUrl})`;
+}
+
+function skillLine(skill: Skill): string {
+  const badge = starBadge(skill.source.repo);
+  return `- [${skill.name}](skills/${skill.id}/)${badge} — ${displaySummary(skill.summary)}`;
 }
 
 function sectionFor(
@@ -53,7 +53,7 @@ function sectionFor(
     if (matched.length === 0) continue;
     any = true;
     chunks.push(`### ${meta.label}`, "");
-    for (const skill of matched) chunks.push(skillLine(skill, stars));
+    for (const skill of matched) chunks.push(skillLine(skill));
     chunks.push("");
   }
   if (!any) {
@@ -102,7 +102,7 @@ export function renderReadme(): string {
 npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 \`\`\`
 
-镜像版权仍归原作者。GitHub 来源会显示**源仓库** star，并按 star 从高到低排列；star 由定时任务刷新。
+镜像版权仍归原作者。GitHub 来源用 [shields.io](https://shields.io) star 徽章展示源仓库实时 star；分类内仍按缓存的 star 数从高到低排列。
 
 ${toc}
 
