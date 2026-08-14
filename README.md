@@ -167,20 +167,4 @@ npx skills add BigPengSays/awesome-creator-skills --skill '*'
 
 ## 版权归属
 
-技能版权仍归原作者。本仓库目录与脚本采用 MIT 许可，各技能保留其上游许可证。详见各技能目录中的 `SOURCE.md`，以及：
-
-- https://github.com/JimLiu/baoyu-skills
-- https://github.com/MrGeDiao/shuorenhua
-- https://github.com/geekjourneyx/md2wechat-skill
-- https://github.com/gnipbao/story-to-handdrawn-video
-- https://github.com/helloianneo/ian-xiaohei-illustrations
-- https://github.com/liyue-aigc/xianxia-visual-director
-- https://github.com/oil-oil/oil-cover
-- https://github.com/oil-oil/oil-tone
-- https://github.com/oil-oil/video-publisher-skill
-- https://github.com/op7418/guizang-material-illustration
-- https://github.com/op7418/guizang-ppt-skill
-- https://github.com/op7418/guizang-social-card-skill
-- https://github.com/op7418/humanizer-zh
-- https://github.com/op7418/youtube-clipper-skill
-- https://github.com/ziguishian/xhs-visual-director-skill
+技能版权仍归原作者。本仓库目录与脚本采用 MIT 许可，各技能保留其上游许可证，详见 `skills/<id>/SOURCE.md`。
