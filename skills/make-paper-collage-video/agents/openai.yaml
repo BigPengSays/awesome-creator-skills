@@ -1,0 +1,4 @@
+interface:
+  display_name: "可编辑插画视频制作"
+  short_description: "用动态风格档案、注册素材族和证明门制作纸片或漫画化视频"
+  default_prompt: "使用 $make-paper-collage-video 制作可编辑插画视频，先从动态风格目录选择视觉语言，再按批准预算生产注册素材族，并执行语义证据、旁白时长、响度与最终预览检查。"

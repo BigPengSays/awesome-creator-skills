@@ -1,0 +1,97 @@
+# Human Decisions, Cost, and Rights
+
+Read this before presenting or recording a human gate, making a material paid call, cloning a voice, or taking an external action.
+
+## Default Creation Gates
+
+Require explicit decisions for:
+
+1. Initial intake: `16:9|9:16`, one style from the current built-in catalog, and text-only parallax preference.
+2. Combined scenario, story scope, duration/scenes, production profile, exact budget cap, facts, and provider plan.
+3. Story-specific visual sample, fictional voice, whole-film action-language card, and 3–5 second motion/topology proof.
+4. Rendered preview and requested creative changes.
+
+The first intake never authorizes provider spend. The combined second decision may authorize both providers and concept when the request clearly names both. Preserve the human's wording. If approval is ambiguous, ask one concise question.
+
+Do not create a fourth default gate after final render. Local final delivery completes the creation task.
+
+Loudness normalization, dynamic control, true-peak limiting, codec headroom,
+and other delivery mastering parameters are not creative approvals. Resolve
+them automatically against the declared mastering contract and expose the
+measured result in the report. Even an extreme source does not justify asking
+the user to approve gain or compression; repair it technically or report a
+genuine processing failure.
+
+If preview feedback intentionally changes narration meaning, scene semantics, or
+which scenes must be still, do not disguise it as a directing-only revision.
+Record a schema-v1 semantic revision authorization containing the source
+feedback, exact allowed scene ids, human note, and equivalent-quality evidence,
+then run `project:revise-preview-semantic`. The command rejects top-level
+story/style drift, records old/new concept fingerprints, recomputes only legal
+locked-static motion floors, preserves the approved provider cap, and
+invalidates all dependent style/proof/render evidence.
+
+## Cost Boundary
+
+- Before combined scenario/concept approval, use only the current host model for the common story and three scenarios; do not invoke an unconfirmed external/paid provider. Built-in style cards are versioned local text-to-image PNG assets and consume no provider calls when shown during intake.
+- Before style approval, classify and contract any identity-, topology-,
+  mechanism-, or diagram-critical sample, then create at most one representative
+  source package, a short fictional-voice audition, and one 3–5 second proof
+  when motion is new or coupled topology is present. A topology or
+  limited-animation proof uses the actual v12 group/state sequence and renderer.
+  A `registered-depth-stack` uses its compiled layer-complete source package and
+  family-aware proof: neutral reconstruction, reference comparison,
+  checkerboard exploded members, and both extremes of the 16:9, 9:16, and 1:1
+  reveal envelopes. Standard alpha/tight/motion evidence remains required where
+  applicable. Coupled approval cannot advance while that evidence is missing,
+  stale, or semantically pending.
+- The style/voice gate also owns motion-language approval. Show
+  `motion-language-card.json` with the sample and proof. It must expose the
+  whole-film grammar, pacing, camera/transition/ambient strategy, per-scene
+  performance roles and proof anchors, final holds, exceptions, and
+  `approvalFingerprint`. `approve-style-voice` writes the attributable human
+  note and current Style Profile/motion/style-proof bindings to
+  `motion-approval.json`. This is not a fourth gate.
+- A directing-only timing or treatment refinement may keep that approval only
+  when `approvalFingerprint` is unchanged; its exact execution fingerprint
+  still invalidates stale proof, quality, and render artifacts. Changing motion
+  grammar, performance roles, proof bindings, transition intent, locked-static
+  exception, or Style Profile returns to this gate.
+- After style approval, produce autonomously within the approved asset budget.
+- A later image-budget increase requires one explicit exact total cap. Record it
+  with `project:increase-image-budget`; the command preserves the original
+  scenario proposal, appends the old/new cap plus used/reserved state and human
+  note, and rejects any value above the current profile hard ceiling.
+- Reuse exact-match assets and deterministic local processing before regeneration.
+- Disclose the compiled source-package strategy, base/reserve/hard ceiling,
+  one story-specific style-sample call, proposed exact image-attempt cap,
+  provider calls, local derivatives, and avoided calls at the decision that authorizes them. Record the cap as
+  `budgetDecision.imageAttemptLimit`; the profile ceiling alone is not provider
+  authorization.
+
+## Voice, Rights, and Accuracy
+
+Use the confirmed fictional catalog voice. Real-person cloning is a separate opt-in requiring authorization for licensed reference audio and its transcript.
+
+Stop for unclear logos, likenesses, private media, or third-party copyrighted assets. Offer a fictional or public-domain alternative without silently changing the brief.
+
+Verify consequential historical, medical, legal, financial, or political claims with suitable current sources before locking narration. Record material uncertainty in the concept.
+
+## External Publication
+
+Technical validation does not prove factual, legal, brand, or editorial readiness. When the human actually requests upload, send, or publication:
+
+1. confirm content, facts, rights, branding, and platform fit;
+2. obtain one explicit authorization for the named destination/action;
+3. before acting, record that exact authorization:
+
+   ```bash
+   npm run project:advance -- <slug> approve-publish --note="<destination + action + scope>"
+   ```
+
+4. perform only that authorized external action.
+
+Never infer external authorization from preview approval or the existence of `final.mp4`.
+Local production is already terminal at `complete`; `approve-publish` is an
+optional post-completion audit event, not a stage and not blanket permission for
+another destination or action.
