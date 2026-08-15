@@ -433,6 +433,24 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: ian-handdrawn-ppt
+    name: ian-handdrawn-ppt
+    summary: 把文章、课程笔记或提纲做成中文手绘技术解释风格的 PPT 式页面图，输出 21:9 封面与 16:9 正文 PNG。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - slides
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/helloianneo/ian-handdrawn-ppt
+      path: ian-handdrawn-ppt
+      ref: main
+      pinned_commit: b2cc5f303337e5470fd6ac2870d261a43b218439
+    license: MIT
+    sync: true
+    status: active
   - id: ian-xiaohei-illustrations
     name: ian-xiaohei-illustrations
     summary: 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。

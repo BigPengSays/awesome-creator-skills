@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href="https://github.com/BigPengSays"><img alt="BigPengSays" src="https://img.shields.io/badge/Made%20by%20BigPengSays-000?logoColor=fff" /></a>
-<a href="https://github.com/BigPengSays/awesome-creator-skills"><img alt="Skills" src="https://img.shields.io/badge/skills-36-2ea043?logoColor=fff" /></a>
+<a href="https://github.com/BigPengSays/awesome-creator-skills"><img alt="Skills" src="https://img.shields.io/badge/skills-37-2ea043?logoColor=fff" /></a>
 <a href="https://github.com/BigPengSays/awesome-creator-skills/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/BigPengSays/awesome-creator-skills?color=blue" /></a>
 </p>
 
@@ -16,7 +16,7 @@
 
 - **平台覆盖：** 微信公众号 · 小红书 · YouTube · X (Twitter) · LinkedIn · 哔哩哔哩
 - **内容形态：** 文章 · 图片 · 图文 · 视频 · 幻灯片 · 漫画 · 信息图
-- **当前收录：** **36** 个精选 skill，[持续更新中](CONTRIBUTING.md)
+- **当前收录：** **37** 个精选 skill，[持续更新中](CONTRIBUTING.md)
 
 ## 快速开始
 
@@ -109,6 +109,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
 - [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
 - [make-paper-collage-video](https://github.com/cyberlesterr/paper-collage-video/tree/main/skills/make-paper-collage-video) [![GitHub Stars](https://badgen.net/github/stars/cyberlesterr/paper-collage-video)](https://github.com/cyberlesterr/paper-collage-video) — 基于 Remotion 制作可编辑纸片分层故事/漫画/说明视频，含故事板、旁白同步、渲染与技术验收。
+- [ian-handdrawn-ppt](https://github.com/helloianneo/ian-handdrawn-ppt/tree/main/ian-handdrawn-ppt) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-handdrawn-ppt)](https://github.com/helloianneo/ian-handdrawn-ppt) — 把文章、课程笔记或提纲做成中文手绘技术解释风格的 PPT 式页面图，输出 21:9 封面与 16:9 正文 PNG。
 - [humanizer-zh](https://github.com/op7418/humanizer-zh) [![GitHub Stars](https://badgen.net/github/stars/op7418/humanizer-zh)](https://github.com/op7418/humanizer-zh) — 基于维基 AI 写作特征清单，识别并改写中文文本里的 AI 痕迹，让成稿更自然、更像人写。
 ## 按创作类型
 
@@ -155,6 +156,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 - [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
+- [ian-handdrawn-ppt](https://github.com/helloianneo/ian-handdrawn-ppt/tree/main/ian-handdrawn-ppt) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-handdrawn-ppt)](https://github.com/helloianneo/ian-handdrawn-ppt) — 把文章、课程笔记或提纲做成中文手绘技术解释风格的 PPT 式页面图，输出 21:9 封面与 16:9 正文 PNG。
 
 #### 漫画
 
