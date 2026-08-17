@@ -483,7 +483,7 @@ skills:
       repo: https://github.com/KKKKhazix/khazix-skills
       path: khazix-writer
       ref: main
-      pinned_commit: a8744f0c682cac4c8c25f97d5968f3d3e6241e63
+      pinned_commit: 7a5c4934be4106ac740ffdb95280bb81b3f4b83c
     license: MIT
     sync: true
     status: active
