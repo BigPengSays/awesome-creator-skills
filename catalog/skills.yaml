@@ -487,6 +487,25 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: ip-illustration-for-yourself
+    name: ip-illustration-character-system
+    summary: 用照片建立可复用的萌粒风格个人 IP，并为长文生成留白多的 mini 插图与 3:4 信息图，保持角色一致。
+    role: creation
+    platforms:
+      - wechat-oa
+      - xiaohongshu
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/EverettFish/ip_illustration_for_yourself
+      path: .
+      ref: main
+      pinned_commit: 7e47ee615485d4bf04a4fef4550497bfd5e553f5
+    license: Unknown
+    sync: true
+    status: active
   - id: khazix-writer
     name: khazix-writer
     summary: 按卡兹克公众号口吻与节奏写长文，含禁忌词、四层自检与风格示例库。
@@ -652,6 +671,24 @@ skills:
       ref: main
       pinned_commit: fbab5b27f4f0db61739d86f78000a39eeaa692d3
     license: MIT
+    sync: true
+    status: active
+  - id: tait-crt-interface-skill
+    name: tait-crt-interface-skill
+    summary: 把人像、群像或主题描述重绘成 80 年代 CRT 电脑界面风复古位图插画，支持调色板与比例两阶段 intake。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/TaiT-tt/tait-crt-interface-skill
+      path: .
+      ref: main
+      pinned_commit: 6bd76c91db0d5af9bbbf2a38ebb0880978be4105
+    license: Unknown
     sync: true
     status: active
   - id: video-publisher

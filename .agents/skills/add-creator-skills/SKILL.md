@@ -18,12 +18,12 @@ User provides one or more links such as:
 ## Workflow
 
 1. Classify each URL: GitHub vs article.
-2. **Dry-run first.** Print import / skip / blocked, then vendor only the import rows.
-3. GitHub: scan every `SKILL.md`, keep creator-aligned skills, skip cataloged/rejected, block unknown licenses.
+2. **Dry-run first.** Print import / skip, then vendor only the import rows.
+3. GitHub: scan every `SKILL.md`, keep creator-aligned skills, skip cataloged/rejected. Do **not** block on missing or unknown licenses.
 4. Article: fetch body, extract GitHub / skills.sh links, then follow the GitHub path. If the page embeds a full skill and has no GitHub source, copy it as `source.type: url`.
 5. Regenerate README. Refresh stars for new git sources.
 6. Polish catalog `summary` into one Chinese sentence. **Classify by reading the skill** — follow [`catalog/classification-guide.md`](../../../catalog/classification-guide.md): set `role` (`publishing` or `creation`), then one primary `content_types`, necessary `platforms`, optional single `format`. Ingest leaves tags empty.
-7. Tell the user what changed (imported / skipped / blocked, plus classification and summary edits).
+7. Tell the user what changed (imported / skipped, plus classification and summary edits).
 8. **Commit and push immediately.** Do not wait for another confirmation.
 
 ### After import: report, commit, push
@@ -31,9 +31,8 @@ User provides one or more links such as:
 Report in this shape, then git:
 
 ```text
-Imported: <id> from <repo or url> (license, role, platforms, content type)
+Imported: <id> from <repo or url> (role, platforms, content type)
 Skipped: ...
-Blocked: ...
 Catalog polish: ...
 ```
 
@@ -46,14 +45,13 @@ Follow this repository's existing git author and GitHub push method. Do not upda
 ```bash
 npm run ingest -- --dry-run <url...>
 npm run ingest -- <url...>
-npm run ingest -- --allow-unknown-license <url...>
 npm run ingest -- --from-dir <skill-dir> --url <article-url>
 ```
 
 Single known GitHub skill (existing path):
 
 ```bash
-npm run vendor -- --repo <url> --path skills/<id> --platforms ... --content-types ... --license MIT
+npm run vendor -- --repo <url> --path skills/<id> --platforms ... --content-types ...
 ```
 
 Non-GitHub copy:
@@ -90,9 +88,9 @@ Then for `role: creation`, write **one** `content_types`, only the `platforms` t
 
 Do not commit without `role`, `platforms`, and `content_types`.
 
-### License gate
+### License field
 
-GitHub: use the repo SPDX license. If missing/`NOASSERTION`, **do not vendor**. Report `blocked` and wait for the user (or `--allow-unknown-license` after they confirm redistribution).
+Record SPDX when the repo declares one; otherwise write `Unknown`. Never block import on a missing LICENSE file.
 
 URL copies: record the article URL in `SOURCE.md`, `sync: false`, no star badge.
 
@@ -106,7 +104,6 @@ Before writing, list:
 
 - **import** — will vendor
 - **skip** — already cataloged, rejected, or not creator-related
-- **blocked** — license unknown
 - **article** — fetch still needed, or GitHub links extracted
 
 This skill is a maintainer tool. Never catalog it as a public creator skill.

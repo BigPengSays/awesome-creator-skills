@@ -75,7 +75,6 @@ function matchText(skill: FoundSkill): string {
 async function planRepo(
   repoUrl: string,
   decisions: IngestDecision[],
-  allowUnknownLicense: boolean,
 ): Promise<Array<IngestDecision & { action: "import" }>> {
   const parsed = parseGithubRepo(repoUrl);
   if (!parsed) {
@@ -129,16 +128,7 @@ async function planRepo(
         });
         continue;
       }
-      if (!license && !allowUnknownLicense) {
-        decisions.push({
-          action: "blocked",
-          repo: canonical,
-          path: skill.path,
-          id: skill.idHint,
-          reason: "license unknown; pass --allow-unknown-license after confirming redistribution is allowed",
-        });
-        continue;
-      }
+      const resolvedLicense = license || "Unknown";
       const tags = inferTaxonomy(text);
       const id = uniqueSkillId(existingIds, skill.idHint, parsed.repo);
       existingIds.add(id);
@@ -147,7 +137,7 @@ async function planRepo(
         repo: canonical,
         path: skill.path,
         id,
-        license,
+        license: resolvedLicense,
         platforms: tags.platforms,
         contentTypes: tags.content_types,
         formats: tags.formats,
@@ -172,7 +162,6 @@ function printDecisions(decisions: IngestDecision[]): void {
 export async function ingestFromUrls(input: {
   urls: string[];
   dryRun?: boolean;
-  allowUnknownLicense?: boolean;
   fromDir?: string;
   fromUrl?: string;
   skipReadme?: boolean;
@@ -233,7 +222,7 @@ export async function ingestFromUrls(input: {
 
   const imports: Array<IngestDecision & { action: "import" }> = [];
   for (const repo of githubRepos) {
-    imports.push(...(await planRepo(repo, decisions, Boolean(input.allowUnknownLicense))));
+    imports.push(...(await planRepo(repo, decisions)));
   }
 
   printDecisions(decisions);
@@ -268,7 +257,6 @@ async function main(): Promise<void> {
     allowPositionals: true,
     options: {
       "dry-run": { type: "boolean", default: false },
-      "allow-unknown-license": { type: "boolean", default: false },
       "from-dir": { type: "string" },
       url: { type: "string" },
       "skip-readme": { type: "boolean", default: false },
@@ -276,13 +264,12 @@ async function main(): Promise<void> {
   });
   if (positionals.length === 0 && !(values["from-dir"] && values.url)) {
     throw new Error(
-      "Usage: npm run ingest -- [--dry-run] [--allow-unknown-license] <github-or-article-url...> [--from-dir <skill> --url <page>]",
+      "Usage: npm run ingest -- [--dry-run] <github-or-article-url...> [--from-dir <skill> --url <page>]",
     );
   }
   await ingestFromUrls({
     urls: positionals,
     dryRun: values["dry-run"],
-    allowUnknownLicense: values["allow-unknown-license"],
     fromDir: values["from-dir"],
     fromUrl: values.url,
     skipReadme: values["skip-readme"],

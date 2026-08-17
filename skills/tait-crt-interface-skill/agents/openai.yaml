@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tait CRT Interface Skill"
+  short_description: "Create one palette-guided CRT pixel interface"
+  default_prompt: "Use $tait-crt-interface-skill to rebuild this subject as one abstract CRT interface, asking me for palette and aspect ratio when missing."
