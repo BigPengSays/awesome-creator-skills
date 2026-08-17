@@ -342,6 +342,24 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: gc-minimal-zine-poster
+    name: gc-minimal-zine-poster-v0-3
+    summary: 把主题、文章或照片做成纸感极简 zine 海报：大留白、小编辑拼贴焦点、实验字体与单一色强调，可成图也可提炼可复用风格规则。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/LiamGvchi/gc-minimal-zine-poster
+      path: .
+      ref: main
+      pinned_commit: ddb0d66b24a94f9c4fdd1f02835a836a2db3774e
+    license: MIT
+    sync: true
+    status: active
   - id: guizang-material-illustration
     name: guizang-material-illustration
     summary: 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
@@ -579,6 +597,24 @@ skills:
       ref: main
       pinned_commit: c7904b70c9829f614b37064d0005149b8a2037dc
     license: Custom (non-commercial, see LICENSE.md)
+    sync: true
+    status: active
+  - id: photo-revival
+    name: photo-revival
+    summary: 把日常照片重绘成白底手绘插画：主体缩小、局部鲜明上色、大量留白与手写小注，保留场景辨识度而非滤镜式美化。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/dacnay816y62-hub/photo-revival
+      path: .
+      ref: main
+      pinned_commit: ca4c3c6c0f812355bd6d815d8a78652db801b7f1
+    license: MIT
     sync: true
     status: active
   - id: shuorenhua
