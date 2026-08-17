@@ -563,6 +563,24 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: photo-abstract-editorial
+    name: photo-abstract-editorial
+    summary: 把上传照片做成竖向编辑作品：保留原图区域，下方生成由原图关系推导的极简抽象记忆面板与诗意英文标题。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/ZzzLc0405/photo-abstract-editorial
+      path: .
+      ref: main
+      pinned_commit: c7904b70c9829f614b37064d0005149b8a2037dc
+    license: Custom (non-commercial, see LICENSE.md)
+    sync: true
+    status: active
   - id: shuorenhua
     name: shuorenhua
     summary: 中英文成稿去 AI 味与模板腔，按 chat、docs、公开写作等场景分级改写，保留事实、术语与责任主体。

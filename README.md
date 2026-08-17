@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href="https://github.com/BigPengSays"><img alt="BigPengSays" src="https://img.shields.io/badge/Made%20by%20BigPengSays-000?logoColor=fff" /></a>
-<a href="https://github.com/BigPengSays/awesome-creator-skills"><img alt="Skills" src="https://img.shields.io/badge/skills-37-2ea043?logoColor=fff" /></a>
+<a href="https://github.com/BigPengSays/awesome-creator-skills"><img alt="Skills" src="https://img.shields.io/badge/skills-38-2ea043?logoColor=fff" /></a>
 <a href="https://github.com/BigPengSays/awesome-creator-skills/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/BigPengSays/awesome-creator-skills?color=blue" /></a>
 </p>
 
@@ -16,7 +16,7 @@
 
 - **平台覆盖：** 微信公众号 · 小红书 · YouTube · X (Twitter) · LinkedIn · 哔哩哔哩
 - **内容形态：** 文章 · 图片 · 图文 · 视频 · 幻灯片 · 漫画 · 信息图
-- **当前收录：** **37** 个精选 skill，[持续更新中](CONTRIBUTING.md)
+- **当前收录：** **38** 个精选 skill，[持续更新中](CONTRIBUTING.md)
 
 ## 快速开始
 
@@ -104,6 +104,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
 - [baoyu-translate](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-translate) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 文章文档三档翻译（quick/normal/refined），适合多语言内容生产而不只是机械直译。
 - [baoyu-url-to-markdown](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-url-to-markdown) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 用 Chrome CDP 抓取任意 URL 并转为 Markdown，内置 X、YouTube、HN 等站点适配与登录等待。
+- [photo-abstract-editorial](https://github.com/ZzzLc0405/photo-abstract-editorial) [![GitHub Stars](https://badgen.net/github/stars/ZzzLc0405/photo-abstract-editorial)](https://github.com/ZzzLc0405/photo-abstract-editorial) — 把上传照片做成竖向编辑作品：保留原图区域，下方生成由原图关系推导的极简抽象记忆面板与诗意英文标题。
 - [shuorenhua](https://github.com/MrGeDiao/shuorenhua) [![GitHub Stars](https://badgen.net/github/stars/MrGeDiao/shuorenhua)](https://github.com/MrGeDiao/shuorenhua) — 中英文成稿去 AI 味与模板腔，按 chat、docs、公开写作等场景分级改写，保留事实、术语与责任主体。
 - [story-to-handdrawn-video](https://github.com/gnipbao/story-to-handdrawn-video/tree/main/skill-package/story-to-handdrawn-video) [![GitHub Stars](https://badgen.net/github/stars/gnipbao/story-to-handdrawn-video)](https://github.com/gnipbao/story-to-handdrawn-video) — 把中文故事或本地图片序列转成手绘 Remotion 无声视频，内置 20 种手绘风格，支持预览与渲染。
 - [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
@@ -134,6 +135,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-compress-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-compress-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把图片压缩为 WebP 或 PNG 并自动选择工具，适合发布前减小体积而不明显损画质。
 - [baoyu-cover-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-cover-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按类型、配色、渲染、文字与情绪五维生成封面，覆盖电影宽幅、16:9 与方形，适合文章与社媒头图。
 - [baoyu-diagram](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-diagram) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 生成深色主题 SVG 架构图、流程图、时序图、思维导图等，适合长文与教程配图。
+- [photo-abstract-editorial](https://github.com/ZzzLc0405/photo-abstract-editorial) [![GitHub Stars](https://badgen.net/github/stars/ZzzLc0405/photo-abstract-editorial)](https://github.com/ZzzLc0405/photo-abstract-editorial) — 把上传照片做成竖向编辑作品：保留原图区域，下方生成由原图关系推导的极简抽象记忆面板与诗意英文标题。
 - [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
 - [xianxia-visual-director](https://github.com/liyue-aigc/xianxia-visual-director/tree/main/xianxia-visual-director) [![GitHub Stars](https://badgen.net/github/stars/liyue-aigc/xianxia-visual-director)](https://github.com/liyue-aigc/xianxia-visual-director) — 在统一东方仙侠视觉规范下，生成、优化与诊断电影级场景生图提示词，支持多种画幅与风格变体。
 - [guizang-material-illustration](https://github.com/op7418/guizang-material-illustration) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-material-illustration)](https://github.com/op7418/guizang-material-illustration) — 从文章、笔记或图表数据生成归藏风格带字插图与解释图，适合公众号、小红书、汇报与教程配图。
