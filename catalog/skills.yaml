@@ -520,7 +520,7 @@ skills:
       repo: https://github.com/KKKKhazix/khazix-skills
       path: khazix-writer
       ref: main
-      pinned_commit: a8744f0c682cac4c8c25f97d5968f3d3e6241e63
+      pinned_commit: 7a5c4934be4106ac740ffdb95280bb81b3f4b83c
     license: MIT
     sync: true
     status: active
@@ -596,7 +596,7 @@ skills:
       repo: https://github.com/oil-oil/oil-tone
       path: skills/oil-tone
       ref: main
-      pinned_commit: 07eb56baddf5e0b7dd33a09cfd93bfc48b1e81c3
+      pinned_commit: b9b250ad2ffd09802beec3606981ebcf7b4b87e2
     license: MIT
     sync: true
     status: active
@@ -614,7 +614,7 @@ skills:
       repo: https://github.com/ZzzLc0405/photo-abstract-editorial
       path: .
       ref: main
-      pinned_commit: c7904b70c9829f614b37064d0005149b8a2037dc
+      pinned_commit: 49e55073d6d0330274d31f75d27f5dd6eb35fd6d
     license: Custom (non-commercial, see LICENSE.md)
     sync: true
     status: active

@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/KKKKhazix/khazix-skills
 - Path: `khazix-writer`
 - Ref: `main`
-- Pinned commit: `a8744f0c682cac4c8c25f97d5968f3d3e6241e63`
+- Pinned commit: `7a5c4934be4106ac740ffdb95280bb81b3f4b83c`
 - License: MIT
-- Synced at: 2026-08-14T08:09:14.646Z
+- Synced at: 2026-08-20T03:42:06.032Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
