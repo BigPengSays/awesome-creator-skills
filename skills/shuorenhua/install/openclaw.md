@@ -1,7 +1,8 @@
 # OpenClaw 安装
 
-## lite / full 怎么选
+## mini / lite / full 怎么选
 
+- `mini`：把 `dist/shuorenhua-mini.md` 放进一次性 prompt 或 `SOUL.md` 的风格段；它没有 skill 元数据，不应冒充可自动发现的 skill。
 - `lite`：只放 `SKILL.md`。适合 token 紧张或只做基础改写。
 - `full`：放 `SKILL.md` + `references/`。适合长期 workspace、对外文本、技术文档和需要误杀防护的场景。
 

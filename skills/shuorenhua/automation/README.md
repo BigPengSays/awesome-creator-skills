@@ -16,7 +16,9 @@ python3 automation/check_repo.py
 - `counts`：核对 README、评测文档和批次表里的计数锚点。
 - `links`：检查 Markdown 和 README HTML 中的相对链接目标是否存在。
 - `case-ids`：检查正文引用的 SF、SNF、RS 编号是否存在。
-- `meta`：检查 skill frontmatter 必填字段和 plugin JSON 格式。
+- `meta`：检查 skill frontmatter 必填字段、plugin JSON 结构，以及 plugin / marketplace 版本一致性。
+- `human-corpus`：v2.3.1 发布检查要求 HUMAN manifest，并校验公开再分发许可/许可证据、归属、固定 revision/UTC 时间、AI 依据、哈希、长度、句数、作者/时代/原始语言分层与 benchmark 隔离；`docs / public-writing / status` 的代表性只计 direct，proxy 不顶数。
+- `rule-tables`：核对 residual 脚本和结构规则正文里的名词化、连词、借喻场枚举。
 
 ## Star 曲线自绘
 

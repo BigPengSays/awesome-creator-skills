@@ -4,6 +4,7 @@
 v2.2.0：字数留存率 / 破折号密度 / protected spans 粗核（规格见旧 roadmap §6）。
 v2.3.0：新增句长 CV / 连词密度 / 名词化 / 借喻场统计与 benchmark 标定模式。
 v2.3.0 合并批次：residual 层新增「」/『』高亮短语候选计数，继续只报数不判死。
+v2.3.1：增加 HUMAN 长文 manifest 校验与分布输出；只做 residual 对照，不进判分。
 合并版 v2.3.0 标定实测（SF 57 / SNF 46）：候选数两组中位数与 p90 均为 0、
 max 均为 3；SF-55 是自造高亮，SNF-44 是人物对白，原始计数不可分，
 因此不设阈值、不影响退出码。
@@ -22,6 +23,12 @@ protected spans 粗核只报警不判死，缺失留给 judge 复核（粗核是
         # 原文本从文件读，改后文本从 stdin 读；输出可读结果
     python3 automation/eval/hard_metrics.py --pair A.md B.md --report-json
         # 输出单行 JSON，供 automation/eval/README.md 的管道用法拼接 judge 输入
+    python3 automation/eval/hard_metrics.py --human-stats evals/human-corpus.jsonl
+        # 严格校验 HUMAN manifest 与正文，并输出不含正文的 residual 分布
+    python3 automation/eval/hard_metrics.py --calibrate
+        # 标定 benchmark SF/SNF + 8–12 篇 HUMAN 对照；缺 manifest 或 cohort 不全退出 2
+    python3 automation/eval/hard_metrics.py --calibrate --benchmark-only
+        # 采集期显式跳过 HUMAN，只看 benchmark 诊断分布；不算发布标定
 
 退出码：--run 模式任一长文用例留存率低于硬下限 0.85 时退出码为 1；
 批次不完整（零用例批次 / 缺输出）时退出码为 2（报告不可信）；
@@ -29,10 +36,14 @@ protected spans 粗核只报警不判死，缺失留给 judge 复核（粗核是
 """
 
 import argparse
+import hashlib
 import json
 import re
 import sys
+from collections import Counter
+from datetime import date, datetime, timezone
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 # 长文用例判据口径来自 evals/run-eval.md「Long-form / in-place」：
 # 字数留存率目标 >= 0.90，硬下限 0.85
@@ -140,7 +151,8 @@ def extract_blocks(text):
     """从模型输出里切出每条用例的 处理结果 正文。
 
     返回 {盲测编号: 正文}。B-xx 标题后的「处理结果：」以下到下一个
-    B-xx 标题之间的内容都算正文；B-xx 标题缺失时按序配对前一个编号。
+    B-xx 标题之间的内容都算正文；处理结果内的 Markdown 标题是被测
+    文本的一部分，必须保留。
     """
     lines = text.splitlines()
     blocks = {}
@@ -160,10 +172,6 @@ def extract_blocks(text):
             buf = []
             continue
         if pending_id is None:
-            continue
-        if in_result and re.match(r"^## |^### ", line_stripped):
-            # 下一个用例标题（或章节标题）：结束当前正文块，行由下一轮循环的
-            # 标题分支处理；不能用 break，否则后续用例全部丢失
             continue
         # 处理结果 行也可能带 blockquote 前缀（`> 处理结果：`），剥前缀后再识别
         if re.match(r"^处理结果(?:（[^）]*）)?[:：]", line_stripped):
@@ -880,14 +888,557 @@ def _percentile(values, q):
     return ordered[lo] * (1 - frac) + ordered[hi] * frac
 
 
-def calibrate(root):
-    """在 benchmark 语料上实测 residual 判据分布，供定阈值使用。
+class HumanCorpusError(ValueError):
+    """HUMAN manifest 或正文不满足可复现统计合同。"""
+
+
+HUMAN_REQUIRED_FIELDS = {
+    "id",
+    "path",
+    "scene",
+    "genre",
+    "era",
+    "origin_language",
+    "representation_role",
+    "author_group",
+    "source_type",
+    "source_url",
+    "source_revision",
+    "source_revision_at",
+    "source_title",
+    "source_author",
+    "license",
+    "license_url",
+    "license_evidence_url",
+    "modifications",
+    "consent_evidence",
+    "written_at",
+    "fixed_revision_at",
+    "ai_assisted",
+    "ai_evidence",
+    "deidentified",
+    "added_on",
+    "sha256",
+    "withdrawn",
+}
+HUMAN_SCENES = {"chat", "status", "docs", "public-writing"}
+HUMAN_ERAS = {"historical", "modern"}
+HUMAN_ORIGIN_LANGUAGES = {"zh-original", "translated-from-en"}
+HUMAN_REPRESENTATION_ROLES = {"direct", "proxy"}
+HUMAN_SOURCE_TYPES = {"owner", "open"}
+HUMAN_OPEN_LICENSES = {
+    "CC0",
+    "CC0 1.0",
+    "CC BY 1.0",
+    "CC BY 2.0",
+    "CC BY 2.5",
+    "CC BY 3.0",
+    "CC BY 4.0",
+    "CC BY-SA 1.0",
+    "CC BY-SA 2.0",
+    "CC BY-SA 2.5",
+    "CC BY-SA 3.0",
+    "CC BY-SA 4.0",
+    "Public Domain",
+    "written-permission",
+}
+HUMAN_CC_LICENSE_URLS = {
+    "CC0": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "CC0 1.0": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "CC BY 1.0": "https://creativecommons.org/licenses/by/1.0/",
+    "CC BY 2.0": "https://creativecommons.org/licenses/by/2.0/",
+    "CC BY 2.5": "https://creativecommons.org/licenses/by/2.5/",
+    "CC BY 3.0": "https://creativecommons.org/licenses/by/3.0/",
+    "CC BY 4.0": "https://creativecommons.org/licenses/by/4.0/",
+    "CC BY-SA 1.0": "https://creativecommons.org/licenses/by-sa/1.0/",
+    "CC BY-SA 2.0": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "CC BY-SA 2.5": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "CC BY-SA 3.0": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "CC BY-SA 4.0": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "Public Domain": "https://creativecommons.org/publicdomain/mark/1.0/",
+}
+HUMAN_MEDIAWIKI_LICENSE_EVIDENCE = {
+    ("zh.wikinews.org", "CC BY 2.5"): ("Wikinews:版权信息", "262628"),
+    ("zh.wikisource.org", "CC BY-SA 4.0"): ("Wikisource:版权信息", "2437011"),
+}
+
+
+def _inside_root(root, path):
+    root = root.resolve()
+    path = path.resolve()
+    return path == root or root in path.parents
+
+
+def load_human_corpus(root, manifest_path):
+    """读取并严格校验 HUMAN JSONL；返回含统计元数据的记录。
+
+    active 正文必须可随仓库再分发、明确未经过 AI 辅助、至少 1000 个汉字且
+    当前句子解析器能识别至少 12 句。withdrawn 条目只保留编号和 provenance，
+    不要求正文继续存在，也不进入分布。
+    """
+    root = Path(root).resolve()
+    manifest = Path(manifest_path)
+    if not manifest.is_absolute():
+        manifest = root / manifest
+    try:
+        raw = manifest.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise HumanCorpusError(f"无法读取 manifest {manifest}: {exc}") from exc
+
+    corpus_dir_path = root / "evals" / "human-corpus"
+    records, ids, paths, hashes = [], set(), set(), set()
+    for line_no, line in enumerate(raw.splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            item = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise HumanCorpusError(f"{manifest}:{line_no} 不是合法 JSON: {exc.msg}") from exc
+        if not isinstance(item, dict):
+            raise HumanCorpusError(f"{manifest}:{line_no} 每行必须是 JSON object")
+        missing = sorted(HUMAN_REQUIRED_FIELDS - item.keys())
+        if missing:
+            raise HumanCorpusError(f"{manifest}:{line_no} 缺字段: {', '.join(missing)}")
+        extra = sorted(item.keys() - HUMAN_REQUIRED_FIELDS)
+        if extra:
+            raise HumanCorpusError(f"{manifest}:{line_no} 未定义字段: {', '.join(extra)}")
+
+        cid = item["id"]
+        if not isinstance(cid, str) or not re.fullmatch(r"HUMAN-\d{2,}", cid):
+            raise HumanCorpusError(f"{manifest}:{line_no} id 必须是 HUMAN-01 形式")
+        if cid in ids:
+            raise HumanCorpusError(f"{manifest}:{line_no} 重复 id: {cid}")
+        ids.add(cid)
+
+        for key in (
+            "scene",
+            "genre",
+            "era",
+            "origin_language",
+            "representation_role",
+            "author_group",
+            "source_type",
+            "license",
+            "consent_evidence",
+            "written_at",
+            "ai_assisted",
+            "ai_evidence",
+            "added_on",
+        ):
+            if not isinstance(item[key], str) or not item[key].strip():
+                raise HumanCorpusError(f"{manifest}:{line_no} {key} 必须是非空字符串")
+        if item["scene"] not in HUMAN_SCENES:
+            raise HumanCorpusError(f"{manifest}:{line_no} scene 不在允许集合: {item['scene']}")
+        if item["era"] not in HUMAN_ERAS:
+            raise HumanCorpusError(f"{manifest}:{line_no} era 不在允许集合: {item['era']}")
+        if item["origin_language"] not in HUMAN_ORIGIN_LANGUAGES:
+            raise HumanCorpusError(
+                f"{manifest}:{line_no} origin_language 不在允许集合: {item['origin_language']}"
+            )
+        if item["representation_role"] not in HUMAN_REPRESENTATION_ROLES:
+            raise HumanCorpusError(
+                f"{manifest}:{line_no} representation_role 不在允许集合: {item['representation_role']}"
+            )
+        if item["source_type"] not in HUMAN_SOURCE_TYPES:
+            raise HumanCorpusError(f"{manifest}:{line_no} source_type 只能是 owner/open")
+        if not isinstance(item["deidentified"], bool) or not isinstance(item["withdrawn"], bool):
+            raise HumanCorpusError(f"{manifest}:{line_no} deidentified/withdrawn 必须是 boolean")
+        for key in (
+            "source_url",
+            "source_revision",
+            "source_revision_at",
+            "source_title",
+            "source_author",
+            "license_url",
+            "license_evidence_url",
+            "modifications",
+            "fixed_revision_at",
+        ):
+            if not isinstance(item[key], str):
+                raise HumanCorpusError(f"{manifest}:{line_no} {key} 必须是字符串")
+        if item["source_type"] == "open" and not re.fullmatch(r"https?://\S+", item["source_url"]):
+            raise HumanCorpusError(f"{manifest}:{line_no} open 条目必须给出 http(s) source_url")
+        if item["source_type"] == "open" and not item["source_revision"].strip():
+            raise HumanCorpusError(f"{manifest}:{line_no} open 条目必须给出 source_revision")
+        if item["source_type"] == "open" and not item["source_revision_at"].strip():
+            raise HumanCorpusError(f"{manifest}:{line_no} open 条目必须给出 source_revision_at")
+        if item["source_type"] == "open" and not re.fullmatch(
+            r"\d{4}-\d{2}-\d{2}", item["fixed_revision_at"]
+        ):
+            raise HumanCorpusError(
+                f"{manifest}:{line_no} open 条目 fixed_revision_at 必须是 YYYY-MM-DD"
+            )
+        if item["source_type"] == "owner" and item["fixed_revision_at"] and not re.fullmatch(
+            r"\d{4}-\d{2}-\d{2}", item["fixed_revision_at"]
+        ):
+            raise HumanCorpusError(
+                f"{manifest}:{line_no} owner 条目 fixed_revision_at 应留空或使用 YYYY-MM-DD"
+            )
+        if item["fixed_revision_at"]:
+            try:
+                date.fromisoformat(item["fixed_revision_at"])
+            except ValueError as exc:
+                raise HumanCorpusError(
+                    f"{manifest}:{line_no} fixed_revision_at 不是有效日期"
+                ) from exc
+        if item["source_revision_at"]:
+            try:
+                revision_time = datetime.fromisoformat(
+                    item["source_revision_at"].replace("Z", "+00:00")
+                )
+            except ValueError as exc:
+                raise HumanCorpusError(
+                    f"{manifest}:{line_no} source_revision_at 不是有效 ISO 8601 时间"
+                ) from exc
+            if revision_time.tzinfo is None or revision_time.utcoffset() != timezone.utc.utcoffset(None):
+                raise HumanCorpusError(
+                    f"{manifest}:{line_no} source_revision_at 必须明确使用 UTC"
+                )
+            if item["fixed_revision_at"] != revision_time.date().isoformat():
+                raise HumanCorpusError(
+                    f"{manifest}:{line_no} fixed_revision_at 必须与 source_revision_at 的 UTC 日期一致"
+                )
+        if item["source_type"] == "open":
+            source = urlparse(item["source_url"])
+            evidence = urlparse(item["license_evidence_url"])
+            if source.hostname in {"zh.wikinews.org", "zh.wikisource.org"}:
+                oldids = parse_qs(source.query).get("oldid", [])
+                evidence_oldids = parse_qs(evidence.query).get("oldid", [])
+                if not re.fullmatch(r"[1-9]\d*", item["source_revision"]):
+                    raise HumanCorpusError(
+                        f"{manifest}:{line_no} MediaWiki source_revision 必须是正整数"
+                    )
+                if oldids != [item["source_revision"]]:
+                    raise HumanCorpusError(
+                        f"{manifest}:{line_no} MediaWiki source_url 的 oldid 必须与 source_revision 一致"
+                    )
+                expected_evidence = HUMAN_MEDIAWIKI_LICENSE_EVIDENCE.get(
+                    (source.hostname, item["license"])
+                )
+                evidence_titles = parse_qs(evidence.query).get("title", [])
+                if (
+                    expected_evidence is None
+                    or evidence.hostname != source.hostname
+                    or evidence_titles != [expected_evidence[0]]
+                    or evidence_oldids != [expected_evidence[1]]
+                ):
+                    raise HumanCorpusError(
+                        f"{manifest}:{line_no} MediaWiki license_evidence_url 必须指向已核验的固定版权政策 revision"
+                    )
+        if item["source_type"] == "open" and (
+            not item["source_title"].strip() or not item["source_author"].strip()
+        ):
+            raise HumanCorpusError(f"{manifest}:{line_no} open 条目必须给出 source_title/source_author 作归属")
+        if item["source_type"] == "open" and item["license"] not in HUMAN_OPEN_LICENSES:
+            raise HumanCorpusError(
+                f"{manifest}:{line_no} open 条目 license 不在允许集合: {item['license']}"
+            )
+        if item["source_type"] == "open" and not re.fullmatch(
+            r"https?://\S+", item["license_evidence_url"]
+        ):
+            raise HumanCorpusError(
+                f"{manifest}:{line_no} open 条目必须给出 http(s) license_evidence_url"
+            )
+        if (
+            item["source_type"] == "open"
+            and item["license_evidence_url"] == item["license_url"]
+        ):
+            raise HumanCorpusError(
+                f"{manifest}:{line_no} license_evidence_url 必须指向逐篇作品证据，不能只填通用 license_url"
+            )
+        if item["source_type"] == "owner" and item["license"] != "repository-owner-authorized":
+            raise HumanCorpusError(
+                f"{manifest}:{line_no} owner 条目 license 必须是 repository-owner-authorized"
+            )
+        if item["source_type"] == "owner" and item["license_url"]:
+            raise HumanCorpusError(f"{manifest}:{line_no} owner 条目 license_url 应留空")
+        if item["source_type"] == "owner" and item["license_evidence_url"]:
+            raise HumanCorpusError(f"{manifest}:{line_no} owner 条目 license_evidence_url 应留空")
+        if item["source_type"] == "open" and item["license"] in HUMAN_CC_LICENSE_URLS:
+            expected_license_url = HUMAN_CC_LICENSE_URLS[item["license"]]
+            if item["license_url"] != expected_license_url:
+                raise HumanCorpusError(
+                    f"{manifest}:{line_no} license_url 必须是 {expected_license_url}"
+                )
+        if item["source_type"] == "open" and item["license"] == "written-permission" and item["license_url"]:
+            raise HumanCorpusError(f"{manifest}:{line_no} written-permission 的 license_url 应留空")
+        if not item["withdrawn"] and not item["modifications"].strip():
+            raise HumanCorpusError(f"{manifest}:{line_no} active 条目必须用 modifications 说明是否改动")
+        evidence = item["consent_evidence"]
+        if item["withdrawn"] and not re.fullmatch(
+            r"withdrawn by author on \d{4}-\d{2}-\d{2}", evidence
+        ):
+            raise HumanCorpusError(f"{manifest}:{line_no} withdrawn consent_evidence 格式不合合同")
+        if not item["withdrawn"] and item["source_type"] == "owner" and not re.fullmatch(
+            r"owner approved repository redistribution on \d{4}-\d{2}-\d{2}", evidence
+        ):
+            raise HumanCorpusError(f"{manifest}:{line_no} owner consent_evidence 格式不合合同")
+        if not item["withdrawn"] and item["source_type"] == "open" and item["license"] != "written-permission":
+            if evidence != f"source page declares {item['license']}":
+                raise HumanCorpusError(f"{manifest}:{line_no} 开放许可 consent_evidence 必须逐字对应 license")
+        if not item["withdrawn"] and item["source_type"] == "open" and item["license"] == "written-permission":
+            if not re.fullmatch(r"written permission archived at \S+ on \d{4}-\d{2}-\d{2}", evidence):
+                raise HumanCorpusError(f"{manifest}:{line_no} written-permission consent_evidence 格式不合合同")
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", item["added_on"]):
+            raise HumanCorpusError(f"{manifest}:{line_no} added_on 必须是 YYYY-MM-DD")
+
+        record = dict(item)
+        record["manifest_line"] = line_no
+        if item["withdrawn"]:
+            record.update({"text": None, "han": 0, "sentences": 0, "metrics": None})
+            records.append(record)
+            continue
+
+        if item["ai_assisted"] != "no":
+            raise HumanCorpusError(f"{manifest}:{line_no} active HUMAN 条目必须明确 ai_assisted=no")
+        if not item["deidentified"]:
+            raise HumanCorpusError(f"{manifest}:{line_no} active HUMAN 条目必须完成隐私检查并设 deidentified=true")
+        if not isinstance(item["path"], str) or not item["path"].strip():
+            raise HumanCorpusError(f"{manifest}:{line_no} active HUMAN 条目必须给出 path")
+        try:
+            rel = Path(item["path"])
+            candidate = root / rel
+            lexical_corpus_dir = corpus_dir_path
+            if (root / "evals").is_symlink() or lexical_corpus_dir.is_symlink():
+                raise HumanCorpusError(f"{manifest}:{line_no} HUMAN 目录及其父目录不能是 symlink")
+            corpus_dir = lexical_corpus_dir.resolve()
+            body_path = candidate.resolve()
+        except HumanCorpusError:
+            raise
+        except (OSError, ValueError) as exc:
+            raise HumanCorpusError(f"{manifest}:{line_no} path 无法解析: {item['path']}") from exc
+        expected_rel = Path("evals") / "human-corpus" / f"{cid}.txt"
+        if rel.is_absolute() or rel != expected_rel:
+            raise HumanCorpusError(f"{manifest}:{line_no} path 必须精确为 {expected_rel.as_posix()}")
+        if not _inside_root(corpus_dir, body_path):
+            raise HumanCorpusError(f"{manifest}:{line_no} path 解析后越出 evals/human-corpus/: {item['path']}")
+        if candidate.is_symlink():
+            raise HumanCorpusError(f"{manifest}:{line_no} HUMAN 正文不能是 symlink: {item['path']}")
+        try:
+            rel_key = body_path.relative_to(root).as_posix()
+        except ValueError as exc:
+            raise HumanCorpusError(f"{manifest}:{line_no} path 解析后越出仓库: {item['path']}") from exc
+        if rel_key in paths:
+            raise HumanCorpusError(f"{manifest}:{line_no} 重复 path: {item['path']}")
+        paths.add(rel_key)
+        try:
+            body_bytes = body_path.read_bytes()
+            body = body_bytes.decode("utf-8")
+        except (OSError, UnicodeError) as exc:
+            raise HumanCorpusError(f"{manifest}:{line_no} 无法读取 UTF-8 正文 {item['path']}: {exc}") from exc
+
+        digest = hashlib.sha256(body_bytes).hexdigest()
+        if not isinstance(item["sha256"], str) or not re.fullmatch(r"[0-9a-f]{64}", item["sha256"]):
+            raise HumanCorpusError(f"{manifest}:{line_no} sha256 必须是 64 位小写十六进制")
+        if digest != item["sha256"]:
+            raise HumanCorpusError(f"{manifest}:{line_no} sha256 不匹配: {item['path']}")
+        if digest in hashes:
+            raise HumanCorpusError(f"{manifest}:{line_no} 正文重复（sha256）: {item['path']}")
+        hashes.add(digest)
+
+        metrics = residual_metrics(body)
+        if metrics["han"] < 1000:
+            raise HumanCorpusError(f"{manifest}:{line_no} {cid} 只有 {metrics['han']} 个汉字，低于 1000")
+        if metrics["sentences"] < 12:
+            raise HumanCorpusError(f"{manifest}:{line_no} {cid} 只识别到 {metrics['sentences']} 句，低于 12")
+        record.update({"text": body, "han": metrics["han"], "sentences": metrics["sentences"], "metrics": metrics})
+        records.append(record)
+
+    try:
+        body_files = sorted(path for path in corpus_dir_path.iterdir() if path.suffix == ".txt")
+    except OSError as exc:
+        raise HumanCorpusError(f"无法读取 HUMAN 正文目录 {corpus_dir_path}: {exc}") from exc
+    unregistered = [path.name for path in body_files if path.stem not in ids]
+    if unregistered:
+        raise HumanCorpusError(
+            "HUMAN 正文目录存在 manifest 未登记文件: " + ", ".join(unregistered)
+        )
+
+    if not records:
+        raise HumanCorpusError(f"{manifest} 没有任何条目")
+    if not any(not record["withdrawn"] for record in records):
+        raise HumanCorpusError(f"{manifest} 没有 active HUMAN 正文")
+    return records
+
+
+def validate_human_cohort(records):
+    """校验 v2.3.1 发布口径；采集期可只调用 load_human_corpus 检查单篇。"""
+    active = [record for record in records if not record["withdrawn"]]
+    if not 8 <= len(active) <= 12:
+        raise HumanCorpusError(f"active HUMAN 正文应为 8–12 篇，实际 {len(active)} 篇")
+    source_types = {record["source_type"] for record in active}
+    if source_types != {"open"}:
+        raise HumanCorpusError(
+            f"v2.3.1 active HUMAN 正文必须全部来自可核验公开来源，实际 {sorted(source_types)}"
+        )
+    author_groups = {record["author_group"] for record in active}
+    if len(author_groups) < 3:
+        raise HumanCorpusError(
+            f"active HUMAN 正文至少需要 3 个作者组，实际 {len(author_groups)} 个"
+        )
+    era_counts = Counter(record["era"] for record in active)
+    if era_counts["historical"] < 3:
+        raise HumanCorpusError("active HUMAN 历史文本至少需要 3 篇")
+    if era_counts["modern"] < 3:
+        raise HumanCorpusError("active HUMAN 现代文本至少需要 3 篇")
+    translated = sum(
+        record["origin_language"] == "translated-from-en" for record in active
+    )
+    if translated * 3 > len(active):
+        raise HumanCorpusError("翻译文本不得超过 active cohort 的三分之一")
+    return active
+
+
+def validate_human_representativeness(records):
+    """发布代表性门禁；proxy 可参与 residual，但不能替 direct 场景顶数。"""
+    active = validate_human_cohort(records)
+    required_scenes = {"docs", "public-writing", "status"}
+    direct_scenes = {
+        record["scene"] for record in active if record["representation_role"] == "direct"
+    }
+    missing_scenes = sorted(required_scenes - direct_scenes)
+    if missing_scenes:
+        raise HumanCorpusError(
+            "active HUMAN direct 样本缺少代表性场景: " + ", ".join(missing_scenes)
+        )
+    return active
+
+
+def _distribution(values):
+    if not values:
+        return {"n": 0, "min": None, "p10": None, "p25": None, "median": None, "p75": None, "p90": None, "max": None, "raw": []}
+    return {
+        "n": len(values),
+        "min": min(values),
+        "p10": _percentile(values, 0.10),
+        "p25": _percentile(values, 0.25),
+        "median": _percentile(values, 0.50),
+        "p75": _percentile(values, 0.75),
+        "p90": _percentile(values, 0.90),
+        "max": max(values),
+        "raw": sorted(values) if len(values) < 8 else [],
+    }
+
+
+def human_corpus_report(records):
+    """生成不含正文的 HUMAN 统计报告。"""
+    active = [record for record in records if not record["withdrawn"]]
+
+    def group_report(items):
+        cvs = [item["metrics"]["sentence_cv"] for item in items if item["metrics"]["sentence_cv"] is not None]
+        conjs = [item["metrics"]["conjunction_per_1k"] for item in items if item["metrics"]["conjunction_per_1k"] is not None]
+        return {
+            "documents": len(items),
+            "cv_eligible": len(cvs),
+            "sentence_cv": _distribution(cvs),
+            "conjunction_per_1k": _distribution(conjs),
+        }
+
+    scenes = sorted({item["scene"] for item in active})
+    required_scenes = {"docs", "public-writing", "status"}
+    direct_scenes = sorted(
+        {item["scene"] for item in active if item["representation_role"] == "direct"}
+    )
+    buckets = {
+        "1000-1499": [item for item in active if 1000 <= item["han"] < 1500],
+        "1500-2999": [item for item in active if 1500 <= item["han"] < 3000],
+        "3000+": [item for item in active if item["han"] >= 3000],
+    }
+    return {
+        "active": len(active),
+        "withdrawn": len(records) - len(active),
+        "author_groups": dict(sorted(Counter(item["author_group"] for item in active).items())),
+        "source_types": dict(sorted(Counter(item["source_type"] for item in active).items())),
+        "eras": dict(sorted(Counter(item["era"] for item in active).items())),
+        "origin_languages": dict(
+            sorted(Counter(item["origin_language"] for item in active).items())
+        ),
+        "representation_roles": dict(
+            sorted(Counter(item["representation_role"] for item in active).items())
+        ),
+        "direct_scenes": direct_scenes,
+        "missing_direct_scenes": sorted(required_scenes - set(direct_scenes)),
+        "overall": group_report(active),
+        "by_scene": {scene: group_report([item for item in active if item["scene"] == scene]) for scene in scenes},
+        "by_length": {name: group_report(items) for name, items in buckets.items()},
+        "documents": [
+            {
+                "id": item["id"],
+                "scene": item["scene"],
+                "genre": item["genre"],
+                "era": item["era"],
+                "origin_language": item["origin_language"],
+                "representation_role": item["representation_role"],
+                "author_group": item["author_group"],
+                "source_type": item["source_type"],
+                "han": item["han"],
+                "sentences": item["sentences"],
+                "sha256": item["sha256"],
+            }
+            for item in active
+        ],
+    }
+
+
+def _fmt_stat(value):
+    return "-" if value is None else f"{value:.2f}"
+
+
+def print_human_report(report):
+    print("# HUMAN 长文 residual 对照\n")
+    print(f"active {report['active']} 篇 / withdrawn {report['withdrawn']} 篇")
+    print(
+        f"作者组：{report['author_groups']}；来源：{report['source_types']}；"
+        f"时代：{report['eras']}；原始语言：{report['origin_languages']}\n"
+        f"代表性角色：{report['representation_roles']}\n"
+    )
+    if report["missing_direct_scenes"]:
+        print(
+            "代表性门禁：未通过；direct 样本缺 "
+            + ", ".join(report["missing_direct_scenes"])
+            + "（proxy 只进 residual，不顶场景数）。\n"
+        )
+    else:
+        print(f"代表性门禁：通过；direct 场景 {', '.join(report['direct_scenes'])}。\n")
+    print(
+        "| 分组 | 文档 | CV n | CV min | CV 中位 | CV p90 | CV max | "
+        "连词 n | 连词 min | 连词中位 | 连词 p90 | 连词 max |"
+    )
+    print("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
+    rows = [("HUMAN", report["overall"])]
+    rows.extend((f"scene:{name}", stats) for name, stats in report["by_scene"].items())
+    rows.extend((f"length:{name}", stats) for name, stats in report["by_length"].items())
+    for name, stats in rows:
+        cv = stats["sentence_cv"]
+        conj = stats["conjunction_per_1k"]
+        print(
+            f"| {name} | {stats['documents']} | {cv['n']} | "
+            f"{_fmt_stat(cv['min'])} | {_fmt_stat(cv['median'])} | "
+            f"{_fmt_stat(cv['p90'])} | {_fmt_stat(cv['max'])} | "
+            f"{conj['n']} | {_fmt_stat(conj['min'])} | "
+            f"{_fmt_stat(conj['median'])} | {_fmt_stat(conj['p90'])} | "
+            f"{_fmt_stat(conj['max'])} |"
+        )
+
+    small = []
+    for name, stats in rows:
+        for metric in ("sentence_cv", "conjunction_per_1k"):
+            raw = stats[metric]["raw"]
+            if raw:
+                small.append(f"- {name} / {metric}（n={len(raw)}）：{', '.join(_fmt_stat(v) for v in raw)}")
+    if small:
+        print("\n样本少于 8 的分组同时列原始值：\n")
+        print("\n".join(small))
+
+
+def calibrate(root, human_manifest=None, benchmark_only=False):
+    """在 benchmark 与可用的 HUMAN 对照语料上实测 residual 分布。
 
     分组：`SF-xx` 是该改的 AI 味样本，`SNF-xx` 是不该改的正常样本，两组
     天然构成对照组。`B-xx` 是 SF/SNF 的盲测副本，计入会重复污染分布，排除。
 
-    输出每组每个指标的样本数与分位数。阈值应落在两组分布的分离处，
-    并偏向 SNF 一侧——误伤防护优先，宁可漏报不可误杀。
+    输出每组每个指标的样本数与分位数。HUMAN 只作长文假阳性对照，
+    不进入 benchmark 判分；样本不足时只报告原始值，不据此硬设阈值。
     """
     cases = parse_cases(root)
     groups = {"SF": [], "SNF": []}
@@ -901,22 +1452,58 @@ def calibrate(root):
         print("hard_metrics: benchmark.md 没有解析到 SF/SNF 分组，无法标定", file=sys.stderr)
         return 2
 
-    print("# residual 判据标定（evals/benchmark.md）\n")
-    print(f"样本：SF {len(groups['SF'])} 条（该改）/ SNF {len(groups['SNF'])} 条（不该改）")
+    human_records = None
+    if not benchmark_only:
+        manifest = Path(human_manifest) if human_manifest else root / "evals" / "human-corpus.jsonl"
+        if not manifest.is_absolute():
+            manifest = root / manifest
+        if not manifest.exists():
+            print(
+                f"hard_metrics: HUMAN manifest 不存在: {manifest}；只看 benchmark 请显式传 --benchmark-only",
+                file=sys.stderr,
+            )
+            return 2
+        try:
+            human_records = load_human_corpus(root, manifest)
+            validate_human_cohort(human_records)
+        except HumanCorpusError as exc:
+            print(f"hard_metrics: {exc}", file=sys.stderr)
+            return 2
+        groups["HUMAN"] = [
+            (record["id"], record["scene"], record["text"])
+            for record in human_records
+            if not record["withdrawn"]
+        ]
+
+    title = "benchmark" if benchmark_only else "benchmark + HUMAN"
+    print(f"# residual 判据标定（{title}）\n")
+    sample_line = f"样本：SF {len(groups['SF'])} 条（该改）/ SNF {len(groups['SNF'])} 条（不该改）"
+    if "HUMAN" in groups:
+        sample_line += f" / HUMAN {len(groups['HUMAN'])} 篇（人写长文对照）"
+    print(sample_line)
     print("B-xx 盲测副本已排除，避免同一文本重复计入分布。\n")
 
     collected = {}
+    scene_collected = {}
     for name, items in groups.items():
         stats = {"cv": [], "conj": [], "nom": [], "field": [], "quote": []}
-        for _, _, body in items:
+        for _, scene, body in items:
             m = residual_metrics(body)
+            base_scene = scene.split("/", 1)[0].strip()
+            scene_stats = scene_collected.setdefault(
+                (name, base_scene), {"documents": 0, "cv": [], "conj": []}
+            )
+            scene_stats["documents"] += 1
             if m["sentence_cv"] is not None:
                 stats["cv"].append(m["sentence_cv"])
+                scene_stats["cv"].append(m["sentence_cv"])
             if m["conjunction_per_1k"] is not None and m["han"] >= 80:
                 stats["conj"].append(m["conjunction_per_1k"])
-            stats["nom"].append(m["nominalization"])
-            stats["field"].append(m["metaphor_fields"])
-            stats["quote"].append(m["highlight_quotes"])
+                scene_stats["conj"].append(m["conjunction_per_1k"])
+            if name != "HUMAN":
+                stats["nom"].append(m["nominalization"])
+                stats["field"].append(m["metaphor_fields"])
+                stats["quote"].append(m["highlight_quotes"])
         collected[name] = stats
 
     labels = {
@@ -930,7 +1517,8 @@ def calibrate(root):
         print(f"## {label}\n")
         print("| 组 | n | p10 | p25 | 中位 | p75 | p90 | max |")
         print("|---|---|---|---|---|---|---|---|")
-        for name in ("SF", "SNF"):
+        names = groups if key in {"cv", "conj"} else ("SF", "SNF")
+        for name in names:
             vals = collected[name][key]
             if not vals:
                 print(f"| {name} | 0 | - | - | - | - | - | - |")
@@ -949,8 +1537,30 @@ def calibrate(root):
             print(f"| {name} | {len(vals)} | {cells} |")
         print()
 
+    print("## 句长 CV / 连词密度按主场景\n")
+    print("| 组 | 主场景 | 文档 | CV 有效 | CV 中位 | CV p90 | 连词有效 | 连词中位 | 连词 p90 | 小样本原始值 |")
+    print("|---|---|---:|---:|---:|---:|---:|---:|---:|---|")
+    for name in groups:
+        scenes = sorted(scene for group, scene in scene_collected if group == name)
+        for scene in scenes:
+            stats = scene_collected[(name, scene)]
+            cv = _distribution(stats["cv"])
+            conj = _distribution(stats["conj"])
+            raw = []
+            if cv["raw"]:
+                raw.append("CV=" + ",".join(f"{value:.2f}" for value in cv["raw"]))
+            if conj["raw"]:
+                raw.append("连词=" + ",".join(f"{value:.2f}" for value in conj["raw"]))
+            print(
+                f"| {name} | {scene} | {stats['documents']} | {cv['n']} | "
+                f"{_fmt_stat(cv['median'])} | {_fmt_stat(cv['p90'])} | {conj['n']} | "
+                f"{_fmt_stat(conj['median'])} | {_fmt_stat(conj['p90'])} | {'；'.join(raw) or '-'} |"
+            )
+    print("\n样本少于 8 的场景分组列出原始值；没有同场景分离证据时不设阈值。\n")
+
     print("## 逐条命中（名词化 / 借喻场 / 高亮短语非零项）\n")
-    for name, items in groups.items():
+    for name in ("SF", "SNF"):
+        items = groups[name]
         for cid, scene, body in items:
             m = residual_metrics(body)
             if m["nominalization"] or m["metaphor_fields"] >= 2 or m["highlight_quotes"]:
@@ -962,6 +1572,10 @@ def calibrate(root):
                     f"，高亮短语候选 {m['highlight_quotes']}"
                     f"{'（' + '、'.join(m['highlight_quote_samples']) + '）' if m['highlight_quote_samples'] else ''}"
                 )
+    if human_records:
+        print("\n")
+        print_human_report(human_corpus_report(human_records))
+        print("\nHUMAN 只作 residual 假阳性参照，不进 benchmark rewrite/judge，也不单凭这批小样本设产品阈值。")
     return 0
 
 
@@ -988,20 +1602,55 @@ def single_pair(original_path, output_path, scene=""):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="说人话 eval harness 硬判与 residual 统计（v2.3.0）")
+    ap = argparse.ArgumentParser(description="说人话 eval harness 硬判与 residual 统计（v2.3.1）")
     ap.add_argument("--run", metavar="DIR", help="扫批次目录（含 rewrite-*.md），输出 hard-metrics 报告")
     ap.add_argument("--pair", nargs=2, metavar=("ORIG", "OUT"), help="单条对照：原文本文件 + 改后文本文件（- 表示 stdin）")
     ap.add_argument("--stdin", metavar="ORIG", help="原文本文件，改后文本从 stdin 读")
-    ap.add_argument("--report-json", action="store_true", help="--pair 模式输出单行 JSON（供 judge 输入拼接）")
+    ap.add_argument("--report-json", action="store_true", help="支持的模式改为输出 JSON；--pair 可供 judge 输入拼接")
     ap.add_argument("--scene", metavar="SCENE", default="", help="单条模式（--pair/--stdin）的用例场景标签，如 'public-writing / long / in-place'，用于长文留存判据")
     ap.add_argument("--residual", metavar="FILE", help="对单个文本算 residual 统计量（句长 CV / 连词密度 / 名词化 / 借喻场 / 「」高亮短语），只报警不判死；- 表示 stdin")
-    ap.add_argument("--calibrate", action="store_true", help="在 evals/benchmark.md 的 SF / SNF 两组语料上实测 residual 判据分布，用于定阈值")
+    ap.add_argument("--calibrate", action="store_true", help="在 benchmark SF/SNF 与 HUMAN 对照语料上实测 residual 分布")
+    ap.add_argument("--human-manifest", metavar="FILE", help="--calibrate 使用的 HUMAN JSONL；不传则读取 evals/human-corpus.jsonl")
+    ap.add_argument("--benchmark-only", action="store_true", help="仅与 --calibrate 合用：显式跳过 HUMAN，只看 benchmark 诊断分布")
+    ap.add_argument("--human-stats", metavar="FILE", help="只校验 HUMAN JSONL 并输出 residual 分布，不运行 benchmark 标定")
     args = ap.parse_args()
 
     root = Path(__file__).resolve().parents[2]
 
+    primary_modes = [args.run, args.pair, args.stdin, args.residual, args.calibrate, args.human_stats]
+    if sum(value is not None and value is not False for value in primary_modes) > 1:
+        print("hard_metrics: --run/--pair/--stdin/--residual/--calibrate/--human-stats 只能选一种", file=sys.stderr)
+        return 2
+
+    if args.human_manifest and not args.calibrate:
+        print("hard_metrics: --human-manifest 只能与 --calibrate 一起使用", file=sys.stderr)
+        return 2
+    if args.benchmark_only and not args.calibrate:
+        print("hard_metrics: --benchmark-only 只能与 --calibrate 一起使用", file=sys.stderr)
+        return 2
+    if args.benchmark_only and args.human_manifest:
+        print("hard_metrics: --benchmark-only 不能与 --human-manifest 同时使用", file=sys.stderr)
+        return 2
+    if args.report_json and args.calibrate:
+        print("hard_metrics: --calibrate 暂不支持 --report-json", file=sys.stderr)
+        return 2
+
     if args.calibrate:
-        return calibrate(root)
+        return calibrate(root, args.human_manifest, args.benchmark_only)
+
+    if args.human_stats:
+        try:
+            records = load_human_corpus(root, args.human_stats)
+            validate_human_cohort(records)
+        except HumanCorpusError as exc:
+            print(f"hard_metrics: {exc}", file=sys.stderr)
+            return 2
+        report = human_corpus_report(records)
+        if args.report_json:
+            print(json.dumps(report, ensure_ascii=False))
+        else:
+            print_human_report(report)
+        return 0
 
     if args.residual:
         text = sys.stdin.read() if args.residual == "-" else read_text_safe(args.residual)

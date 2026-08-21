@@ -48,7 +48,7 @@ mkdir -p tasks/current/eval-runs/2026-06-18-codex \
 
 ## 批次划分
 
-默认按 5 批跑（盲测编号连续切段，每批 SF/SNF 天然混排）：
+默认按 7 批跑（盲测编号连续切段，每批 SF/SNF 天然混排）：
 
 | batch | 区间 |
 |-------|------|
@@ -56,11 +56,13 @@ mkdir -p tasks/current/eval-runs/2026-06-18-codex \
 | `B17-32` | B-17 到 B-32 |
 | `B33-48` | B-33 到 B-48 |
 | `B49-64` | B-49 到 B-64 |
-| `B65-103` | B-65 到 B-103 |
+| `B65-80` | B-65 到 B-80 |
+| `B81-96` | B-81 到 B-96 |
+| `B97-111` | B-97 到 B-111 |
 
 新增或补跑用例可以单独成批：targeted 补跑先查 `benchmark-map.md` 找到对应 B 编号，按 B 编号下发给被测模型（不要把 SF/SNF 编号透给被测模型），输出命名可用 `targeted-vX.Y.Z`。历史批次（v1.9.x 的 `SF01-14` 等命名）是盲测前的旧口径，归档不改。
 
-如果模型或供应商的上下文 / 输出限制跑不下 5 批之一，可以继续细拆，例如把 `B01-16` 拆成 `B01-08` 和 `B09-16`。文件名保持区间可读即可，最终汇总时按原区间合并。
+如果模型或供应商的上下文 / 输出限制跑不下 7 批之一，可以继续细拆，例如把 `B01-16` 拆成 `B01-08` 和 `B09-16`。文件名保持区间可读即可，最终汇总时按原区间合并。
 
 交叉判分固定为：
 
@@ -103,13 +105,16 @@ python3 automation/eval/hard_metrics.py --pair <原文> <改后> --report-json -
 python3 automation/eval/hard_metrics.py --residual 稿件.md
 python3 automation/eval/hard_metrics.py --residual 稿件.md --report-json
 python3 automation/eval/hard_metrics.py --calibrate
+python3 automation/eval/hard_metrics.py --calibrate --benchmark-only
+python3 automation/eval/hard_metrics.py --human-stats evals/human-corpus.jsonl
 ```
 
 - `--residual` 输出句长变异系数、连词密度（每千字）、动词名词化命中、800 字窗口内借喻场数量，以及 `「」/『』` 括起的短语候选数。代码块、URL、frontmatter 等先用等长空格屏蔽，行号和字符偏移不漂。
-- `--calibrate` 在 `benchmark.md` 的 SF / SNF 两组语料上实测分布，自动排除 B-xx 盲测副本。它用于检验阈值能不能成立，不负责替作者硬凑阈值。
+- `--calibrate` 在 `benchmark.md` 的 SF / SNF 与 HUMAN 对照组上实测分布，自动排除 B-xx 盲测副本；HUMAN manifest 缺失、不足 8 篇或来源不全时退出 2。采集期只想复看 benchmark，可显式加 `--benchmark-only`；这不是发布标定结果。
+- `--human-stats` 严格校验 JSONL、逐篇许可/许可证据与归属元数据、固定 revision/UTC 时间、正文目录/SHA256、去重、隐私检查、AI 辅助状态及其依据、1,000 汉字、12 句、8–12 篇公开来源、至少 3 个作者组、历史/现代各至少 3 篇及翻译稿不超过三分之一，再按总体、场景和长度桶报告 HUMAN 分布，并单列时代、原始语言、direct/proxy 及缺失 direct 场景。`check_repo.py` 的发布代表性门禁只把 direct 计入 `docs / public-writing / status` 覆盖；proxy 仍可作 residual，但不能顶数。自动化能验证的是元数据合同，归属内容与授权证据真实性仍由维护者人工确认。HUMAN 不进 benchmark rewrite/judge；格式或授权元数据不完整退出 2。
 - 五项目前都只报数、不判死、不影响退出码。v2.3.0 的 95 条标定给出一个明确负结论：连词密度不能设全局线——SNF 最高 81.08/千字，反而高于 SF 的 80.00；`docs` / `status` 里的连词常常承担真实条件和因果。规则侧因此只在 `public-writing` 叙事中按分布判断，见 `references/structures.md` 第 23 条。
 - 合并版 v2.3.0 在 103 条（57 SF / 46 SNF）上的 `「」/『』` 候选计数同样给出负结论：两组中位数与 p90 都是 0，max 都是 3。SF-55 的 3 处是抽象概念上的自造高亮，SNF-44 的 3 处是小说人物对白；原始计数完全同值、结论相反，因此不照抄上游「一篇 3 处以上」，不设阈值。脚本只报候选数，引用、正式术语、对白和文学场景由人工复核。
-- 句长 CV 仍缺人写长文对照组（够 12 句的 SF 仅 2 条、SNF 0 条），本版不设阈值；缺口留给后续版本。
+- v2.3.1 增加 HUMAN manifest 与统计入口；在授权语料补齐、分布实际跑出之前，句长 CV 与分场景连词密度继续不设阈值。8–12 篇小样本也只用于观察假阳性，不宣称统计显著或泛化成人味检测器。
 
 ## 改写批
 
