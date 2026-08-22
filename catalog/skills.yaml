@@ -487,6 +487,24 @@ skills:
     license: MIT
     sync: true
     status: active
+  - id: ip-as-logo
+    name: ip-as-logo
+    summary: 生成极简可爱的方形 IP 角色 logo：圆厚造型、两色主体加纯色背景、角落构图，小尺寸仍可辨认。
+    role: creation
+    platforms:
+      - generic
+    content_types:
+      - image
+    formats: []
+    source:
+      type: git
+      repo: https://github.com/s1dashu/ip-as-logo-skill
+      path: .
+      ref: main
+      pinned_commit: b1bf517c54a407452cfaca98a54668cd052f8e63
+    license: MIT
+    sync: true
+    status: active
   - id: ip-illustration-for-yourself
     name: ip-illustration-character-system
     summary: 用照片建立可复用的萌粒风格个人 IP，并为长文生成留白多的 mini 插图与 3:4 信息图，保持角色一致。
