@@ -156,6 +156,22 @@
 - 归档：`results-v2.3.0.md` §9–§10
 - 原始输出：`tasks/current/eval-runs/2026-08-12-v2.4.0-final/`（未入库；目录名保留内部里程碑编号）
 
+## v2.3.1 候选全量基线与 HUMAN 标定（2026-08-19 / 2026-08-20）
+
+- 评测集：`benchmark.md` @ v2.3.1 候选（111 条：61 SF + 50 SNF）；全量范围 B-01–111，HUMAN 8 篇另作 residual 假阳性参照
+- 口径：Opus 5 + DeepSeek V4 Pro 独立盲改写、计划双向交叉判分；冻结 blind SHA256 `79dedd4247e0df8a292a883a282e1d80214e0f6cc829a5855348b6a7e063acdd`
+- 被测模型：Claude Code CLI 2.1.237 / first-party `claude-opus-5`；Cindy Host 实际计费回执 `deepseek-v4-pro[1m]`
+- 完整性：DeepSeek rewrite 111/111；Opus rewrite 111/111。Opus B-97–111 在订阅恢复后用全新 first-party Opus 5 会话补齐，没有重跑已成功批次
+- judge：DeepSeek→Opus 96/111，L1 失败 1（B-39 / SF-27），缺 B-97–111；Opus→DeepSeek 111/111，L1 失败 1（B-95 / SF-07），SF L2 44/58，SNF 误杀 1/50
+- B-39 审计：输入、映射、预期与 frozen rule 都要求保留 fallback 适用条件“高峰期流量”；raw 与归一化输出一致，运行 rc=0、模型身份和执行链正常，判定为 Opus 模型执行失败
+- 认证核验：2026-08-20 17:51:30 +08:00 的 `claude auth status` 仍退出 1，但实际 first-party Opus 请求成功；后续 8 个新会话的原始 JSON 均验证 `claude-opus-5` / `firstParty`。因此将 `auth status` 记为 CLI 2.1.237 假阴性，不再当作实际可用性证据
+- DeepSeek 最后 judge 缺口：原 Cindy Host / Orca Worker 通道当前不可调；直接 Claude CLI 请求 `deepseek-v4-pro` 返回 404 `unrecognized_model`，未用其他模型代替
+- HUMAN：8/8 active，全 open，7 个作者组；3 篇历史 + 5 篇现代，6 篇中文原作 + 2 篇英译中。6 篇是场景 proxy，direct 只有 2 篇 public-writing；`--human-stats` 与 `--calibrate` 通过，`check_repo.py` 按预期被 direct 缺 docs/status 阻塞。逐篇固定 revision/UTC 时间、来源、许可、许可证据、改动和 AI 依据见 `human-corpus.jsonl`
+- 失败后修复侧测（2026-08-20）：先冻结 14 条 task-local held-out，再修改保真回读；first-party Opus 5 与 Grok 4.6 均为 L1 0/14，历史 B-39/B-95 targeted 两模型 4/4。Grok 由 Santi verifier 核对 `grok-4.6-build` + fingerprint；原始输出在 `tasks/current/eval-runs/2026-08-20-l1-generalization-r1/`。这不是正式全量追分，旧 L1 与 NOT release-ready 状态保留
+- 发布判断：**NOT release-ready**。两个独立 L1 均使 L1=0 门槛失败；另有一批 DeepSeek judge 缺失。不改门槛、不移除用例、不追分重跑
+- 归档：`results-v2.3.1.md`
+- 原始输出：`tasks/current/eval-runs/2026-08-19-v2.3.1-{targeted-r3,full-r3}/`（未入库；Opus 早期 429 与 `auth status` 假阴性原件在 `full-r3/opus/raw/`）
+
 ## 登记模板（新一轮实跑照抄填写）
 
 ```markdown
