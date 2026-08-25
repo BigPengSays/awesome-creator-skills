@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/EverettFish/ip_illustration_for_yourself
 - Path: `.`
 - Ref: `main`
-- Pinned commit: `7e47ee615485d4bf04a4fef4550497bfd5e553f5`
+- Pinned commit: `ee773ff14c8d5d4d8f5fce0ad2b0c914914dfa34`
 - License: Unknown
-- Synced at: 2026-08-17T07:55:09.194Z
+- Synced at: 2026-08-25T03:44:04.669Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
