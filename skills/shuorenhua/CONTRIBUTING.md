@@ -78,7 +78,7 @@
 如果你遇到“改完还是像 AI”的真实案例，优先用 GitHub 的 [bad case 模板](.github/ISSUE_TEMPLATE/bad-case.md) 提交。模板会要求你写清楚：
 
 - 原文或已脱敏片段
-- 使用工具和加载方式：`lite`（只加载 `SKILL.md`）或 `full`（`SKILL.md` + `references/`）
+- 使用工具和加载方式：`mini`（`dist/shuorenhua-mini.md`）、`lite`（只加载 `SKILL.md`）或 `full`（`SKILL.md` + `references/`）
 - 场景：`chat / status / docs / public-writing / code-context / mixed`
 - 你觉得哪里仍然不自然
 - 哪些事实、术语、命令、引用或责任主体不能改坏
