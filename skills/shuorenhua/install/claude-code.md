@@ -9,10 +9,11 @@
 
 在 Claude Code 对话里执行这两条命令即可，skill 自动发现和触发。升级用 `/plugin` 面板或 `claude plugin update shuorenhua`。
 
-plugin 自带全量文件（`SKILL.md` + `references/`），lite / full 的区分不再需要。已经用下面方式 2-4 手动装过的，先移除旧安装再装 plugin，避免同一个 skill 重复触发。
+plugin 自带全量文件（`SKILL.md` + `references/`），安装时不用选择档位。已经用下面方式 2-4 手动装过的，先移除旧安装再装 plugin，避免同一个 skill 重复触发。
 
-## lite / full 怎么选（手动安装时）
+## mini / lite / full 怎么选（手动使用时）
 
+- `mini`：只把 `dist/shuorenhua-mini.md` 贴进单次会话。适合上下文很紧或较弱模型；它不参与 skill 自动发现。
 - `lite`：只加载 `SKILL.md`。适合临时改写和轻量审稿。
 - `full`：加载 `SKILL.md` + `references/`。适合项目级安装、公开文本、技术文档和需要误杀防护的场景。
 
