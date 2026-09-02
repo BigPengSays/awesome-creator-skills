@@ -17,7 +17,7 @@ assignees: ""
 ## 使用方式
 
 - 工具：Codex / Claude Code / Cursor / ChatGPT / OpenClaw / 其他
-- 加载方式：lite（只加载 `SKILL.md`）/ full（`SKILL.md` + `references/`）/ 不确定
+- 加载方式：mini（`dist/shuorenhua-mini.md`）/ lite（只加载 `SKILL.md`）/ full（`SKILL.md` + `references/`）/ 不确定
 - 场景：chat / status / docs / public-writing / code-context / mixed
 
 ## 问题

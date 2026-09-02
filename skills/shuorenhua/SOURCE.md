@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/MrGeDiao/shuorenhua
 - Path: `.`
 - Ref: `main`
-- Pinned commit: `a9145e38875f116d65235a728cd0048b7c3d9003`
+- Pinned commit: `c160e1e86001a40bc2ea9dd78869786a5d39f5a6`
 - License: MIT
-- Synced at: 2026-08-14T07:08:15.711Z
+- Synced at: 2026-09-02T07:33:32.350Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
