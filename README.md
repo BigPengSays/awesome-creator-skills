@@ -199,10 +199,10 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 ## 内容发布
 
+- [md2wechat](https://github.com/geekjourneyx/md2wechat-skill/tree/main/skills/md2wechat) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。
 - [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-wechat) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把 Markdown、HTML 或纯文本发到微信公众号草稿，支持文章与多图贴图，外链可转为文末引用以适配公众号规范。
 - [baoyu-post-to-weibo](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-weibo) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 发布微博图文或视频，以及 Markdown 头条文章，适合把长文转到微博主页与头条。
 - [baoyu-post-to-x](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-post-to-x) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 向 X 发布推文、配图或视频，以及长文 Articles，同时覆盖短帖与长文两种形态。
-- [md2wechat](https://github.com/geekjourneyx/md2wechat-skill/tree/main/skills/md2wechat) [![GitHub Stars](https://badgen.net/github/stars/geekjourneyx/md2wechat-skill)](https://github.com/geekjourneyx/md2wechat-skill) — 把 Markdown 转成公众号 HTML，覆盖主题、预览、草稿上传、封面与信息图，以及去 AI 痕迹等写作辅助。
 - [video-publisher](https://github.com/oil-oil/video-publisher-skill/tree/main/video-publisher) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/video-publisher-skill)](https://github.com/oil-oil/video-publisher-skill) — 用 Ego Lite 把同一视频包并行投递到小红书、抖音、B 站与视频号草稿，含文案、标签、封面与发布前校验。
 ## 安装
 
