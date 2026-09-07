@@ -1,248 +1,89 @@
 ---
 name: video-publisher
-description: Prepare and automate video drafts for Xiaohongshu, Douyin, Bilibili, and WeChat Channels with Ego Lite. Use for first-run onboarding, per-user available/default platform selection, video intake, platform copy and tags, parallel upload scheduling, draft recovery, original declarations, optional upload of provided cover assets, custom publishing-workflow extensions, and verification before final publish.
+description: 使用 Ego Lite 将本地视频安全准备为小红书、抖音、B站、视频号或 YouTube 的已验证草稿。用户要求配置创作者账号、确认本地视频、标题和 tags、上传或替换已有封面、并行准备多平台草稿、恢复中断任务、检查草稿状态，或维护创作者页面流程时使用。始终停在最终发布按钮前。不用于视频剪辑、封面制作、公众号长文或泛平台建议。
 ---
 
-# Video Publisher
+# 视频发布
 
-Prepare one confirmed video package and drive selected creator platforms to a verified draft state. Use Ego Lite for all live creator-page work.
+确认一个视频内容包，交给维护好的程序完成多平台上传、表单修复和独立验证，最后把草稿留在最终发布按钮前供用户检查。
 
-## Configuration And Onboarding
+## 必须遵守
 
-At the start of every invocation, before inspecting a video or opening a browser, run:
+- 将本文件所在目录记为 `SKILL_DIR`，所有相对命令都在该目录运行。
+- 日常发布只调用维护好的生产入口，不手工拆分平台阶段，也不自行控制创作者页面。
+- 不点击任何平台的最终发布、保存或定时发布按钮。页面守卫只是最后一道保护，不是可试点的按钮。
+- 只有配置声明所有视频均为原创，或用户明确确认当前视频拥有原创权利时，才允许勾选原创、自制等声明；不得从视频内容自行推断。
+- 使用用户确认的精确视频和封面路径，不静默替换、裁剪、转码或改用相似文件。
+- 让程序判断上传完成、草稿身份、字段状态、回执和 `READY`；不要把“执行过动作”解释为成功。
+- 当前请求与同一任务已经确认的标题、平台、封面意图和原创依据直接继承，不重复询问。做封面后继续发布的完整授权包含上传本次已生成封面；按 `references/intake-workflow.md` 交接。
+- 开始前区分新建草稿、恢复原草稿、替换草稿封面和修改已发布内容。原稿换源不等于另发一条；本生产入口不支持已发布内容换源，不能用新建或重发冒充。
 
-```bash
-node scripts/config.mjs status
-```
+## 标准发布流程
 
-If `onboardingRequired` is `true`, stop the publishing flow and onboard the user. Ask first which supported creator platforms the user actually has; require at least one and never assume all four. Then ask which of those available platforms should run by default, proposing all available platforms as the default subset. Ask for Douyin topics only when Douyin is available and Bilibili automatic tags only when Bilibili is available. Collect the source directory, shared copy/tag preferences, and whether every video may truthfully be declared original; keep concurrency `4/4` and platform cover as proposed defaults unless the user changes them. Summarize the choices before writing. Save available accounts with repeatable `--available-platform` flags and defaults with repeatable `--platform` flags, run `validate`, and continue only when `onboardingRequired` is `false`.
+1. 运行配置检查：
 
-Configuration is per user at `$XDG_CONFIG_HOME/video-publisher/config.json`, or `$HOME/.config/video-publisher/config.json`. `VIDEO_PUBLISHER_CONFIG` overrides the path. Never put a user's configuration inside the shareable Skill folder.
+   ```bash
+   node scripts/config.mjs status
+   ```
 
-An explicit current request overrides the package; explicit package fields override configuration defaults. A current request may select any configured available platform, but it cannot silently add an unavailable platform: update onboarding and confirm that account first. The onboarding configuration may persist the user's truthful standing originality policy and declared platform availability, but never cookies, credentials, video-specific paths, or final-publish authorization. Read `references/configuration.md` for the schema and onboarding command.
+2. 若 `onboardingRequired` 为 `true`，读取 `references/configuration.md`，完成配置并执行 `validate`；配置完成前不打开创作者页面。
+3. 读取 `references/intake-workflow.md` 和 `references/content-package.md`，确认：
+   - 精确本地视频；
+   - 从 `availablePlatforms` 中选择的平台；
+   - 标题和 tags/topics；不要写平台长文案，平台若必填描述就用标题或标题加 tags；
+   - 小红书标题按加权长度不超过 20：所有 ASCII 字符算 0.5，其他 Unicode 字符算 1；未超限时保留原始标题；
+   - 当前视频的原创权利依据；
+   - 是否上传用户已经提供的封面。
+4. 将确认后的内容包 JSON 写到 Skill 目录之外。只有明确上传已有封面时才读取 `references/cover-workflow.md`。
+5. 直接运行生产入口；它会在打开页面前统一完成配置、内容包、媒体和封面校验：
 
-## Safety Boundary
+   ```bash
+   scripts/run-safe-platforms.sh <package.json> [task-suffix] [platform...]
+   ```
 
-Never click the final `发布`, `发布笔记`, `发表`, or `立即投稿` control unless the user explicitly authorizes publishing in the current run. Uploading and preparing a draft do not imply permission to publish. The maintained runner mounts a page-level capture guard for all four labels; `READY` requires evidence that the guard is armed and that it blocked zero attempts.
+   命名参数：`--package`、`--platform` / `--platforms`、`--task-suffix`、`--job-id`、`--operation`、`--space-name`、`--reuse-space`、`--cleanup-only`。默认新任务开新 Ego 空间；中断恢复复用已记录空间。草稿就绪后**留下本次空间**，方便你在发布按钮前检查并手动点发布。只清过期采集空间和已退役的旧空间。要在就绪后立刻关掉本次空间，才加 `--close-on-complete`。
 
-Before enabling any `原创`, `自制`, or equivalent declaration, require one of two truthful signals: the onboarded `declarations.originalityPolicy` is `all_videos_original`, or the user confirms the current video and the run passes `--confirm-original-rights`. Never infer either signal from the video itself. If neither is available, stop: non-original declaration modes are outside the current live-tested boundary.
+   已经 `READY` 的 Job 默认拒绝再次创建草稿。用户明确要重发时使用全新 Job，并加 `--operation repost --confirm-new-copy`。替换已 `READY` 且尚未发布的草稿封面时，读取 `references/cover-workflow.md`，沿用原 `--job-id`，只修改封面路径并加 `--operation replace-cover`；程序会复用原任务空间，不重新上传视频。标题、正文、tags、视频或其他字段发生变化时不得冒充封面替换。
 
-Treat `all_videos_original` as a reusable content policy, not permission to publish. The final publish controls still require explicit authorization in the current run and that authority is never persisted. `ask_each_run` remains the generic onboarding default for shared installations.
+   同一个多平台 Job 只恢复或重开部分平台时，必须沿用原 `--job-id` 并加 `--no-cleanup-stale-spaces`，防止清理影响未选平台的待发布页面；命令若报告关闭了当前 Job 的未选平台空间，不得宣称页面仍可见，必须恢复对应平台。
 
-Stop only when every selected platform is either:
+   平台参数省略时使用配置中的默认平台。仅在用户确认当前视频原创权利后追加 `--confirm-original-rights`。
+6. 读取命令最后输出的结构化摘要：
+   - `ready: true`：所有所选平台已验证。草稿页留着，你检查后自己点发布；
+   - `ready: false`：逐个平台报告 `blocker`、`missing` 和 `evidencePath`，不要笼统宣称失败或成功；
+   - `USER_CONTROL`：立即停止全部浏览器工作，只有用户明确要求继续后才能重试；
+   - `INPUT_CHANNEL_BROKEN`：立即说明受影响平台和缺失项，保留现有任务。通道未恢复时不重复跑生产命令；确认 Ego Lite 恢复后再沿用原 `--job-id` 和内容包，只恢复未完成平台；
+   - 其他 blocker 只处理对应平台，不回退或重做已经 `READY` 的平台。
 
-- `ready`: every required gate is verified from fresh page evidence; or
-- blocked by a typed condition that genuinely requires the user or a later retry.
+同一个内容包的中断恢复仍使用同一生产命令和 `--job-id`。程序负责复用任务状态、平台空间和已验证回执。
 
-Never turn “an action was attempted” into success. A title, tag, declaration, setting, or cover is complete only after a fresh verifier confirms the resulting page state.
+交付时区分“本地封面已生成”“平台已接收封面”“草稿 READY”和“用户确认已发布”。历史 READY 不能证明页面仍在；用户报告页面缺失时先检查原任务，不能直接报完成或默认重传。已由用户发布的平台不再恢复上传。
 
-## Production Architecture
-
-Use the stateful production entry:
-
-```bash
-scripts/run-safe-platforms.sh <package.json> [task-suffix] [platform...]
-```
-
-This invokes `scripts/v2/publisher.mjs`. The older Agent-per-platform implementation and its runners have been removed. Do not recreate them.
-
-Use one orchestrator and one Ego Lite task space per platform. Do not delegate live browser control to sub Agents. Agents may help prepare copy or inspect saved artifacts, but they must not control creator tabs.
-
-The publisher first acquires one state-root publisher lock, then one atomic job-directory lock, before any state write or browser phase. Only one video job may control the shared creator accounts at a time; a second job or duplicate invocation must fail immediately while the owner continues. Locks whose recorded PID is dead are stale and may be removed automatically. Keep the separate platform locks as defense in depth. This global job serialization does not reduce the intended four-platform parallelism inside the owning video job.
-
-Schedule by resource type:
-
-```text
-read-only inspect: parallel, default 4
-video upload and platform processing wait: parallel, default 4
-metadata, topic, declaration, setting, and cover mutation: serial, exactly 1
-final verification: parallel, default 4
-```
-
-The upload phase is a barrier: no UI mutation starts until every selected upload runner has exited. An upload runner may exit only after the platform proves completion. A preview card alone is insufficient when progress text, a percentage, processing text, or `取消上传` remains visible.
-
-Treat the Ego input channel as shared failure state. If any parallel phase returns `INPUT_CHANNEL_BROKEN`, wait for the other runners to exit, then skip every remaining quarantine, upload, and mutation in that invocation. Run only final read-only verification so the persisted job records page truth; resume through the ordinary same-job command after Ego restarts.
-
-Custom-cover dialogs also use the single UI queue. Isolated task spaces do not make concurrent clicking safe.
-
-Accepted cover receipts are written to atomic, fingerprint-bound checkpoints inside the job directory before an adapter returns. This closes the crash window between a successful creator-page mutation and the orchestrator recording its result. A resumed run still has to match the checkpoint against fresh page truth.
-
-Job state also keeps a one-generation atomic backup. If `state.json` is invalid JSON, restore only a backup whose package fingerprint matches, preserve the corrupt primary as `state.corrupt-<timestamp>.json`, and then re-inspect every platform. Never turn restored state into `READY` without fresh page verification.
-
-## Browser Rules
-
-- Use `ego-browser`; do not fall back to Chrome control.
-- Verify the exact local video and cover paths before opening creator pages.
-- Inspect before acting and reuse only a draft whose identity matches the package.
-- Preserve both the numeric task-space id and the exact stable task-space name in persisted job state. A recycled id whose live name differs belongs to another job; select or recreate only the recorded exact name.
-- Leave task spaces open by default so the user can review drafts.
-- Use hand-written Ego heredocs only after the maintained runner reports a blocker, and fold repeatable fixes back into the adapter.
-- If Ego reports that the user took control, stop all browser work. Resume only after the user explicitly says to continue, then claim the recorded task space.
-
-Read `references/ego-browser-workflow.md` before browser diagnosis or adapter changes.
-
-## Custom Workflow Extensions
-
-When the user asks to add, remove, reorder, or customize a publishing step—for example, “在抖音填完标题后点击某个按钮”—read `references/customizing-workflows.md` before diagnosing the page or editing an adapter.
-
-Use the extension workflow to turn the request into an idempotent `inspect -> action -> verify` step backed by real creator-page evidence. Classify the behavior as a generic adapter repair, an explicit package/config option, or a private per-user default before choosing where it belongs. Never encode personal account data in the shareable Skill, and never let a customization bypass final-publish authorization, truthful originality policy, task-space ownership, or the shared safety gate.
-
-## Phases And Evidence
-
-The platform runner exposes only these phases:
-
-```text
-inspect: read page truth; no mutation
-quarantine: Bilibili only; resolve or preserve an old draft
-upload: upload only when the target video is not already present
-mutate: repair metadata, entities, declarations, settings, and covers
-verify: independently re-read every required gate
-```
-
-Do not use the removed `fill`, `check-only`, `repair-only`, `upload-only`, or `quarantine-only` interfaces.
-
-`ready` is computed centrally. Platform adapters cannot set it themselves. Every result also carries `finalPublishClicked: false` and a safety gate injected by the shared core.
-
-Required evidence includes:
-
-```text
-authenticated session
-correct draft identity
-video upload fully complete
-exact platform text and tag/entity state
-required original/self-made declarations
-required account settings
-custom-cover receipt when enabled
-no blocking dialog
-visible, enabled final button
-final publish not clicked
-```
-
-Read `references/platform-common.md` for the shared gate and blocker contract.
-
-## Bilibili Draft Recovery
-
-Treat Bilibili’s local restore banner as unresolved identity, not a clean upload page.
-
-1. Open `继续编辑`.
-2. If the resumed filename/title matches the package, reuse it.
-3. If it is another video, click `存草稿`, return to a clean upload page, and verify the old editor is gone.
-4. Upload the target only after that clean state is proven.
-
-Distinguish “some video is uploaded” from “the target video is uploaded”. This exact distinction prevents foreign drafts from bypassing quarantine.
-
-## Content Package
-
-Use the onboarded configuration as defaults, then confirm the source video, platform selection from `availablePlatforms`, title, tags, any unresolved rights/declaration status, and existing-cover upload intent before browser automation. Newlines in JSON fields must be real newline characters.
-
-Use platform-native defaults:
-
-```text
-Xiaohongshu: short title, real topic entities, no prose body by default, original declaration
-Douyin: title/body plus 1-5 package-supplied topic entities
-Bilibili: title, concise description, tag chips, self-made declarations
-WeChat Channels: description begins with title and plain hashtags; leave short title empty
-```
-
-This Skill does not create or edit cover artwork. When the user supplies existing cover files and explicitly enables `cover.uploadCustomCover: true`, validate the mapped file paths and ratios before upload:
-
-```text
-Xiaohongshu: 3:4
-Douyin: 3:4 and 4:3
-Bilibili: 4:3
-WeChat Channels: 3:4 and 4:3
-```
-
-Run `scripts/check-package.mjs` for every selected platform before browser work. The validator reads MP4/M4V/MOV duration directly from ISO BMFF metadata without `ffprobe`. For Douyin, reject content longer than the real-tested 900-second boundary before Ego Lite starts; allow only 0.1 seconds of container-metadata rounding because a standard 15:00 stream copy reported 900.010 seconds and passed the real upload. Do not automatically trim or transcode the user's media. This duration rule is platform-specific and must not block the other selected platforms.
-
-## Default Flow
-
-1. Load configuration and complete onboarding, including available and default platform selection, when required.
-2. Identify the exact local source and any subtitle variant.
-3. Propose and confirm the package and selected platforms.
-4. Validate any user-supplied cover assets before browser work.
-5. Validate each platform package.
-6. Run the production orchestrator.
-7. Let it inspect in parallel and quarantine Bilibili when required.
-8. Let all missing video uploads run in parallel and fully settle.
-9. Let the single UI queue repair metadata, declarations, settings, and covers.
-10. Run independent parallel verification.
-11. Leave every verified draft open before its final button.
-
-For read-only job inspection:
+只读检查使用：
 
 ```bash
 scripts/run-safe-platforms.sh <package.json> [task-suffix] [platform...] --inspect-only
 ```
 
-For one-platform adapter diagnosis, use `scripts/v2/run-platform.mjs` as documented in `references/scripts.md`.
+## 按需读取
 
-## Current Live-Test Boundary
+只读取当前任务需要的文档：
 
-As of 2026-07-16:
+- 首次配置、修改默认平台或新增账号：`references/configuration.md`
+- 选择视频、检查字幕、拟定发布内容：`references/intake-workflow.md`
+- 创建或修复内容包 JSON：`references/content-package.md`
+- 上传用户已有封面：`references/cover-workflow.md`
+- 查看命令参数、任务状态或单平台诊断入口：`references/scripts.md`
+- 诊断或修改页面适配器：先读 `references/platform-common.md`、`references/ego-browser-workflow.md`，再按平台读取 `references/platform-xiaohongshu.md`、`references/platform-douyin.md`、`references/platform-bilibili.md`、`references/platform-wechat-channels.md` 或 `references/platform-youtube.md`
+- 自定义发布步骤：先读 `references/customizing-workflows.md`，再按其中路由读取共享和平台文档
+- 更新实测范围或发布维护结论：`references/acceptance-history.md`
 
-- Xiaohongshu passed title, exact topic entities, original declaration, 3:4 custom cover receipt, dialog and final-button verification.
-- Douyin passed title/body, exact requested topic entities, cross-post setting, distinct 3:4 and 4:3 custom-cover receipts, dialog and final-button verification.
-- Bilibili passed title, description, exact requested tag chips, self-made declarations, 4:3 custom-cover receipt, same-target restore, and real foreign-draft quarantine.
-- WeChat Channels passed full upload completion, exact description, empty short title, original declaration, distinct 3:4 personal-profile and 4:3 share-card custom-cover receipts, stale cover-editor recovery, independent verification, dialog and final-button checks. The upload and cover inputs both require CDP object-id injection inside Wujie open roots.
+不要为普通发布加载适配器、调度、锁、恢复或历史验收文档。
 
-The production orchestrator then passed a real four-platform regression with upload concurrency `4`, UI concurrency `1`, persisted receipts, interruption recovery, and a final parallel verify in which all four platforms returned `READY`. No final publish control was clicked.
+## 维护边界
 
-The onboarded `all_videos_original` policy also passed real mutation without `--confirm-original-rights`. After a targeted Xiaohongshu cover receipt reset, the maintained runner re-uploaded the 3:4 asset on its first attempt; three immediate full four-platform reruns then remained `READY` with no upload or UI mutation work.
+静态审查、文档修改和本地测试不读取个人配置，也不打开 Ego Lite。只有维护任务进入真实页面诊断时，才执行配置检查并遵循页面工作流。
 
-A second cold-start regression used a different 308 MB source video and four fresh task spaces. Bilibili quarantined a real foreign draft before upload. Douyin recovered from a visible upload failure with bounded reinjection, then rebuilt a corrupted rich description into the exact body plus five topic entities. Bilibili closed a framework-swallowed cover dialog through its exact scoped completion control. Both platforms wrote fingerprint-bound cover checkpoints. After the main-state receipts were deliberately removed, the next full run restored them from those checkpoints and all four platforms returned `READY` without upload or mutation. Three additional consecutive full reruns were also no-op `READY` passes. No final publish control was clicked.
+页面适配器的改动必须以真实创作者页面证据和无操作复跑验收；调度、持久化、锁、任务空间、共享输入或回执改动还需要对应的崩溃恢复与完整生产回归。历史结果只记录在 `references/acceptance-history.md`。
 
-A third cold-start regression used another 208 MB source, a longer Chinese title, prose that repeated two requested topic words, a platform activity entity without a literal `#`, and different cover assets. It exposed and repaired native-title character loss, false plain-topic residue, and a delayed Douyin landscape-card URL. The repaired job reached four-platform `READY`, passed three consecutive no-op full reruns, then restored a deliberately removed Douyin state receipt from its fingerprint-bound checkpoint without mutation. No final publish control was clicked.
-
-A fourth cold-start regression used a 344 MB source with an English-and-number mixed title, five new topic entities, and another cover pair. Bilibili quarantined the prior foreign draft, all four parallel uploads and serialized mutations reached `READY` on the first run, and three full reruns were no-op `READY` passes. After the WeChat Channels state receipt was deliberately removed, its two-slot cover checkpoint restored without mutation. The Xiaohongshu task space was then deliberately deleted to simulate browser/task-space loss; the same job created a new numeric space, re-uploaded and rebuilt only Xiaohongshu with a new cover receipt, preserved the other three ready drafts, and returned four-platform `READY`. Every final guard remained armed with zero blocked attempts, and no final publish control was clicked.
-
-A fifth cold-start regression used a 196 MB source whose filename contained spaces, English text, and a comma, while its explicit cover paths used a different `_subtitled` naming pattern. All four platforms used the exact supplied assets and reached `READY`; Douyin's first independent verify caught a delayed landscape-card URL and the existing evidence-bound receipt repair passed the next verify. Three full reruns were no-op `READY` passes. The Bilibili state receipt and task space were then removed together: the new space resumed the same target without a video upload, refused to trust the checkpoint while no live cover URL existed, removed two restored platform tags, restored four requested tags, re-uploaded the exact 4:3 asset, and independently verified the content-addressed cover URL. Two more full reruns remained no-op `READY`. No final publish control was clicked.
-
-A sixth regression used a 731 MB source and deliberately terminated the production process group while four uploads were active. The same persisted job reused all four numeric task-space ids. The first recovery exposed that Xiaohongshu and Bilibili could reinject while already uploading and that Douyin could misclassify its missing initial-page input as selector drift. All upload adapters now distinguish `already_ready`, `resume_existing`, and `injected`; an observed in-progress target enters the completion wait without another file injection. The repaired job recovered Xiaohongshu and Douyin from the interrupted browser uploads, handled one explicit Douyin upload failure through a bounded reinjection, reached four-platform `READY`, and passed three no-op full reruns. No final publish control was clicked.
-
-A seventh cold-start regression used a different 533 MB source, four fresh task spaces, and deliberately terminated the orchestrator after all four file injections. Recovery evidence recorded `resume_existing` for Xiaohongshu, Bilibili, and WeChat Channels; Douyin recorded `resume_existing` followed by an explicit platform failure and then one successful `injected` retry. The sample also exposed package topic names containing spaces: Xiaohongshu and Douyin now query the platform's compact topic name while verifying only real committed entities, never plain hashtag text. The repaired job reached four-platform `READY`, every final guard was armed with zero attempts, and three consecutive full reruns were no-op `READY` passes. No final publish control was clicked.
-
-An eighth cold-start regression used another 534 MB source with a mixed English/Chinese title and a second whitespace-bearing topic set. All four uploads and serialized mutations reached `READY` on the first production run; Douyin handled one explicit first-attempt upload failure and completed its bounded second attempt inside the same upload phase. Three full reruns were no-op `READY` passes. The WeChat Channels task space was then deliberately removed: the same job replaced id 51 with 55, rebuilt only WeChat Channels with fresh two-slot cover receipts, and passed two no-op reruns. The Douyin task space was removed next: the job replaced id 52 with 56, rebuilt only Douyin with fresh distinct portrait/landscape receipts, and passed two more no-op reruns. The other three platforms stayed `READY` during each recovery, every final guard remained armed with zero attempts, and no final publish control was clicked.
-
-A ninth cold-start regression used a 1.12 GB, 15:09 HEVC source with custom-cover upload disabled. Xiaohongshu, Bilibili, and WeChat Channels completed the large upload, accepted platform-default covers, and reached `READY`. Douyin produced the same explicit upload failure twice. A stream-copy sample from the same source kept the codec, resolution, frame rate, bitrate, and approximately 1.11 GB size but ended at 14:59; Douyin uploaded it, accepted all fields and default covers, reached `READY`, and passed three no-op reruns. The package validator and production orchestrator now read ISO BMFF duration locally and stop a Douyin source above 900 seconds before opening its Ego Lite task space. A full four-platform rerun recorded that one platform as `PLATFORM_REJECTED_ASSET` while independently keeping the other three `READY` without upload or UI mutation; a Douyin-only run fails before job creation. Every live final guard remained armed with zero attempts, and no final publish control was clicked.
-
-A tenth boundary regression stream-copied exactly 15:00 from that source. ISO BMFF reported 900.010 seconds because of final-packet rounding; the 1.113 GB HEVC file uploaded to Douyin on its first diagnostic attempt and passed exact title, description, five topic entities, settings, platform-default cover, final-button, and safety verification. After adding the 0.1-second tolerance, the production orchestrator repeated the upload in a fresh task space, reached `READY`, and passed three no-op reruns. The preflight therefore allows only 0.1 seconds above 900 for container rounding while still rejecting materially longer content. Every final guard remained armed with zero attempts.
-
-An eleventh four-platform regression used a fresh 94 MB H.264 source and platform-default covers, then terminated the orchestrator during serialized Douyin topic insertion after every upload had completed and Xiaohongshu had reached `READY`. Fresh recovery evidence found the exact Douyin title and body plus exactly two of five committed topics; it reported only `tags` missing. The same job reused all four task-space ids, performed no video upload, rebuilt the Douyin rich editor without duplication, completed Bilibili and WeChat Channels serially, and reached four-platform `READY`. Three additional full reruns were no-op `READY` passes. Every final guard remained armed with zero attempts, and no final publish control was clicked.
-
-A twelfth cold-start regression used a real 45 MB, 27-second, 120fps MOV with two whitespace-bearing topic names and platform-default covers. All four platforms accepted the MOV and reached `READY`; three full reruns were no-op passes. Deliberately corrupting the completed job's `state.json` first reproduced a fatal JSON parse. After adding atomic state backups, a second corruption was preserved as a timestamped artifact, the matching backup restored all four numeric task-space ids, and fresh inspection/verification returned four-platform `READY` with no upload or UI mutation. A further no-op rerun remained `READY`; all final guards stayed armed with zero attempts.
-
-A thirteenth regression started two production orchestrators against that same ready four-platform job at the same instant. With only platform locks, each process acquired a different subset, both failed, and the shared job was left `running`. The new job-level atomic lock made the same real double launch deterministic: one invocation was refused before state/browser work while the owner completed four-platform `READY`. A deliberately planted dead-PID job lock was then removed automatically, the job remained no-op `READY`, and the lock was released after completion.
-
-A fourteenth regression started two different ready four-platform video jobs at the same instant. Per-job locks alone allowed them to split platform ownership: one failed on a platform lock and was left `running`. The new state-root publisher lock made the real retry deterministic: one job was refused in 0.38 seconds before state or browser work, its existing `READY` state hash and timestamp remained unchanged, and the owner completed four-platform `READY`. The global lock disappeared on normal exit. A deliberately planted dead-PID global lock was then removed automatically; the next job stayed no-op `READY`, all final guards remained armed with zero attempts, and the lock was released after completion.
-
-A fifteenth cold-start regression used a real 322 MB, 5:40 subtitled MP4 with custom 3:4 and 4:3 covers. After all four upload runners had acquired their platform locks, the entire production process group received `SIGKILL`. This left a real `running` state plus dead-owner publisher, job, and four platform locks. The normal same-job command removed every stale lock without manual cleanup, reused task-space ids 75/74/72/73, and all four upload adapters reported `resume_existing` rather than reinjecting the file. Serialized metadata, topic/tag, original declaration, and custom-cover repair then reached four-platform `READY`; exact per-slot cover receipts passed fresh verification. Three consecutive full reruns were pure no-op `READY` passes, every final guard remained armed with zero attempts, and no final publish control was clicked.
-
-A sixteenth resilience regression killed the entire Ego Lite browser process group twice while reusing that same real job. The pre-fix crash exposed unstructured runner failure, stale receipts after task-space recreation, a Douyin body insertion misrouted into the title, and a Bilibili cover completion click timeout. Receipt checkpoints are now schema `2` and bound to the exact live task space; an explicit recreation signal invalidates both state and checkpoint receipts even when Ego recycles the same numeric id. Ego process loss returns retryable `INPUT_CHANNEL_BROKEN` observations rather than a fatal parse error. The post-fix crash produced that structured blocker for all four final verifiers with upload and UI mutation both `none`; ordinary recovery then rebuilt the missing spaces, reused Bilibili's restored local target without a video upload, safely repaired the known Douyin title/body misroute, and rebuilt only invalidated cover receipts. A final cold-page Xiaohongshu failure proved that its sticky publish footer can cover the visible topic toolbar: the adapter now invokes the platform's native topic command, refocuses the editor, types only the topic query, and selects the exact real suggestion. The repaired job reached four-platform `READY` and passed three further full no-op reruns. Every final guard remained armed with zero attempts, and no final publish control was clicked.
-
-A seventeenth resilience regression killed Ego Lite while a real 322 MB four-platform job still had active uploads. The first post-crash invocation proved the shared-channel boundary; the repaired orchestrator emitted `UI serial: none (input channel broken)` and performed no mutation after the structured blocker. Ego then recycled numeric ids `1` and `2` for another job. Stable-name identity rejected both collisions, recreated or selected only the recorded task-space names, and recovered the intended four drafts. Sustained browser load also reproduced empty topic-candidate panels: Xiaohongshu now retries an exact whole-topic rebuild with finite waits, while Douyin preserves a proven ordered prefix of committed entities, deletes only a trailing failed query one real Backspace at a time, and retries only the missing topic. The same failed pages recovered all titles, descriptions, exact tags/topics, original declarations, custom covers, and safety gates to four-platform `READY`; three full reruns were pure `inspect`/`verify` no-ops. No final publish control was clicked.
-
-An eighteenth cold-start regression used a different 201 MB source whose video and both cover filenames contained a trailing-space-style boundary before their suffixes. Four parallel uploads used the exact paths, Bilibili quarantined the prior foreign draft, and Xiaohongshu, Bilibili, and WeChat Channels reached `READY` on their first serialized mutations. Douyin exposed a new zero-entity editor shape: its exact description and first topic query shared one framework text node, so the initial tail detector treated the entire description as the query and a failed clear left `#A`. The adapter now isolates the suffix after the exact description and treats zero committed entities as a valid ordered prefix. The same damaged page proved cleanup `#A -> # -> empty`, committed all five requested entities, uploaded distinct 3:4 and 4:3 covers, and returned four-platform `READY`. Three full reruns were pure no-op `READY` passes, all final guards remained armed with zero attempts, and no final publish control was clicked.
-
-A nineteenth resilience regression used an independent process monitor to terminate Ego Lite one second after the real Douyin `mutate` runner started. Xiaohongshu had reached `READY`; Douyin returned structured `INPUT_CHANNEL_BROKEN`; Bilibili and WeChat Channels recorded no mutation phase at all, proving the invocation-wide circuit breaker during serialized UI work. After Ego restarted, the ordinary same-job command re-read the empty replacement pages, reused Bilibili's matching local draft without a video upload, and rebuilt only lost browser state. Recovery then exposed why Xiaohongshu candidates could appear long after bounded retries: the readable task-space tab still had `document.visibilityState: hidden`, and its timers were throttled. The topic adapter now activates and focuses the page immediately before serialized topic repair. The same failed page committed all four topics on its first rebuild, restored its 3:4 receipt, and returned four-platform `READY`; three full reruns were inspect/verify-only no-ops. Every final guard remained armed with zero attempts, and no final publish control was clicked.
-
-A twentieth Bilibili-specific regression started on the authenticated creator home page, where the page was complete but exposed zero active video inputs. The old single-probe adapter stopped there. The repaired adapter waited through six evidence probes, navigated to the exact upload URL once, re-armed the final-publish guard after navigation, and activated the new page lifecycle before accepting its scoped `.bcc-upload-wrapper` input. A fresh 93 MB upload proved the lifecycle boundary: injecting while the navigated page was hidden left `files=1` without starting the platform component, while activating the same clean page immediately produced visible upload progress and then `上传完成`. The post-injection verifier now requires an upload signal within 20 seconds instead of silently consuming the full completion window. A second real run from the creator home page recorded `navigationAttempts: 1`, reused the restored matching target without reinjection, and finished with the safety guard armed and zero attempts. The same draft also proved that a topic-only tag rejection remains a typed metadata blocker while the independent 4:3 cover upload continues and returns an `archive.biliimg.com` receipt; with five accepted tags, fresh mutation and verification passed every Bilibili gate. No final publish control was clicked.
-
-A passing platform-specific diagnostic still does not replace this system-level regression when scheduler, persistence, or shared-browser behavior changes.
-
-Real creator-page evidence is the acceptance gate for adapter changes. Unit tests validate orchestration and parsing, not live selectors.
-
-## Reference Map
-
-- `references/intake-workflow.md`: source selection and package drafting.
-- `references/configuration.md`: per-user schema, onboarding, precedence, and privacy boundary.
-- `references/cover-workflow.md`: upload of existing cover assets, ratio mapping, and receipts.
-- `references/ego-browser-workflow.md`: Ego Lite task spaces, upload channels, handoff, and diagnostics.
-- `references/platform-common.md`: orchestration, gates, blockers, and concurrency.
-- `references/scripts.md`: production and diagnostic commands.
-- `references/platform-xiaohongshu.md`: Xiaohongshu adapter contract.
-- `references/platform-douyin.md`: Douyin adapter contract.
-- `references/platform-bilibili.md`: Bilibili adapter and draft quarantine contract.
-- `references/platform-wechat-channels.md`: Wujie lifecycle activation, upload truth, original declaration, cover flow, and retry recovery.
-
-Default source directory comes from configuration; `VIDEO_PUBLISHER_SOURCE_DIR` may override it for `find-video.mjs`.
+任何 Agent 都不得并行控制创作者页面；生产编排器是唯一的页面控制入口。
