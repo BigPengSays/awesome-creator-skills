@@ -1,7 +1,8 @@
 # Cursor / Windsurf 安装
 
-## lite / full 怎么选
+## mini / lite / full 怎么选
 
+- `mini`：把 `dist/shuorenhua-mini.md` 粘贴进单次聊天或临时 Rule。适合上下文很紧、较弱模型或只清明显模板感。
 - `lite`：只加载 `SKILL.md`。适合临时改写和上下文紧张的编辑任务。
 - `full`：加载 `SKILL.md` + `references/`。适合长期 rules、公开文本、技术文档和需要误杀防护的场景。
 
@@ -59,7 +60,7 @@ Rules 文件会加载到上下文，但不等于会自动对所有输出套用�
 
 三种模式：`rewrite-safe`（默认用于 chat/public-writing，直接删无证据权威铺垫）、`audit-only`（默认用于 docs/status，只标缺来源）、`rewrite-with-placeholder`（保留结构但暴露缺来源）。不指定时按场景默认值走。
 
-token 紧张时用 lite；需要精细改写、Scene Packs 或误杀防护时用 full。
+极短上下文用 mini，普通临时任务用 lite；需要精细改写、Scene Packs 或误杀防护时用 full。
 
 ## 长文改写的三档 scope
 
