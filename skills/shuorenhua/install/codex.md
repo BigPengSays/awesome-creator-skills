@@ -1,7 +1,8 @@
 # Codex 安装 / 使用
 
-## lite / full 怎么选
+## mini / lite / full 怎么选
 
+- `mini`：只把 `dist/shuorenhua-mini.md` 作为一次性 prompt。适合上下文很紧、较弱模型或只清明显模板感；它不是完整 skill。
 - `lite`：只加载 `SKILL.md`。适合单次临时改写、上下文紧张、只想先压掉明显模板感的场景。
 - `full`：加载 `SKILL.md` + `references/`。适合长期项目、README / release note / issue 回复、技术文档和需要误杀防护的场景。
 
@@ -36,6 +37,12 @@ codex exec -C . "读取 ./SKILL.md，按其中规则改写以下文本：..."
 ```
 
 不需要修改项目文件，适合临时使用。这是 lite 用法；如果要处理公开文本、技术边界或 Scene Packs，建议同时让 Codex 读取 `references/` 下的相关文件。
+
+如果当前上下文放不下完整规则，可以改读 mini：
+
+```bash
+codex exec -C . "读取 ./dist/shuorenhua-mini.md，按其中规则改写以下文本：..."
+```
 
 如果你想先判断“哪里像 AI”，不要直接改稿，可以这样用：
 

@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/JimLiu/baoyu-skills
 - Path: `skills/baoyu-cover-image`
 - Ref: `main`
-- Pinned commit: `6b7a2e417500561a5ecdd0b168332f4142584617`
+- Pinned commit: `52f3d500db2e4a2c8ded962a4171306966f9a3eb`
 - License: MIT
-- Synced at: 2026-08-14T02:13:51.890Z
+- Synced at: 2026-09-09T07:48:32.558Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
