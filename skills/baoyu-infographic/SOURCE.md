@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/JimLiu/baoyu-skills
 - Path: `skills/baoyu-infographic`
 - Ref: `main`
-- Pinned commit: `6b7a2e417500561a5ecdd0b168332f4142584617`
+- Pinned commit: `8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766`
 - License: MIT
-- Synced at: 2026-08-14T03:01:04.105Z
+- Synced at: 2026-09-10T07:49:01.124Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.

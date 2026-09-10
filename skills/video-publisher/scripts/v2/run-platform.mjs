@@ -4,13 +4,17 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import {
+  coverForPlatform,
   readPackage,
   validateBilibiliPackage,
   validateDouyinPackage,
   validateWechatChannelsPackage,
   validateXiaohongshuPackage,
+  validateYoutubePackage,
 } from "../lib/content-package.mjs";
 import { loadConfig } from "../lib/config.mjs";
+import { inspectMediaFile, validateMediaForPlatform } from "../lib/media.mjs";
+import { acquireJobLock, assertJobLockOwner, registerJobLockMember, resolvePublisherLockDirectory } from "./lib/job-lock.mjs";
 import { PLATFORMS, requiredGates } from "./lib/model.mjs";
 import { acquirePlatformLock } from "./lib/platform-lock.mjs";
 import { parseV2Result, V2_RESULT_PREFIX } from "./lib/result-line.mjs";
@@ -21,27 +25,49 @@ const validators = {
   douyin: validateDouyinPackage,
   bilibili: validateBilibiliPackage,
   wechat_channels: validateWechatChannelsPackage,
+  youtube: validateYoutubePackage,
 };
 const platformFiles = {
   xiaohongshu: "xiaohongshu.mjs",
   douyin: "douyin.mjs",
   bilibili: "bilibili.mjs",
   wechat_channels: "wechat-channels.mjs",
+  youtube: "youtube.mjs",
 };
 
 function usage() {
-  return "Usage: run-platform.mjs <platform> <package.json> <inspect|upload|mutate|verify|quarantine> [task-suffix] [task-space-id] [--confirm-original-rights]";
+  return "Usage: run-platform.mjs <platform> <package.json> <inspect|upload_start|prefill|upload|mutate|verify|quarantine> [task-suffix] [task-space-id] [--confirm-original-rights]";
 }
 
-function runEgo(script) {
+function runEgo(script, onSpawn) {
   return new Promise((resolve, reject) => {
     const child = spawn(process.env.VIDEO_PUBLISHER_V2_EGO_COMMAND || "ego-browser", ["nodejs"], { stdio: ["pipe", "pipe", "pipe"] });
+    let releaseMember = () => {};
+    let settled = false;
+    const fail = error => {
+      releaseMember();
+      if (settled) return;
+      settled = true;
+      reject(error);
+    };
+    child.on("error", fail);
+    try {
+      releaseMember = onSpawn(child.pid);
+    } catch (error) {
+      child.kill("SIGTERM");
+      fail(error);
+      return;
+    }
     let stdout = "";
     let stderr = "";
     child.stdout.on("data", chunk => { stdout += chunk; });
     child.stderr.on("data", chunk => { stderr += chunk; });
-    child.on("error", reject);
-    child.on("close", code => resolve({ code: code ?? 1, stdout, stderr }));
+    child.on("close", code => {
+      releaseMember();
+      if (settled) return;
+      settled = true;
+      resolve({ code: code ?? 1, stdout, stderr });
+    });
     child.stdin.end(script);
   });
 }
@@ -54,7 +80,7 @@ if (positional.some(arg => arg.startsWith("--"))) {
   process.exit(2);
 }
 const [platform, rawPackagePath, phase, taskSuffix = "manual", taskSpaceRef = ""] = positional;
-if (!PLATFORMS.includes(platform) || !rawPackagePath || !["inspect", "upload", "mutate", "verify", "quarantine"].includes(phase)) {
+if (!PLATFORMS.includes(platform) || !rawPackagePath || !["inspect", "upload_start", "prefill", "upload", "mutate", "verify", "quarantine"].includes(phase)) {
   console.error(usage());
   process.exit(2);
 }
@@ -63,6 +89,10 @@ if (phase === "quarantine" && platform !== "bilibili") {
   process.exit(2);
 }
 const config = loadConfig({ requireOnboarded: true });
+if (!config.availablePlatforms.includes(platform)) {
+  console.error(`Platform is not configured as available: ${platform}. Update Video Publisher onboarding before browser work.`);
+  process.exit(2);
+}
 const standingOriginalityPolicy = config.declarations.originalityPolicy === "all_videos_original";
 if (phase === "mutate" && ["xiaohongshu", "bilibili", "wechat_channels"].includes(platform) && !standingOriginalityPolicy && !originalRightsConfirmed) {
   console.error(`Originality confirmation is required before ${platform} mutation; set declarations.originalityPolicy=all_videos_original during onboarding, or add --confirm-original-rights after confirming this run.`);
@@ -71,9 +101,9 @@ if (phase === "mutate" && ["xiaohongshu", "bilibili", "wechat_channels"].include
 const packagePath = path.resolve(rawPackagePath);
 if (!fs.existsSync(packagePath)) throw new Error(`Package JSON not found: ${packagePath}`);
 const pkg = readPackage(packagePath);
-const errors = validators[platform](pkg);
+const media = inspectMediaFile(pkg.videoPath);
+const errors = [...validators[platform](pkg), ...validateMediaForPlatform(pkg, platform, media)];
 if (errors.length) throw new Error(`Package preflight failed for ${platform}: ${errors.join("; ")}`);
-if (!fs.existsSync(pkg.videoPath)) throw new Error(`Video file not found: ${pkg.videoPath}`);
 
 const header = [
   'import fs from "node:fs";',
@@ -83,9 +113,10 @@ const header = [
   `const taskName = ${JSON.stringify(process.env.VIDEO_PUBLISHER_V2_TASK_NAME || `video publisher v2 ${platform} ${taskSuffix}`)};`,
   `const taskSpaceRef = ${JSON.stringify(taskSpaceRef)};`,
   `const packagePath = ${JSON.stringify(packagePath)};`,
-  `const pkg = ${JSON.stringify(pkg)};`,
+  `const pkg = ${JSON.stringify({ ...pkg, cover: coverForPlatform(pkg, platform) })};`,
   `const videoPath = ${JSON.stringify(path.resolve(pkg.videoPath))};`,
   `const expectedReceipts = ${JSON.stringify(JSON.parse(process.env.VIDEO_PUBLISHER_V2_RECEIPTS || "{}"))};`,
+  `const expectedVideoReceipt = ${JSON.stringify(JSON.parse(process.env.VIDEO_PUBLISHER_V2_VIDEO_RECEIPT || "null"))};`,
   `const receiptCheckpointPath = ${JSON.stringify(process.env.VIDEO_PUBLISHER_V2_CHECKPOINT_PATH || "")};`,
   `const jobFingerprint = ${JSON.stringify(process.env.VIDEO_PUBLISHER_V2_FINGERPRINT || "")};`,
 ].join("\n");
@@ -96,16 +127,31 @@ const fragments = [
   fs.readFileSync(path.join(DIR, "platforms", "dispatch.mjs"), "utf8"),
 ].join("\n\n");
 
-const releasePlatformLock = acquirePlatformLock(platform, phase);
+const publisherLockDirectory = resolvePublisherLockDirectory();
+const inheritedPublisherToken = process.env.VIDEO_PUBLISHER_V2_PUBLISHER_LOCK_TOKEN || "";
+const releasePublisherLock = inheritedPublisherToken
+  ? (assertJobLockOwner(publisherLockDirectory, inheritedPublisherToken), () => {})
+  : acquireJobLock(publisherLockDirectory, {
+    jobId: `direct-${platform}-${phase}`,
+    packagePath,
+    scope: "publisher",
+  });
+const activePublisherToken = inheritedPublisherToken || releasePublisherLock.token;
+let releasePlatformLock = () => {};
 let execution;
 try {
+  releasePlatformLock = acquirePlatformLock(platform, phase);
   try {
-    execution = await runEgo(fragments);
+    execution = await runEgo(fragments, pid => registerJobLockMember(publisherLockDirectory, activePublisherToken, {
+      pid,
+      role: `${platform}:${phase}:ego`,
+    }));
   } catch (error) {
     execution = { code: 1, stdout: "", stderr: String(error?.stack || error) };
   }
 } finally {
   releasePlatformLock();
+  releasePublisherLock();
 }
 const combined = `${execution.stdout}\n${execution.stderr}`;
 let result;

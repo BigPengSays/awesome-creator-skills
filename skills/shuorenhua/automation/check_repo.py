@@ -43,7 +43,7 @@ ANCHORS = (
     ("evals/benchmark-map.md", r"^> 共 (\d+) 条 = \d+ SF \+ \d+ SNF。$", "total", 1),
     ("evals/benchmark-map.md", r"^> 共 \d+ 条 = (\d+) SF \+ \d+ SNF。$", "sf", 1),
     ("evals/benchmark-map.md", r"^> 共 \d+ 条 = \d+ SF \+ (\d+) SNF。$", "snf", 1),
-    ("automation/eval/README.md", r"^\| `B65-(\d+)` \| B-65 到 B-\1 \|$", "total", 1),
+    ("automation/eval/README.md", r"^\| `B97-(\d+)` \| B-97 到 B-\1 \|$", "total", 1),
 )
 
 CN_NUM = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
@@ -229,14 +229,131 @@ def check_meta(issues):
                 if not value:
                     add_issue(issues, "SKILL.md", number, "meta", f"frontmatter 的 {key} 不能为空")
 
+    payloads = {}
     for relative in (".claude-plugin/plugin.json", ".claude-plugin/marketplace.json"):
         text = read_text(relative, issues, "meta")
         if text is None:
             continue
         try:
-            json.loads(text)
+            payloads[relative] = json.loads(text)
         except json.JSONDecodeError as exc:
             add_issue(issues, relative, exc.lineno, "meta", f"JSON 无法解析：{exc.msg}")
+
+    plugin = payloads.get(".claude-plugin/plugin.json")
+    marketplace = payloads.get(".claude-plugin/marketplace.json")
+    if ".claude-plugin/plugin.json" in payloads and not isinstance(plugin, dict):
+        add_issue(issues, ".claude-plugin/plugin.json", 1, "meta", "顶层 JSON 必须是 object")
+    if ".claude-plugin/marketplace.json" in payloads and not isinstance(marketplace, dict):
+        add_issue(issues, ".claude-plugin/marketplace.json", 1, "meta", "顶层 JSON 必须是 object")
+    if not isinstance(plugin, dict) or not isinstance(marketplace, dict):
+        return
+    plugin_name = plugin.get("name")
+    plugin_version = plugin.get("version")
+    if not isinstance(plugin_name, str) or not plugin_name:
+        add_issue(issues, ".claude-plugin/plugin.json", 1, "meta", "name 必须是非空字符串")
+        return
+    metadata = marketplace.get("metadata")
+    if not isinstance(metadata, dict):
+        add_issue(issues, ".claude-plugin/marketplace.json", 1, "meta", "metadata 必须是 object")
+        return
+    marketplace_version = metadata.get("version")
+    entries = marketplace.get("plugins")
+    if not isinstance(entries, list):
+        add_issue(issues, ".claude-plugin/marketplace.json", 1, "meta", "plugins 必须是数组")
+        return
+    matches = [entry for entry in entries if isinstance(entry, dict) and entry.get("name") == plugin_name]
+    if len(matches) != 1:
+        add_issue(
+            issues,
+            ".claude-plugin/marketplace.json",
+            1,
+            "meta",
+            f"应有且只有一个 name={plugin_name!r} 的 plugin 条目，实际 {len(matches)} 个",
+        )
+        return
+    entry_version = matches[0].get("version")
+    if not isinstance(plugin_version, str) or not plugin_version:
+        add_issue(issues, ".claude-plugin/plugin.json", 1, "meta", "version 必须是非空字符串")
+    elif marketplace_version != plugin_version or entry_version != plugin_version:
+        add_issue(
+            issues,
+            ".claude-plugin/marketplace.json",
+            1,
+            "meta",
+            "版本不一致："
+            f"plugin.json={plugin_version!r}, metadata={marketplace_version!r}, plugin entry={entry_version!r}",
+        )
+
+
+def normalized_corpus_body(text):
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    return "\n".join(line.rstrip() for line in text.splitlines()).strip()
+
+
+def human_benchmark_duplicates(records, cases, strip_blockquote):
+    """返回 HUMAN 正文与 SF/SNF benchmark 正文的精确重复关系。"""
+    benchmark = {}
+    for cid, _, body in cases:
+        if cid.startswith(("SF-", "SNF-")):
+            benchmark.setdefault(normalized_corpus_body(strip_blockquote(body)), []).append(cid)
+    return [
+        (record, benchmark[normalized_corpus_body(record["text"])])
+        for record in records
+        if normalized_corpus_body(record["text"]) in benchmark
+    ]
+
+
+def check_human_corpus(issues):
+    """校验 v2.3.1 必需的 HUMAN 语料、发布 cohort 与 benchmark 隔离。"""
+    relative = "evals/human-corpus.jsonl"
+    manifest = ROOT / relative
+    if not manifest.exists():
+        add_issue(issues, relative, "-", "human-corpus", "v2.3.1 发布要求 8–12 篇逐篇核验公开许可的 HUMAN 正文，manifest 缺失")
+        return 0
+
+    module = load_hard_metrics(issues)
+    if module is None:
+        return 0
+    try:
+        records = module.load_human_corpus(ROOT, manifest)
+        active = module.validate_human_cohort(records)
+    except module.HumanCorpusError as exc:
+        add_issue(issues, relative, "-", "human-corpus", str(exc))
+        return 0
+
+    try:
+        module.validate_human_representativeness(records)
+    except module.HumanCorpusError as exc:
+        add_issue(issues, relative, "-", "human-representativeness", str(exc))
+
+    for target in ("evals/benchmark.md", "evals/benchmark-blind.md", "evals/benchmark-map.md"):
+        text = read_text(target, issues, "human-corpus")
+        if text is None:
+            continue
+        match = re.search(r"\bHUMAN-\d+\b", text)
+        if match:
+            add_issue(
+                issues,
+                target,
+                line_number(text, match.start()),
+                "human-corpus",
+                "HUMAN 只作 residual 对照，不得进入 benchmark/blind/map",
+            )
+
+    try:
+        cases = module.parse_cases(ROOT)
+    except SystemExit:
+        add_issue(issues, relative, "-", "human-corpus", "无法解析 benchmark 正文，不能验证 HUMAN 隔离")
+        return 0
+    for record, case_ids in human_benchmark_duplicates(active, cases, module.strip_blockquote):
+        add_issue(
+            issues,
+            relative,
+            record["manifest_line"],
+            "human-corpus",
+            f"{record['id']} 正文与 benchmark {', '.join(case_ids)} 完全重复；HUMAN 不得进入 rewrite/judge 分母",
+        )
+    return len(active)
 
 
 # hard_metrics.py 里的词表是判据的脚本实现，references/structures.md 的正文是同一
@@ -374,6 +491,7 @@ def main():
     links = check_links(files, issues)
     check_case_ids(files, case_matches, rs_matches, issues)
     check_meta(issues)
+    human = check_human_corpus(issues)
     tables = check_rule_tables(issues)
 
     if issues:
@@ -381,7 +499,8 @@ def main():
         print(f"check_repo: FAIL（{len(issues)} 个问题）")
         return 1
     total = sf + snf
-    print(f"check_repo: OK（{total} 用例 / {len(rs_matches)} 样本 / {anchors} 锚点 / {links} 链接 / {tables} 词表）")
+    human_text = f" / HUMAN {human} 篇" if human else ""
+    print(f"check_repo: OK（{total} 用例 / {len(rs_matches)} 样本{human_text} / {anchors} 锚点 / {links} 链接 / {tables} 词表）")
     return 0
 
 

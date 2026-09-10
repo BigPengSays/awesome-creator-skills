@@ -13,7 +13,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-article-illustrator
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -32,7 +32,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-comic
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -50,7 +50,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-compress-image
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -68,7 +68,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-cover-image
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -86,7 +86,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-diagram
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -104,7 +104,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-format-markdown
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -122,7 +122,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-infographic
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -140,7 +140,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-markdown-to-html
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -158,7 +158,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-post-to-wechat
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -176,7 +176,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-post-to-weibo
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -194,7 +194,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-post-to-x
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -212,7 +212,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-slide-deck
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -230,7 +230,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-translate
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -248,7 +248,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-url-to-markdown
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -266,7 +266,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-xhs-images
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -284,7 +284,7 @@ skills:
       repo: https://github.com/JimLiu/baoyu-skills
       path: skills/baoyu-youtube-transcript
       ref: main
-      pinned_commit: 6b7a2e417500561a5ecdd0b168332f4142584617
+      pinned_commit: 8ae8c33a8d7c8c7c6de291b2c91ba1debe1d2766
     license: MIT
     sync: true
     status: active
@@ -501,7 +501,7 @@ skills:
       repo: https://github.com/s1dashu/ip-as-logo-skill
       path: .
       ref: main
-      pinned_commit: b1bf517c54a407452cfaca98a54668cd052f8e63
+      pinned_commit: acb834c717bcd0a487c49732d08397ba280d690b
     license: MIT
     sync: true
     status: active
@@ -520,7 +520,7 @@ skills:
       repo: https://github.com/EverettFish/ip_illustration_for_yourself
       path: .
       ref: main
-      pinned_commit: 7e47ee615485d4bf04a4fef4550497bfd5e553f5
+      pinned_commit: 6b0cb54e63fb270bb0c966991795d89d15499e76
     license: Unknown
     sync: true
     status: active
@@ -538,7 +538,7 @@ skills:
       repo: https://github.com/KKKKhazix/khazix-skills
       path: khazix-writer
       ref: main
-      pinned_commit: a8744f0c682cac4c8c25f97d5968f3d3e6241e63
+      pinned_commit: 3fa874169134f65b14e8a27164386510bc867037
     license: MIT
     sync: true
     status: active
@@ -575,7 +575,7 @@ skills:
       repo: https://github.com/geekjourneyx/md2wechat-skill
       path: skills/md2wechat
       ref: main
-      pinned_commit: d656438f1e9994fb7f4560c43d51eb7fd0a1ceb3
+      pinned_commit: cbc8c600ed1f9cccbc29a33576f657c07d39ba9a
     license: MIT
     sync: true
     status: active
@@ -595,7 +595,7 @@ skills:
       repo: https://github.com/oil-oil/oil-cover
       path: .
       ref: main
-      pinned_commit: 3a882c051532b7225879079117c0efbed5e1b5dd
+      pinned_commit: d4e36e759caebada025da116ffb929344f6908aa
     license: MIT
     sync: true
     status: active
@@ -614,7 +614,7 @@ skills:
       repo: https://github.com/oil-oil/oil-tone
       path: skills/oil-tone
       ref: main
-      pinned_commit: 07eb56baddf5e0b7dd33a09cfd93bfc48b1e81c3
+      pinned_commit: b9b250ad2ffd09802beec3606981ebcf7b4b87e2
     license: MIT
     sync: true
     status: active
@@ -632,7 +632,7 @@ skills:
       repo: https://github.com/ZzzLc0405/photo-abstract-editorial
       path: .
       ref: main
-      pinned_commit: c7904b70c9829f614b37064d0005149b8a2037dc
+      pinned_commit: 49e55073d6d0330274d31f75d27f5dd6eb35fd6d
     license: Custom (non-commercial, see LICENSE.md)
     sync: true
     status: active
@@ -650,7 +650,7 @@ skills:
       repo: https://github.com/dacnay816y62-hub/photo-revival
       path: .
       ref: main
-      pinned_commit: ca4c3c6c0f812355bd6d815d8a78652db801b7f1
+      pinned_commit: 5574fa2f6fa8fa52b232d7836b7960bf6b5753f6
     license: MIT
     sync: true
     status: active
@@ -668,7 +668,7 @@ skills:
       repo: https://github.com/MrGeDiao/shuorenhua
       path: .
       ref: main
-      pinned_commit: a9145e38875f116d65235a728cd0048b7c3d9003
+      pinned_commit: d2d0ce27da295581c3cf87a30ab65deb7d0ddfb8
     license: MIT
     sync: true
     status: active
@@ -725,7 +725,7 @@ skills:
       repo: https://github.com/oil-oil/video-publisher-skill
       path: video-publisher
       ref: main
-      pinned_commit: eb297bc1c1c5a61d46fb2e04453cbeeeebb1de59
+      pinned_commit: fb6b879783e359783435c790e6055180d0ab9b93
     license: MIT
     sync: true
     status: active
