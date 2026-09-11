@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { BLOCKER, classifyVerdict, evaluateObservation, requiredGates } from "../lib/model.mjs";
+import { BLOCKER, classifyVerdict, evaluateObservation, requiredGates, videoReceiptFromObservation } from "../lib/model.mjs";
 
 function observation(platform, overrides = {}) {
   const gates = Object.fromEntries(requiredGates(platform).map(name => [name, {
@@ -28,6 +28,25 @@ test("foreign Bilibili drafts enter quarantine instead of user blocking", () => 
   const verdict = evaluateObservation(observation("bilibili", { gates: { draftIdentity: { ok: false, evidence: { foreign: true } } } }));
   assert.equal(verdict.blocker.code, BLOCKER.FOREIGN_DRAFT);
   assert.equal(classifyVerdict(verdict), "needs_quarantine");
+});
+
+test("an ambiguous draft identity never enters mutation", () => {
+  const verdict = evaluateObservation(observation("wechat_channels", {
+    gates: { draftIdentity: { ok: false, evidence: { ambiguous: true, description: "" } } },
+  }));
+  assert.equal(verdict.blocker.code, BLOCKER.STATE_AMBIGUOUS);
+  assert.equal(classifyVerdict(verdict), "blocked");
+});
+
+test("a video receipt requires both video and draft identity evidence", () => {
+  const valid = observation("wechat_channels");
+  valid.actions = { upload: { mode: "resume_existing" } };
+  assert.equal(videoReceiptFromObservation(valid, "fingerprint", 1).mode, "resume_existing");
+  valid.gates.draftIdentity = { ok: false, evidence: { ambiguous: true } };
+  assert.equal(videoReceiptFromObservation(valid, "fingerprint", 1), null);
+  valid.gates.draftIdentity = { ok: true, evidence: {} };
+  valid.blocker = { code: BLOCKER.ACTION_FAILED };
+  assert.equal(videoReceiptFromObservation(valid, "fingerprint", 1), null);
 });
 
 test("typed risk-control blocker wins over otherwise missing gates", () => {
@@ -63,4 +82,19 @@ test("READY rejects any attempted final-publish interaction even when it was blo
   }));
   assert.equal(verdict.ready, false);
   assert.deepEqual(verdict.missing, ["safety"]);
+});
+
+test("YouTube READY requires audience, full settings, visibility, and final-save safety", () => {
+  const valid = observation("youtube");
+  assert.equal(evaluateObservation(valid).ready, true);
+  valid.gates.visibility = { ok: false, evidence: { expected: "private", actual: "" } };
+  const verdict = evaluateObservation(valid);
+  assert.equal(verdict.ready, false);
+  assert.deepEqual(verdict.missing, ["visibility"]);
+  assert.equal(classifyVerdict(verdict), "needs_mutation");
+  assert.deepEqual(requiredGates("youtube"), [
+    "authenticated", "draftIdentity", "video", "title", "description", "tags",
+    "audience", "settings", "cover", "visibility", "noBlockingDialog",
+    "finalButton", "safety",
+  ]);
 });

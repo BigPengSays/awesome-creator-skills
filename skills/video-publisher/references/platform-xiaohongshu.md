@@ -1,6 +1,6 @@
 # Xiaohongshu Adapter Contract
 
-Read `platform-common.md` and `ego-browser-workflow.md` first.
+Before changing the Xiaohongshu adapter, read `platform-common.md` and `ego-browser-workflow.md`.
 
 ## Account Defaults
 
@@ -15,7 +15,7 @@ no prose body unless explicitly requested
 
 Use the confirmed video file. Reuse an uploaded editor only when the filename or expected title identifies this package. A different active draft is a blocker; Xiaohongshu has no tested automatic quarantine flow.
 
-Do not mutate metadata until the upload phase has fully completed and every selected platform upload runner has exited.
+视频上传仍在进行时，只要 fresh inspection 同时证明标题输入框、正文话题编辑器和原生话题按钮可见，就可通过单宽 UI 队列提前填写标题和话题。原创声明、封面和最终验证仍必须等上传完成。`prefill` 不满足 video gate，之后必须继续正式 `upload` 等待。
 
 ## Topic Entities
 
@@ -26,6 +26,8 @@ Under sustained browser load, the decoration may appear while the candidate pane
 After an Ego restart, the selected Xiaohongshu tab may report `document.visibilityState: hidden` even though its DOM is readable. Hidden-page timer throttling can delay a real topic candidate response far beyond the bounded wait. Immediately before a serialized topic rebuild, bring the page to front, set its web lifecycle to `active`, enable focus emulation, and prove `visible` plus `document.hasFocus()`. Do not add longer blind waits to compensate for a hidden lifecycle.
 
 Spaces terminate Xiaohongshu topic input. When a readable package label contains whitespace, query the compact form (for example `AI Agent` -> `AIAgent`) and accept it only when the committed entity's `data-topic.name`, normalized without whitespace, matches the requested label. Preserve the readable package label in evidence. Never accept compact plain text as a substitute for an entity.
+
+Xiaohongshu topic entities do not support the half-width dot `.`. Reject any dotted `xhsTopics` label during package preflight instead of opening the creator page or silently rewriting the label. Use an explicitly chosen dot-free label such as `GPT56` when that still represents the intended topic.
 
 The verifier must prove:
 
@@ -40,13 +42,15 @@ Do not insert `.tiptap-topic` HTML manually.
 
 Open `内容设置`, enable `原创声明`, accept the agreement checkbox when a dialog appears, and click the dialog’s `声明原创` control. That dialog control is not the final publish button.
 
-Verify the enabled toggle from a fresh inspection. A click attempt is insufficient.
+The current switch uses `.d-switch-simulator.checked` and `.d-switch-simulator.unchecked`. Read the nested checkbox first and otherwise compare class tokens exactly; substring matching is forbidden because `unchecked` contains `checked`.
+
+After accepting the agreement, wait for Vue to enable `声明原创` before clicking it. A disabled confirmation is a blocker, not a successful toggle. Verify both the enabled switch and the closed agreement dialog from a fresh inspection.
 
 ## Custom Cover
 
 Default to the platform cover unless the package explicitly enables an existing-cover upload. Use the user-provided `3:4` asset.
 
-The tested editor entry is the real preview control under `.default.row` or `.default.column`. Open it with a real browser click, then poll for a visible `上传封面` tab instead of assuming a fixed render delay; one clean reopen is allowed when the asynchronous dialog does not materialize. Upload through the image input, choose the crop ratio matching the asset when exposed, and confirm the editor.
+The current editor exposes a hover-only `.cover-edit-entry`. Pointer movement can remove that element before the click event completes, so this is a live-proven native-handler exception: invoke that exact entry’s page click handler before falling back to a stable preview click. Then poll for `.main-cover-editor-modal` and prefer its direct image input; the current editor may show only `上传` and `完成`, without a separate `上传封面` tab. Choose the crop ratio matching the asset when exposed and confirm the editor.
 
 Accept the cover only when the main editor exposes the uploaded preview URL, normally on `ros-preview.xhscdn.com`, and no cover dialog blocks the page. Store that URL in the receipt and require the verify phase to find it again.
 
@@ -61,8 +65,8 @@ exact topic entities with no plain residue
 原创声明 enabled
 custom 3:4 receipt when enabled, otherwise default cover state
 no blocking dialog
-visible enabled 发布 button
-visible enabled `发布笔记` final button; final publish not clicked
+one visible enabled final control labeled `发布` or `发布笔记`
+final publish not clicked
 ```
 
-This path passed real draft runs on 2026-07-14 and 2026-07-15. The visible-tab polling path was fault-tested by discarding the receipt and re-uploading the same 3:4 asset. Later 731 MB and 533 MB runs survived orchestrator termination during upload without reinjection, and the 533 MB run verified whitespace-normalized topic lookup plus three no-op full reruns. Real Ego Lite crash/restart and sustained-load runs reproduced both the cold-page topic-decoration failure and an empty candidate panel. A mutation-stage crash finally proved the persistent failure was hidden lifecycle throttling: activating and focusing that exact failed page made its next bounded whole-set rebuild commit four entities on attempt one. The 3:4 receipt and four-platform `READY` state were restored, followed by three full no-op reruns.
+实测记录和待回归边界见 `acceptance-history.md`。
