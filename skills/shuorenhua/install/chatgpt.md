@@ -1,17 +1,18 @@
 # ChatGPT / 通用 LLM 安装
 
-## lite / full 怎么选
+## mini / lite / full 怎么选
 
-- `lite`：只加载 `SKILL.md`。适合直接贴对话、API system prompt、上下文紧张或偶尔改写。
+- `mini`：只加载 [`dist/shuorenhua-mini.md`](../dist/shuorenhua-mini.md)。适合 Custom Instructions、直接贴对话、较弱模型或只想先清明显模板感的场景。
+- `lite`：只加载 `SKILL.md`。适合 API system prompt、临时项目和需要完整保真合同的改写。
 - `full`：加载 `SKILL.md` + `references/`。适合 Custom GPT、Project、公开文本、技术文档和需要误杀防护的场景。
 
-ChatGPT / 通用 LLM 场景默认从 lite 开始；如果要长期使用、处理 README / release note / issue 回复，或担心术语和事实被误杀，再升级到 full。
+ChatGPT / 通用 LLM 临时使用可以从 mini 开始；只要涉及公开文本、技术边界、长文或反误杀，就用 lite 或 full。mini 是压缩子集，不替代完整规则。
 
 ## ChatGPT
 
 ### 方案一：Custom GPT（推荐）
 
-`SKILL.md` 有 12,000+ 字符，超过 Custom Instructions 的 1,500 字限制。用 Custom GPT 可以绕过这个限制，规则完整加载，不用删减。
+`SKILL.md` 有 12,000+ 字符，超过 Custom Instructions 当前所有档位的上限。用 Custom GPT 可以加载完整规则，不用删减。
 
 **直接使用：** [说人话 GPT](https://chatgpt.com/g/g-6a5829b1163481919e1e45851f6bc709-shuo-ren-hua)（需要 ChatGPT Plus / Pro）
 
@@ -35,13 +36,15 @@ ChatGPT / 通用 LLM 场景默认从 lite 开始；如果要长期使用、处�
 
 Projects 的文件没有严格字符限制，效果和 Custom GPT 类似。
 
-### 方案三：直接贴对话（轻量用法）
+### 方案三：直接贴对话（mini）
 
-不想建 GPT 也不想建 Project，直接在对话开头贴 `SKILL.md` 内容也能用。适合偶尔用一次的场景。
+不想建 GPT 也不想建 Project，直接在对话开头贴 `dist/shuorenhua-mini.md` 的内容。适合偶尔用一次、上下文紧张或较弱模型。
 
-这是 lite 用法。
+如果需要完整保真合同，可以改贴 `SKILL.md`，这是 lite 用法。
 
-> **注意：** Custom Instructions（Settings > Personalization）有 1,500 字符上限，放不下完整的 `SKILL.md`。不建议用这个方式。
+### 方案四：Custom Instructions（mini）
+
+把 `dist/shuorenhua-mini.md` 粘贴到 Settings > Personalization > Custom Instructions。按 [OpenAI 当前官方说明](https://help.openai.com/en/articles/8096356-custom-instructions-for-chatgpt)，Free / Go 上限是 1,500 字符，Plus / Pro / Enterprise / Business / Education 上限是 5,000 字符；约 1,000 字符的 mini 两边都放得下，完整 `SKILL.md` 两边都放不下。
 
 ## Claude（Web / Project）
 

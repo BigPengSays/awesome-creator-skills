@@ -110,6 +110,36 @@ test("onboarding defaults to every available platform when no default subset is 
   await fs.promises.rm(root, { recursive: true, force: true });
 });
 
+test("add-platform preserves existing onboarding preferences", async () => {
+  const root = await fs.promises.mkdtemp(path.join(os.tmpdir(), "video-publisher-config-add-platform-"));
+  const configPath = path.join(root, "config.json");
+  const initial = createOnboardedConfig({
+    sourceDirectory: root,
+    availablePlatforms: ["xiaohongshu"],
+    defaultPlatforms: ["xiaohongshu"],
+    contentProfile: { copyStyle: "Personal style", recurringTags: ["Existing"] },
+    declarations: { originalityPolicy: "all_videos_original" },
+    execution: { checkConcurrency: 2, uploadConcurrency: 3 },
+  });
+  writeConfig(initial, configPath);
+  const result = await run(process.execPath, [
+    SCRIPT_PATH,
+    "add-platform",
+    "douyin",
+    "--default",
+    "--douyin-topic", "New topic",
+  ], { env: { ...process.env, VIDEO_PUBLISHER_CONFIG: configPath } });
+  assert.equal(result.code, 0, `${result.stderr}\n${result.stdout}`);
+  const updated = JSON.parse(result.stdout).config;
+  assert.deepEqual(updated.availablePlatforms, ["xiaohongshu", "douyin"]);
+  assert.deepEqual(updated.defaultPlatforms, ["xiaohongshu", "douyin"]);
+  assert.deepEqual(updated.contentProfile, { copyStyle: "Personal style", recurringTags: ["Existing"] });
+  assert.deepEqual(updated.platforms.douyin.defaultTopics, ["New topic"]);
+  assert.equal(updated.declarations.originalityPolicy, "all_videos_original");
+  assert.deepEqual(updated.execution, { checkConcurrency: 2, uploadConcurrency: 3 });
+  await fs.promises.rm(root, { recursive: true, force: true });
+});
+
 test("schema 1 configurations conservatively migrate available platforms from old defaults", async () => {
   const root = await fs.promises.mkdtemp(path.join(os.tmpdir(), "video-publisher-config-legacy-"));
   const configPath = path.join(root, "config.json");
@@ -134,5 +164,37 @@ test("default platforms must be selected from available creator accounts", async
     availablePlatforms: ["xiaohongshu"],
     defaultPlatforms: ["douyin"],
   }), /defaultPlatforms must be a subset of availablePlatforms: douyin/);
+  await fs.promises.rm(root, { recursive: true, force: true });
+});
+
+test("YouTube can be added non-destructively with private publishing defaults", async () => {
+  const root = await fs.promises.mkdtemp(path.join(os.tmpdir(), "video-publisher-config-youtube-"));
+  const configPath = path.join(root, "config.json");
+  const initial = createOnboardedConfig({
+    sourceDirectory: root,
+    availablePlatforms: ["bilibili"],
+    defaultPlatforms: ["bilibili"],
+    contentProfile: { copyStyle: "Personal style", recurringTags: ["AI"] },
+  });
+  writeConfig(initial, configPath);
+  const result = await run(process.execPath, [
+    SCRIPT_PATH,
+    "add-platform",
+    "youtube",
+    "--default",
+    "--youtube-category", "科学与技术",
+    "--youtube-language", "中文（简体）",
+    "--youtube-visibility", "private",
+  ], { env: { ...process.env, VIDEO_PUBLISHER_CONFIG: configPath } });
+  assert.equal(result.code, 0, `${result.stderr}\n${result.stdout}`);
+  const updated = JSON.parse(result.stdout).config;
+  assert.deepEqual(updated.availablePlatforms, ["bilibili", "youtube"]);
+  assert.deepEqual(updated.defaultPlatforms, ["bilibili", "youtube"]);
+  assert.deepEqual(updated.platforms.youtube, {
+    defaultCategory: "科学与技术",
+    defaultLanguage: "中文（简体）",
+    defaultVisibility: "private",
+  });
+  assert.deepEqual(updated.contentProfile, { copyStyle: "Personal style", recurringTags: ["AI"] });
   await fs.promises.rm(root, { recursive: true, force: true });
 });

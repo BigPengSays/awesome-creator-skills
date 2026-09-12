@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/JimLiu/baoyu-skills
 - Path: `skills/baoyu-format-markdown`
 - Ref: `main`
-- Pinned commit: `6b7a2e417500561a5ecdd0b168332f4142584617`
+- Pinned commit: `1567581c26ec29f4216c6e6835415bf30343b0e3`
 - License: MIT
-- Synced at: 2026-08-14T08:08:03.544Z
+- Synced at: 2026-09-12T07:38:31.281Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
