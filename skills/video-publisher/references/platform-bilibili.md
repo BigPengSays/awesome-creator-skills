@@ -1,6 +1,12 @@
 # Bilibili Adapter Contract
 
-Read `platform-common.md` and `ego-browser-workflow.md` first.
+Before changing the Bilibili adapter, read `platform-common.md` and `ego-browser-workflow.md`.
+
+## Contents
+
+- Draft resolution and upload entry recovery
+- Metadata, declarations, and exact tags
+- Custom cover and required gates
 
 ## Draft Resolution
 
@@ -22,10 +28,6 @@ targetUploaded: the requested filename/title owns that completed video
 
 Do not equate “target not found” with “no active upload”. This false equivalence previously skipped foreign-draft quarantine.
 
-Both same-target resume and a real foreign-draft save/clean-page flow passed live testing. A later task-space-loss test recreated the Bilibili space, resumed the same target with no video upload, and repaired only the page state that did not survive the restore.
-
-A separate 533 MB fault test terminated the orchestrator while Bilibili was actively uploading. The same task space resumed with upload action mode `resume_existing`, completed without another file injection, and independently reached `READY`.
-
 ## Upload Entry Recovery
 
 The current task-space tab may remain on another authenticated `member.bilibili.com` page that has no upload input. Treat this as a bounded page-readiness state, not immediate selector drift:
@@ -40,6 +42,8 @@ The current task-space tab may remain on another authenticated `member.bilibili.
 This flow was reproduced from the authenticated creator home page with zero video inputs. A hidden navigated page accepted a 93 MB file into `input.files` but did not start the upload component. The same clean page started immediately after lifecycle activation and reached `上传完成`. A later full recovery run recorded one navigation, reused the matching restored target without reinjection, and preserved the armed final-publish guard.
 
 ## Metadata And Declarations
+
+视频上传仍在进行时，只要 fresh inspection 同时证明标题和标签输入控件可见，就可通过单宽 UI 队列提前修复标题与标签。简介、创作声明、原创权益和封面仍必须等上传完成。平台后续自动标签若改变集合，正式 mutation 会再次执行精确修复。
 
 Set and independently verify:
 
@@ -76,7 +80,7 @@ If Bilibili reports that a requested tag is topic-only and cannot be added as a 
 
 ## Custom Cover
 
-Use the user-provided `4:3` asset only when enabled.
+Use the user-provided exact `4:3` homepage master from `cover.horizontal4x3Path` only when enabled. Bilibili’s current editor maintains two outputs: `首页推荐封面（4:3）` and `个人空间封面（16:9）`. The 4:3 editor is primary and can synchronize its changes to the 16:9 personal-space slot.
 
 Upload through the active `.bcc-upload-wrapper` image input. The cover editor’s final control can be a `div.button.submit`, not a native button. Wait until its exact label becomes `完成`, click it through the real input channel, and require the editor to close.
 
@@ -95,10 +99,10 @@ video fully uploaded
 exact title and description
 exact requested tag chips plus only allowed auto-tags
 both declaration states
-custom 4:3 receipt when enabled
+custom 4:3 source receipt covering the homepage 4:3 and synchronized space 16:9 slots when enabled
 no blocking dialog
 visible enabled 立即投稿 button
 final publish not clicked
 ```
 
-The complete draft path passed real testing on 2026-07-14, including foreign-draft quarantine, the scoped cover-completion fallback, checkpoint recovery, and repeated no-op verification.
+实测记录和待回归边界见 `acceptance-history.md`。
