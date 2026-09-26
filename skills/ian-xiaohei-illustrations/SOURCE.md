@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/helloianneo/ian-xiaohei-illustrations
 - Path: `ian-xiaohei-illustrations`
 - Ref: `main`
-- Pinned commit: `91b560849e8f883922cc2fa8a358a668caa94105`
+- Pinned commit: `4102eb807f03bcb6e538a16e8b31b41db8b5b954`
 - License: MIT
-- Synced at: 2026-08-14T06:41:47.706Z
+- Synced at: 2026-09-26T08:16:39.156Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.

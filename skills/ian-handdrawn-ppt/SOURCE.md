@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/helloianneo/ian-handdrawn-ppt
 - Path: `ian-handdrawn-ppt`
 - Ref: `main`
-- Pinned commit: `b2cc5f303337e5470fd6ac2870d261a43b218439`
+- Pinned commit: `306d8240c49d1c7c390fd55b55ec6b18650a8a1a`
 - License: MIT
-- Synced at: 2026-08-15T02:40:46.398Z
+- Synced at: 2026-09-26T08:16:37.842Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
