@@ -40,6 +40,126 @@ test("Douyin preserves committed topic entities while retrying a failed tail que
   assert.match(source, /value\.startsWith\(expectedDescription\)/, "the first topic query must be isolated from a shared description text node");
   assert.match(add, /attempt<=3/, "suggestion lookup must use a finite retry bound");
   assert.match(add, /removeDouyinTrailingTopicQuery\(queryTag,committedBefore\)/, "a failed lookup must remove only its own plain query");
+  assert.match(add, /querySelectorAll\('\[class\*=\"mention-suggest-item-container\"\]'\)/, "current Douyin must click the real suggestion row before falling back to descendants");
+  assert.match(add, /direct\.length\?direct:legacy/, "legacy suggestion descendants remain a bounded fallback");
+});
+
+test("Douyin prefill requires live editable-upload evidence and defers covers", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "douyin.mjs"), "utf8");
+  const start = source.indexOf("async function prefillDouyin");
+  const end = source.indexOf("async function mutateDouyin", start);
+  assert.ok(start >= 0 && end > start, "Douyin prefill function must remain discoverable");
+  const prefill = source.slice(start, end);
+  assert.match(source, /stage:'editable_uploading'/, "upload start must expose an explicit editable-uploading stage");
+  assert.match(prefill, /early\.ready===true/, "prefill must require freshly proven editor readiness");
+  assert.match(prefill, /video\.evidence\?\.uploading===true/, "prefill must remain bound to an active upload when video is incomplete");
+  assert.match(prefill, /ensureDouyinMetadata\(before\)/, "prefill must use the same idempotent metadata repair as final mutation");
+  assert.doesNotMatch(prefill, /uploadDouyinCoverSlot|repairDelayedDouyinCoverReceipt/, "custom covers stay after upload completion");
+});
+
+test("Xiaohongshu prefill requires live title and topic controls and defers rights and cover", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "xiaohongshu.mjs"), "utf8");
+  const start = source.indexOf("async function prefillXiaohongshu");
+  const end = source.indexOf("async function mutateXiaohongshu", start);
+  assert.ok(start >= 0 && end > start);
+  const prefill = source.slice(start, end);
+  assert.match(source, /stage: 'editable_uploading'/);
+  assert.match(source, /controls: \{ title: visible\(titleInput\), topics:/);
+  assert.match(prefill, /ensureXiaohongshuEarlyMetadata\(before\)/);
+  assert.doesNotMatch(prefill, /ensureXhsOriginal|uploadXhsCover/);
+});
+
+test("Xiaohongshu cover repair resumes by reselecting the requested source asset", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "xiaohongshu.mjs"), "utf8");
+  const start = source.indexOf("async function uploadXhsCover");
+  const end = source.indexOf("async function ensureXiaohongshuEarlyMetadata", start);
+  assert.ok(start >= 0 && end > start, "cover upload function must remain discoverable");
+  const coverFlow = source.slice(start, end);
+  assert.match(coverFlow, /\.main-cover-editor-modal/, "the current cover-editor root must be recognized");
+  assert.match(coverFlow, /\^\(上传封面\|上传\)\$/, "both old and current upload labels must remain supported");
+  assert.match(coverFlow, /\^\(确定\|完成\)\$/, "both old and current confirmation labels must remain supported");
+  assert.match(coverFlow, /input\[type=file\]/, "a direct image input must take precedence over tab text");
+  assert.match(coverFlow, /openedAfterRealClick/, "the cover opener must verify that the asynchronous editor materialized");
+  assert.match(coverFlow, /native fallback/, "a missing asynchronous editor must retry through the page's native click handler");
+  assert.match(coverFlow, /resume-uploaded-thumbnail/, "a retry must resume a cover that already reached the editor");
+  assert.match(coverFlow, /uploaded-thumbnail-clear/, "a resumed thumbnail must be cleared before selecting the requested source");
+  assert.doesNotMatch(coverFlow, /if \(!tab\.alreadyUploaded\)/, "the requested source file must be proven on every repair");
+  assert.match(coverFlow, /selectedFile\?\.name!==path\.basename\(xhsCoverPath\)/);
+  assert.match(coverFlow, /const cropProof=await js/, "the crop ratio must be re-read from the live editor before confirmation");
+  assert.match(coverFlow, /xhsCoverCropMatches\(cropProof\)/, "the selected ratio control must prove the requested 3:4 crop");
+  assert.match(coverFlow, /controlVisible/);
+  assert.doesNotMatch(coverFlow, /inferredFromUploadedThumbnail|uploadedThumbnail/, "source-image dimensions cannot substitute for crop-control evidence");
+});
+
+test("Xiaohongshu original declaration never treats unchecked as checked", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "xiaohongshu.mjs"), "utf8");
+  const inspectStart = source.indexOf("async function inspectXiaohongshu");
+  const inspectEnd = source.indexOf("async function waitXiaohongshuUploadCompletion", inspectStart);
+  const ensureStart = source.indexOf("async function ensureXhsOriginal");
+  const ensureEnd = source.indexOf("async function uploadXhsCover", ensureStart);
+  const inspectFlow = source.slice(inspectStart, inspectEnd);
+  const ensureFlow = source.slice(ensureStart, ensureEnd);
+  assert.match(inspectFlow, /originalInput\?\.checked === true/, "the real checkbox must be authoritative when present");
+  assert.match(inspectFlow, /simulatorTokens\.some\(token => \['checked', 'active', 'open', 'enabled'\]\.includes\(token\)\)/, "state classes must be matched as exact tokens");
+  assert.doesNotMatch(inspectFlow, /\/checked\|active\|open\|enabled\//, "substring matching would make unchecked a false positive");
+  assert.match(ensureFlow, /querySelector\?\.\('\.d-switch-simulator'\)/, "the proven interactive simulator is the preferred click target");
+  assert.match(ensureFlow, /accept xhs original declaration agreement/, "the agreement must be a separate real interaction");
+  assert.match(ensureFlow, /attempt < 12/, "the Vue confirmation state needs a bounded readiness wait");
+  assert.match(ensureFlow, /if \(!confirm\.ok\) return/, "a disabled confirmation must stop mutation instead of being ignored");
+  assert.match(ensureFlow, /original declaration dialog did not close/, "success requires an independently closed dialog");
+});
+
+test("Xiaohongshu opens the hover-only cover editor through its native handler", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "xiaohongshu.mjs"), "utf8");
+  const start = source.indexOf("async function uploadXhsCover");
+  const end = source.indexOf("async function ensureXiaohongshuEarlyMetadata", start);
+  const coverFlow = source.slice(start, end);
+  assert.match(coverFlow, /target\.matches\('\.cover-edit-entry'\)\)\{target\.click\(\);return \{ok:true,nativeHoverEntry:true/, "the hover entry must fire before pointer movement can remove it");
+  assert.match(coverFlow, /if \(!opener\.nativeHoverEntry\)/, "ordinary stable controls should still use the real click path");
+  assert.match(coverFlow, /document\.querySelector\('\.cover-plugin-preview \.cover-edit-entry'\)\|\|document\.querySelector\('#vp2-xhs-cover-opener'\)/, "the native fallback must prefer a fresh hover entry over a stale id");
+});
+
+test("Bilibili prefill is limited to live title and tag controls", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "bilibili.mjs"), "utf8");
+  const start = source.indexOf("async function prefillBilibili");
+  const end = source.indexOf("async function mutateBilibili", start);
+  assert.ok(start >= 0 && end > start);
+  const prefill = source.slice(start, end);
+  assert.match(source, /stage:'editable_uploading'/);
+  assert.match(source, /controls:\{title:visible\(titleInput\),tags:visible\(tagInput\)\}/);
+  assert.match(prefill, /ensureBilibiliEarlyMetadata\(before\)/);
+  assert.doesNotMatch(prefill, /setBilibiliDescriptionV2|ensureBilibiliDeclarationV2|uploadBilibiliCoverV2/);
+});
+
+test("WeChat Channels prefill uses a task-space-bound upload receipt and defers original and covers", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "wechat-channels.mjs"), "utf8");
+  const start = source.indexOf("async function prefillWechatChannels");
+  const end = source.indexOf("async function mutateWechatChannels", start);
+  assert.ok(start >= 0 && end > start);
+  const prefill = source.slice(start, end);
+  assert.match(source, /正在处理文件\|处理中\|生成中/, "processing and generated-cover text must keep the upload incomplete");
+  assert.match(source, /uploadStartReceipt\?\.fingerprint===jobFingerprint/);
+  assert.match(source, /completeWechatUploadStartObservation\(current,mode,'editable_uploading'/);
+  assert.match(prefill, /ensureWechatEarlyMetadata\(before\)/);
+  assert.doesNotMatch(prefill, /ensureWechatOriginal|uploadWechatCover/);
+});
+
+test("WeChat Channels cover flow supports both slot-specific and generic editors", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "wechat-channels.mjs"), "utf8");
+  const start = source.indexOf("async function dismissWechatCoverEditor");
+  const end = source.indexOf("async function ensureWechatEarlyMetadata", start);
+  const coverFlow = source.slice(start, end);
+  const helperStart = source.indexOf("function wechatCoverEditorExpression");
+  const helperEnd = source.indexOf("async function probeWechatCoverEditor", helperStart);
+  assert.ok(helperStart >= 0 && helperEnd > helperStart, "the shared editor probe must remain discoverable");
+  const editorProbe = source.slice(helperStart, helperEnd);
+  assert.match(coverFlow, /编辑个人主页卡片\|编辑分享卡片\|编辑封面\|裁剪封面图/, "recovery must recognize every live cover-dialog title");
+  assert.match(coverFlow, /querySelectorAll\('\.weui-desktop-dialog__wrp'\)/, "cover lookup must not depend on the removed edit-cover-dialog ancestor");
+  assert.match(editorProbe, /heading\(d\)===title/, "the exact slot title remains preferred");
+  assert.match(editorProbe, /heading\(d\)==='编辑封面'/, "the current generic editor title remains a fallback");
+  assert.match(editorProbe, /candidates=exact\.length\?exact:dialogs\.filter/);
+  assert.match(editorProbe, /owned=\(dialog,selector\)=>/, "child controls must be scoped to the matched editor");
+  assert.match(coverFlow, /owned\(editor,'input\[type=file\]'\)/, "file injection requires an input owned by the matched editor");
 });
 
 test("Ego task-space selection rejects a recycled id with another name", () => {
@@ -86,4 +206,68 @@ test("Bilibili cover repair continues after a rejected tag and preserves the blo
   assert.ok(tagFailure >= 0 && coverRepair > tagFailure, "cover repair must run after recording a tag rejection");
   assert.ok(finalReturn > coverRepair, "the original typed blocker must survive after independent cover repair");
   assert.doesNotMatch(mutation.slice(tagFailure, coverRepair), /return /, "tag rejection must not return before cover repair");
+});
+
+test("Bilibili keeps homepage and personal-space cover verification independent", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "bilibili.mjs"), "utf8");
+  assert.match(source, /const bilibiliCoverAssets = \[/);
+  assert.match(source, /slot:'homepage-master',ratio:'4:3'/);
+  assert.match(source, /slot:'personal-space',ratio:'16:9'/);
+  assert.match(source, /editor:'#editor_4_3',key:'extra'/);
+  assert.match(source, /editor:'#editor_16_9',key:'main'/);
+  assert.match(source, /bilibiliCoverReceiptMatches\(asset,receipt\?\.slots\?\.\[asset\.slot\]/);
+  assert.match(source, /bilibiliCoverAssets\.every\(asset=>bilibiliCoverReceiptMatches\(asset,receipt\?\.slots\?\.\[asset\.slot\],imagesBySlot\[asset\.slot\]\)\)/, "READY requires current live proof for both slots");
+  assert.doesNotMatch(source, /slots:\['homepage-4:3','space-16:9'\]/, "one 4:3 upload cannot claim both slots");
+
+  assert.match(source, /sync-checkbox input\[type=checkbox\]/);
+  assert.match(source, /inputs\.every\(i=>!i\.checked\)/, "both sync controls must stay unchecked");
+  assert.match(source, /previewProof\?\.changed&&previewProof\.active&&previewProof\.loaded/, "upload completion requires a new loaded preview in the active slot");
+  assert.match(source, /image\.source==='upload'/, "accepted images must come from the upload flow");
+  assert.match(source, /image\.origin===receipt\.previewProof\.url/, "the accepted image must originate from the selected preview");
+  assert.match(source, /receipt\.slots\[asset\.slot\]=result\.receipt/);
+  assert.match(source, /checkpointReceipts\(\{\.\.\.expectedReceipts,cover:receipt\}\)/, "each successful slot must be checkpointed for recovery");
+  assert.match(source, /if\(bilibiliCoverReceiptMatches\(asset,receipt\.slots\[asset\.slot\],images\[asset\.slot\]\)\)continue/, "a verified earlier slot must survive a retry without another upload");
+  assert.match(source, /const accepted=bilibiliCoverAssets\.every\(asset=>bilibiliCoverReceiptMatches/);
+  assert.match(source, /if\(closed&&accepted\)/, "final confirmation requires both live slot proofs and a closed editor");
+  assert.match(source, /不同步，手动编辑/, "the sync warning must be recovered through the manual-edit path");
+  assert.doesNotMatch(source, /确认同步/, "the adapter must never merge the two cover slots");
+
+  assert.match(source, /item\.extra\?\.edited===cardUrl/, "the visible primary card URL must bind to one cover-list item");
+  assert.match(source, /matches\.length===1\?matches\[0\]:null/, "ambiguous ownership must fail closed");
+  assert.match(source, /personal-space':image\(item\?\.main\)/, "the 16:9 slot is checked against the main URL, not a PK cover");
+});
+
+test("WeChat Channels refuses an unproven uploaded draft with an empty description", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "wechat-channels.mjs"), "utf8");
+  assert.match(source, /identityAmbiguous=uploaded&&!description&&!trustedVideoReceipt/);
+  assert.match(source, /expectedVideoReceipt\?\.fingerprint===jobFingerprint/);
+  assert.match(source, /current\.gates\.draftIdentity=okGate\(\{trustedUploadAction:true,mode,uploadStartReceipt:/);
+  assert.match(source, /if\(!before\.gates\.draftIdentity\.ok\)return/);
+});
+
+test("YouTube prefill repairs full details but defers thumbnail, visibility, and final save", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "youtube.mjs"), "utf8");
+  const start = source.indexOf("async function prefillYoutube");
+  const end = source.indexOf("async function mutateYoutube", start);
+  assert.ok(start >= 0 && end > start, "YouTube prefill function must remain discoverable");
+  const prefill = source.slice(start, end);
+  assert.match(source, /stage: 'editable_uploading'/);
+  assert.match(source, /controls: \{ title: visible\(titleEditor\), description: visible\(descriptionEditor\) \}/);
+  assert.match(prefill, /ensureYoutubeMetadata\(before\)/);
+  assert.doesNotMatch(prefill, /uploadYoutubeThumbnail|advanceYoutubeToVisibility|ensureYoutubeVisibility/);
+  assert.doesNotMatch(source, /click\([^)]*done-button|click\([^)]*final/i, "the adapter must never click YouTube's final action");
+});
+
+test("YouTube final guard covers localized Save, Publish, and Schedule labels only on YouTube", () => {
+  const source = fs.readFileSync(path.join(DIR, "..", "ego", "core.mjs"), "utf8");
+  assert.match(source, /YOUTUBE_FINAL_TEXT = \/\^\(保存\|发布\|安排时间\|Save\|Publish\|Schedule\)\$\//);
+  assert.match(source, /platform === 'youtube' \? YOUTUBE_FINAL_TEXT : FINAL_TEXT/);
+});
+
+test("YouTube corrections can clear all tags and replace a stale details receipt", () => {
+  const source = fs.readFileSync(path.join(PLATFORM_DIR, "youtube.mjs"), "utf8");
+  assert.match(source, /for \(const tag of youtubeTags\)/, "an empty requested list must skip additions after removing old chips");
+  assert.match(source, /const detailsGatesReady = \['title', 'description', 'tags', 'audience', 'settings'\]/);
+  assert.match(source, /currentDetailsComparable/);
+  assert.match(source, /expectedReceipts\.details = receipts\.details/);
 });
