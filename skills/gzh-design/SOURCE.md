@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/isjiamu/gzh-design-skill
 - Path: `.`
 - Ref: `main`
-- Pinned commit: `ba1f4175519b481cb3566616c9e5178705067904`
-- License: see LICENSE file
-- Synced at: 2026-08-14T08:29:02.406Z
+- Pinned commit: `339840b1343c86b0159d97a06a0e9eba7c09f9ba`
+- License: AGPL-3.0
+- Synced at: 2026-10-06T09:43:22.205Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.

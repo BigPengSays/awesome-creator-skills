@@ -1,0 +1,143 @@
+PLCT开源进展·第14期·2020年12月01日
+
+卷首语
+
+最后一个月。2020年是神奇的一年，有太多的「百年一遇」，以至于不到最后一秒，我们压根不知道明天天亮之前又有什么炸裂的新闻会爆出来。2020年刚开始的时候我在杭州参加方舟的讨论会，美研的前辈们专程飞了半个地球，讨论EAR之后的的方舟如何演进。然后回老家过春节，全国疫情，我被困在非常小的一片地，体内憋着一股怨劲儿，使不出。想了很多的事，看了很少的书，更加喜欢一个人看夕阳。解封之后，慢慢找到的自己的节奏，PLCT实验室的人数在稳步的增加，积累的技术产出也开始有信心跟上游的同行们交流。7月份V8小队跑通了 Hello World 是一件振奋人心的事情，经过了几个月的冲刺和担心之后，我们终于成为第一个将V8移植到RISC-V上的团队。紧接着与FutureWei的吴芃前辈认识，组成联合团队开发，受到了很多的指导。下半年跟RISC-V国际基金会也好、国内的各个RISC-V伙伴厂商也好，联系开始变得越来越紧密，在 V8、Clang/LLVM、GNU Toolchain、OpenJDK、AOSP 等多个领域都有了工作的展开。上个月开始，由于包云岗老师加入BoD契机而快速融入进RISC-V国际基金会的我，开始引荐V8团队的吴芃前辈、BishengJDK的王亚东等与基金会的技术委员会接触，建立更为紧密的国际社区联系。不同小队之间的沟通组合开始爆炸，沟通成本在变大。
+
+是时候了。PLCT实验室在今天发出了「关于建立RISC-V社区软件移植及优化工作的双周同步机制的倡议」。 希望能够为华语乐坛，哦不，华语技术圈提供更加高效的沟通机制，同时也吸引更多的大陆团队和个人，加入到RISC-V国际基金会的统一社区战略规划中。走出去，去融入，一直是PLCT的做事原则。第一次会议估计下周开始，具体的会议时间尚在投票中。下周一截止，欢迎去投票挑选你自己合适的参会时间。开放式会议，自由进入旁听。会议议程严格预约制，时间一个小时，遵守RISC-V国际基金会的惯例。同步会议会跟踪跟PLCT目前相关或感兴趣的基金会技术会议（一般都是在大陆的凌晨，时间不是太友好），为不能熬夜的中年同志提供了一个听取简报的场合。
+
+另外，本周五是PLCT开放日。本来希望是线下的嘉年华聚会，由于零星的疫情不断，谨慎地改成了线上。欢迎参加。今年跟OSDT大会共同举办，一共3天。
+
+本期亮点
+
+OpenJDK/BishengJDK的RV64G的初始性能结果跑出来了。相比于目前RISC-V社区唯一能用的Zero后端，速度提升了 20x 以上。振奋人心。具体可以通过RVI的SW邮件列表查看：
+
+RISC-V 「V」向量扩展LLVM实现
+
+开始支持 RVV 1.0 草案规范。欢迎使用，地址在老地方：
+
+同时我们也开放了使用的 benchmark（整理自 RISC-V V 扩展的官方文档）
+
+Clang/LLVM for RISC-V 相关工作
+
+本次除RVV之外没有其他新增内容。
+
+V8 for RISC-V 项目进展
+
+目前正在全力推动rebase to upstream，在新近跟google master分支的rebase之后，回归测试集一片飘红，正在挨个fix。
+
+Fix issue 314，解决因lazy deopt改成builtin之后，引入的codesize check错误。
+
+Fix issue317，解决因meda data地址不对齐造成的check错误。
+
+去掉不符合Chormium代码规范的cfenv头文件
+
+仿照longfruit（一个差分分析gcc和llvm生成的RISCV指令的脚本），添加了一个差分分析v8-mips64和v8-riscv64的脚本
+
+增加指针压缩在riscv上的实现
+
+修复rebase tip后出现的死循环
+
+AOSP for RISC-V
+
+完成 shell 和 init 的移植，目前可以实现完全基于 bionic 的 libc 库，采用静态链接的方式生成一个最小的 android 根文件系统。该 rootfs 可以在 qemu-system-riscv64 上启动运行，并支持运行一些基本的操作命令。此外还改进了原先的 make 框架系统，为下一个阶段进一步支持动态链接做准备。更多进展信息请参考 PLCT 在 github 上的 AOSP on RISC-V 工作组项目状态报告，以及目前开源在 github 上的代码仓库 。下一步的工作重点是增加动态链接支持，继续完善 bionic 功能并尝试移植 AOSP 的 Soong 构造系统，支持采用 AOSP 的 Soong 构造系统编译 RISC-V 版本的 bionic 库和相关应用。
+
+“知乎” 上的 “RISC-V、Linux 和 AOSP” 专栏持续更新，发布了一篇介绍文章：《第一个 RISC-V 上的“Android 最小系统”》。
+
+OpenJDK for RISC-V
+
+“知乎” 上的 “Java on RISC-V” 专栏持续更新，发布了一篇实验报告：
+毕昇JDK 11 for RICSV64构建及HiFive Unleashed测试：
+修改了毕昇JDK 11 for RICSV64官方构建文档的几处问题
+
+在HiFive Unleashed对毕昇JDK 11 for RICSV64及OpenJDK11 Zero进行了SPECjvm2008 benchmark测试：
+
+OpenBLAS for RISC-V using Vector Extension
+
+本期没有新的进展。
+
+面向国内RISC-V厂商的QEMU支持计划
+
+本期没有新的进展。
+
+RISC-V Spike 模拟器扩展
+
+正在尝试添加Spike对于Zfinx扩展的支持，本期没有新的进展。
+
+在方舟开源编译器社区的工作
+
+1.PLCT实验室的史宁宁编写的《华为方舟编译器之美——基于开源代码的架构分析与实现》已由清华大学出版社出版，各大电商平台已经开始销售。
+
+2.PLCT实验室的史宁宁依然每周在更新方舟编译器社区周报（OpenArkCompiler Weekly），目前已经更新到第三十九期。
+
+方舟编译器周报每周日晚上通过Repo、知乎、Bilibili和邮件列表发布。
+
+Repo:
+
+知乎：
+
+Bilibili：
+
+邮件列表及其订阅方式：
+
+MLIR
+
+PLCT实验室张洪滨向 MLIR repo 提交 patch：
+
+Committed:
+
+[mlir] Get array from the dense elements attribute with buffer protocol.
+
+[mlir] [Python] Sync Python bindings with C API MlirStringRef modification.
+
+Waiting on Review:
+
+[mlir][Python] Sync Python bindings with C API MlirStringRef modification.
+
+CIRCT
+
+TODO 实习生招募！
+
+本期没有新的进展。
+
+OpenROAD
+
+TODO 实习生招募！
+
+Chisel/FIRRTL
+
+TODO 实习生招募！
+本期没有新的进展。
+
+永恒天平 / Eternal Balance
+
+永恒天平项目计划进入 RISC-V 基金会的 code speed opt SIG 作为基础设施。
+
+如果你感兴趣，欢迎加入永恒天平项目，一起做些有意思的事情！
+
+Rust
+Rust语言简介及RISC-V移植现状 - 韩博阳 - 20201125 - PLCT实验室
+
+报告视频地址：
+
+Slides 下载地址：
+
+OpenCV for RISC-V Using Vector Extension
+
+本周没有新的消息。该项目第一阶段已经完成。
+
+GNU Toolchain for RISC-V
+
+陈嘉炜在RISCV-GNU—Toolchain中对GCC和Binutils添加了Zfinx支持，并在RISCV-CODESIZE-REDUCTION会议上进行了工作介绍：
+
+Zfinx扩展介绍（目前还处于草案修订状态）：
+
+项目地址：
+
+项目介绍：
+
+Zfinx移植介绍：
+Zfinx工作介绍：
+进度报告：
+
+其他工作
