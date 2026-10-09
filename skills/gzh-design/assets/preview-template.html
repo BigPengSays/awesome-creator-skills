@@ -38,22 +38,43 @@
   }
   function gzhCopy(){
     var el=document.getElementById('gzh-content');
-    // 选中渲染后的富文本节点并复制（等价于手动 Ctrl+A / Ctrl+C，保留全部样式）
-    var range=document.createRange();
-    range.selectNodeContents(el);
-    var sel=window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-    var ok=false;
-    try{ok=document.execCommand('copy');}catch(e){ok=false;}
-    sel.removeAllRanges();
+    var html=el.innerHTML;
+    var text=el.innerText;
     var btn=document.getElementById('gzhCopyBtn');
+    var ok=false;
+    var handler=null;
+    var ta=document.createElement('textarea');
+    try{
+      // Write the original HTML directly to avoid browser range serialization
+      // injecting values such as text-align:start into the copied markup.
+      handler=function(e){
+        if(!e.clipboardData)return;
+        e.clipboardData.setData('text/html',html);
+        e.clipboardData.setData('text/plain',text);
+        e.preventDefault();
+      };
+      document.addEventListener('copy',handler,{once:true});
+      ta.value=text;
+      ta.setAttribute('readonly','');
+      ta.style.position='fixed';
+      ta.style.left='-9999px';
+      ta.style.top='0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ok=document.execCommand('copy');
+    }catch(e){
+      ok=false;
+    }finally{
+      if(ta.parentNode)ta.parentNode.removeChild(ta);
+      if(handler)document.removeEventListener('copy',handler);
+    }
     if(ok){
       gzhShowToast('✅ 已复制！去公众号编辑器按 Ctrl/⌘+V 粘贴即可');
       var old=btn.textContent;btn.textContent='✅ 已复制';
       setTimeout(function(){btn.textContent=old;},2200);
     }else{
-      gzhShowToast('⚠ 自动复制失败，请手动全选(Ctrl/⌘+A)再复制(Ctrl/⌘+C)');
+      gzhShowToast('⚠ 浏览器阻止复制，请换 Edge/Chrome 后重试');
     }
   }
 </script>
