@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/cyberlesterr/paper-collage-video
 - Path: `skills/make-paper-collage-video`
 - Ref: `main`
-- Pinned commit: `bd531368189c9579bde59909ce0fade33eff9c39`
+- Pinned commit: `59eb5ce6de9735020a7061cec6a43af2611893d8`
 - License: MIT
-- Synced at: 2026-08-15T02:02:51.510Z
+- Synced at: 2026-10-10T09:19:59.404Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
