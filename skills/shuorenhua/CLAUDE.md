@@ -1,1 +1,1 @@
-/Users/happyyan/work/skill-development/awesome-creator-skills/.tmp/vendor-1786691293370-f18f627e63125/extract/shuorenhua-a9145e38875f116d65235a728cd0048b7c3d9003/AGENTS.md
+/home/runner/work/awesome-creator-skills/awesome-creator-skills/.tmp/sync-shuorenhua-1792743164571-51ff73199bcbf/extract/shuorenhua-e33d5eb6420ba3468043791a57d71c153b0a8691/AGENTS.md
