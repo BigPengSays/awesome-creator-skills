@@ -68,8 +68,8 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 #### 小红书
 
 - [baoyu-xhs-images](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-xhs-images) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把内容拆成 1–10 张卡通信息卡片，提供 12 种风格与 8 种版式，针对小红书种草与图文笔记。
-- [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-social-card-skill)](https://github.com/op7418/guizang-social-card-skill) — 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
 - [oil-cover](https://github.com/oil-oil/oil-cover) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-cover)](https://github.com/oil-oil/oil-cover) — 生成小红书和 B 站 AI 工具实操视频封面，支持脚本模式与 Agent 自主模式、真实视频证据、三画幅输出和可选创作者头像。
+- [guizang-social-card-skill](https://github.com/op7418/guizang-social-card-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-social-card-skill)](https://github.com/op7418/guizang-social-card-skill) — 生成归藏风格小红书图文、Live Photo 实况拼图与公众号封面组，支持杂志风与瑞士国际主义两种视觉体系。
 - [oil-tone](https://github.com/oil-oil/oil-tone/tree/main/skills/oil-tone) [![GitHub Stars](https://badgen.net/github/stars/oil-oil/oil-tone)](https://github.com/oil-oil/oil-tone) — 为 oil 本人成稿提供可朗读、平实直叙的中英文文风规范，避免 AI 味、模板化表达与拔高立意。
 - [ip-illustration-character-system](https://github.com/EverettFish/ip_illustration_for_yourself) [![GitHub Stars](https://badgen.net/github/stars/EverettFish/ip_illustration_for_yourself)](https://github.com/EverettFish/ip_illustration_for_yourself) — 用照片建立可复用的萌粒风格个人 IP，并为长文生成留白多的 mini 插图与 3:4 信息图，保持角色一致。
 - [xhs-visual-director](https://github.com/ziguishian/xhs-visual-director-skill/tree/main/skill) [![GitHub Stars](https://badgen.net/github/stars/ziguishian/xhs-visual-director-skill)](https://github.com/ziguishian/xhs-visual-director-skill) — 以视觉导演而不是文案助手的方式规划小红书图文：封面、3:4 与轮播分页构图、生图提示词、风格一致性与标题标签。
