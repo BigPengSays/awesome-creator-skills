@@ -95,7 +95,6 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 #### 通用
 
-- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [baoyu-article-illustrator](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-article-illustrator) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 按文章结构找出需要配图的位置，用类型×风格×配色生成插图，适合长文配图而不是随机出图。
 - [baoyu-comic](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-comic) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把知识、教程或人物故事做成多格知识漫画，支持多种画风与语气，先分镜再出图。
 - [baoyu-compress-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-compress-image) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 把图片压缩为 WebP 或 PNG 并自动选择工具，适合发布前减小体积而不明显损画质。
@@ -106,6 +105,7 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
 - [baoyu-translate](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-translate) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 文章文档三档翻译（quick/normal/refined），适合多语言内容生产而不只是机械直译。
 - [baoyu-url-to-markdown](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-url-to-markdown) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 用 Chrome CDP 抓取任意 URL 并转为 Markdown，内置 X、YouTube、HN 等站点适配与登录等待。
+- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations/tree/main/ian-xiaohei-illustrations) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-xiaohei-illustrations)](https://github.com/helloianneo/ian-xiaohei-illustrations) — 为中文长文分析认知锚点并生成 Ian 小黑 IP 风格 16:9 手绘正文配图，支持 shot list 规划与单张怪诞解释图输出。
 - [humanizer-zh](https://github.com/op7418/humanizer-zh) [![GitHub Stars](https://badgen.net/github/stars/op7418/humanizer-zh)](https://github.com/op7418/humanizer-zh) — 基于维基 AI 写作特征清单，识别并改写中文文本里的 AI 痕迹，让成稿更自然、更像人写。
 - [ip-as-logo](https://github.com/s1dashu/ip-as-logo-skill) [![GitHub Stars](https://badgen.net/github/stars/s1dashu/ip-as-logo-skill)](https://github.com/s1dashu/ip-as-logo-skill) — 生成极简可爱的方形 IP 角色 logo：圆厚造型、两色主体加纯色背景、角落构图，小尺寸仍可辨认。
@@ -167,8 +167,8 @@ npx skills add BigPengSays/awesome-creator-skills --skill <skill-id>
 
 #### 幻灯片
 
-- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [baoyu-slide-deck](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-slide-deck) [![GitHub Stars](https://badgen.net/github/stars/JimLiu/baoyu-skills)](https://github.com/JimLiu/baoyu-skills) — 先产出大纲与风格说明，再逐页生成专业幻灯片图，适合把文章或方案做成演示稿。
+- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) [![GitHub Stars](https://badgen.net/github/stars/op7418/guizang-ppt-skill)](https://github.com/op7418/guizang-ppt-skill) — 生成横向翻页网页 PPT（单 HTML 文件），含 WebGL 背景、演讲者视图、观众屏同步、讲稿备注、章节幕封、数据大字报、图片网格等模板。
 - [ian-handdrawn-ppt](https://github.com/helloianneo/ian-handdrawn-ppt/tree/main/ian-handdrawn-ppt) [![GitHub Stars](https://badgen.net/github/stars/helloianneo/ian-handdrawn-ppt)](https://github.com/helloianneo/ian-handdrawn-ppt) — 把文章、课程笔记或提纲做成中文手绘技术解释风格的 PPT 式页面图，输出 21:9 封面与 16:9 正文 PNG。
 
 #### 漫画
