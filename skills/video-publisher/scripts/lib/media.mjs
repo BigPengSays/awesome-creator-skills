@@ -1,9 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export const DOUYIN_MAX_DURATION_SECONDS = 15 * 60;
-export const DOUYIN_DURATION_CONTAINER_TOLERANCE_SECONDS = 0.1;
-
 const ISO_BMFF_EXTENSIONS = new Set([".mp4", ".m4v", ".mov"]);
 
 function readAt(fileDescriptor, length, position) {
@@ -111,15 +108,16 @@ export function validateMediaForPlatform(pkg, platform, media = inspectMediaFile
     errors.push(`video file not found: ${media.path || pkg.videoPath}`);
     return errors;
   }
-  if (platform === "douyin"
-    && media.durationSeconds !== null
-    && media.durationSeconds > DOUYIN_MAX_DURATION_SECONDS + DOUYIN_DURATION_CONTAINER_TOLERANCE_SECONDS) {
+  if (platform === "douyin" && !ISO_BMFF_EXTENSIONS.has(path.extname(media.path).toLowerCase())) {
+    errors.push("DOUYIN_DURATION_UNVERIFIED: use an MP4, M4V, or MOV source whose duration can be verified before browser upload.");
+    return errors;
+  }
+  if (platform === "douyin" && (!Number.isFinite(media.durationSeconds) || media.durationSeconds <= 0)) {
     errors.push(
-      `DOUYIN_DURATION_LIMIT: video duration is ${media.durationSeconds.toFixed(3)}s; `
-      + `the real-tested content maximum is ${DOUYIN_MAX_DURATION_SECONDS}s (15:00), `
-      + `with ${DOUYIN_DURATION_CONTAINER_TOLERANCE_SECONDS.toFixed(3)}s allowed for container rounding. `
-      + "Edit or export a shorter source before browser upload.",
+      `DOUYIN_DURATION_UNVERIFIED: could not read a trustworthy ISO BMFF duration${media.probeError ? ` (${media.probeError})` : ""}; `
+      + "export a valid MP4, M4V, or MOV before browser upload.",
     );
+    return errors;
   }
   return errors;
 }
