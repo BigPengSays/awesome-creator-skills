@@ -23,28 +23,26 @@ Concrete `AskUserQuestion` references below are examples — substitute the loca
 
 ## Image Generation Tools
 
-When this skill needs to render an image, resolve the backend in this order:
+Resolve the image backend in this order:
 
-1. **Current-request override** — if the user names a specific backend in the current message, use it.
-2. **Saved preference** — if `EXTEND.md` sets `preferred_image_backend` to a backend available right now, use it.
-3. **Auto-select** (when the preference is `auto`, unset, or the pinned backend isn't available):
-   - **Codex (`imagegen`)** — first, inspect your available-skills / tool inventory. If a skill named `imagegen` is listed, you are running inside Codex and MUST use it: invoke via the `Skill` tool with `skill: "imagegen"`, passing the saved prompt file's content (plus output path and aspect ratio per Codex `imagegen`'s own args). Codex `imagegen` is the official raster backend in that runtime and outranks any non-native skill (e.g., `baoyu-image-gen`) unless the user has explicitly pinned a different `preferred_image_backend`.
-   - **Codex via `codex exec` (`codex-imagegen`)** — if the current runtime exposes no native `imagegen` skill but the `codex` CLI is on `PATH` with an active `codex login`, route through `baoyu-image-gen --provider codex-cli` (preferred), or — if baoyu-image-gen is unavailable — invoke the bundled wrapper directly. Details, parameters, and the runtime-discovery procedure live in [references/codex-imagegen.md](references/codex-imagegen.md) — load that file only when this branch is selected.
-   - **Cursor (`GenerateImage`)** — if the runtime exposes a native `GenerateImage` tool, you are running inside Cursor and it outranks any non-native skill the same way Codex `imagegen` does. Two hard caveats: (a) it has no aspect-ratio parameter — state the target aspect ratio / dimensions explicitly in the prompt text passed as `description`; (b) it does not accept an output directory — it saves to a tool-managed location, so after generation copy/move the file to the skill's expected output path (e.g., `outputs/.../NN-xxx.png`). Reference images go in `reference_image_paths`.
-   - **Other runtime-native tools** — if the runtime exposes a different native image tool (e.g., Hermes `image_generate`), use it the same way.
-   - Otherwise, if exactly one non-native backend is installed (e.g., `baoyu-image-gen`), use it.
-   - Otherwise (multiple non-native backends with no runtime-native tool), ask the user once — batch with any other initial questions.
-4. **If none are available**, tell the user and ask how to proceed.
+1. **User names a backend** in the current message → use it.
+2. **`preferred_image_backend`** in `EXTEND.md` names a backend available now → use it. `ask` means ask every run.
+3. **Auto-select** (preference `auto`, unset, or the pinned backend is unavailable), first match wins:
+   - **Codex `imagegen`** skill is in your available skills → you are in Codex and MUST use it: `Skill` with `skill: "imagegen"`, passing the prompt file's content plus output path and aspect ratio. It outranks non-native skills such as `baoyu-image-gen`.
+   - **Codex via `codex exec` (`codex-imagegen`)**: no native `imagegen`, but the `codex` CLI is on `PATH` with an active `codex login` → `baoyu-image-gen --provider codex-cli` (preferred), or the bundled wrapper if baoyu-image-gen is unavailable. Load [references/codex-imagegen.md](references/codex-imagegen.md) only for this branch.
+   - **Cursor `GenerateImage`** → use it (outranks non-native skills). It has no aspect-ratio parameter, so state the aspect ratio / dimensions in the `description` prompt; it saves to a tool-managed location, so copy the file to the expected output path (e.g., `outputs/.../NN-xxx.png`). Reference images go in `reference_image_paths`.
+   - **Other runtime-native image tool** (e.g., Hermes `image_generate`) → use it the same way.
+   - Exactly one non-native backend installed (e.g., `baoyu-image-gen`) → use it.
+   - Several non-native backends → ask the user once, batched with other initial questions.
+4. **None available** → tell the user and ask how to proceed.
 
-**⛔ Never substitute SVG, HTML, canvas, or other code-based rendering for raster image generation.** Codex `imagegen`'s own description says it should be used "when the output should be a bitmap asset rather than repo-native code or vector." If you cannot resolve a raster backend via step 3, fall through to step 4 and ask the user — do **not** silently emit SVG, write inline `<svg>` markup, or produce HTML/CSS art as a substitute. This applies even if the article/section seems "diagram-like": the consumer skill calling this rule has already decided that a raster image is what it needs.
+**⛔ Raster only**: never substitute SVG, HTML/CSS, canvas, or other code-based rendering for a raster image, even for diagram-like content. If no raster backend resolves, go to step 4.
 
-**⛔ Never repair rendered text by painting over a generated bitmap.** Do not use ImageMagick, Pillow, Canvas, SVG, HTML/CSS, OCR scripts, or any other programmatic overlay to cover, rewrite, erase, stroke, or replace titles, body copy, tags, or any other text inside an already generated image card. If text is wrong or unclear, regenerate from a corrected prompt, switch to a layout with less on-card text, or ask the user which imperfect candidate to keep.
+**⛔ No bitmap text patching**: never use ImageMagick, Pillow, Canvas, SVG, HTML/CSS, OCR scripts, or any other overlay to cover, rewrite, erase, stroke, or replace titles, body copy, tags, or any other text inside an already generated image card. Regenerate from a corrected prompt, switch to a layout with less on-card text, or ask the user which imperfect candidate to keep.
 
-Setting `preferred_image_backend: ask` forces the step-3 prompt every run regardless of available backends. Users change the pinned backend via the `## Changing Preferences` section below.
+**Prompt file (hard)**: before invoking any backend, write each image's full, final prompt to its own file under `prompts/` (`NN-{type}-[slug].md`) and pass that file (or its content) to the backend. It is the reproducibility record and lets you switch backends without rewriting prompts.
 
-**Prompt file requirement (hard)**: write each image's full, final prompt to a standalone file under `prompts/` (naming: `NN-{type}-[slug].md`) BEFORE invoking any backend. The file is the reproducibility record and lets you switch backends without regenerating prompts.
-
-Concrete tool names (`imagegen`, `GenerateImage`, `image_generate`, `baoyu-image-gen`) above are examples — substitute the local equivalents under the same rule.
+Change the pinned backend via `## Changing Preferences` below. Tool names above are examples; use the local equivalent in other runtimes.
 
 ## Batch Generation Policy
 
@@ -83,7 +81,7 @@ Respond in the user's language across questions, progress, errors, and completio
 | `--style <name>` | Visual style (see Styles below) |
 | `--layout <name>` | Information layout (see Layouts below) |
 | `--palette <name>` | Color override: macaron / warm / neon |
-| `--preset <name>` | Style + layout + optional palette shorthand (see Presets below; per-preset prompt fragments in `references/style-presets.md`) |
+| `--preset <name>` | Style + layout + optional palette shorthand (see `references/style-presets.md`) |
 | `--ref <files...>` | Reference images applied to image 1 as the series anchor |
 | `--batch-size <n>` | Temporary generation batch size for this run. Default: `generation_batch_size` from EXTEND.md, otherwise 4. Clamp to 1-8. |
 | `--yes` | Non-interactive: skip all confirmations, use EXTEND.md or built-in defaults, auto-confirm recommended plan (Path A) |
@@ -150,60 +148,7 @@ Palette specs: `references/palettes/<palette>.md`.
 
 ## Presets (style + layout shortcuts)
 
-Quick-start combos, grouped by scenario. Use `--preset <name>` or recommend during Step 2.
-
-**Knowledge & Learning**:
-
-| Preset | Style | Layout | Best For |
-|--------|-------|--------|----------|
-| `knowledge-card` | notion | dense | 干货知识卡、概念科普 |
-| `checklist` | notion | list | 清单、排行榜 |
-| `concept-map` | notion | mindmap | 概念图、知识脉络 |
-| `swot` | notion | quadrant | SWOT 分析、四象限 |
-| `tutorial` | chalkboard | flow | 教程步骤、操作流程 |
-| `classroom` | chalkboard | balanced | 课堂笔记、知识讲解 |
-| `study-guide` | study-notes | dense | 学习笔记、考试重点 |
-| `hand-drawn-edu` | sketch-notes | flow | 手绘教程、流程图解 |
-| `sketch-card` | sketch-notes | dense | 手绘知识卡 |
-| `sketch-summary` | sketch-notes | balanced | 手绘总结、图文笔记 |
-
-**Lifestyle & Sharing**:
-
-| Preset | Style | Layout | Best For |
-|--------|-------|--------|----------|
-| `cute-share` | cute | balanced | 少女风分享、日常种草 |
-| `girly` | cute | sparse | 甜美封面、氛围感 |
-| `cozy-story` | warm | balanced | 生活故事、情感分享 |
-| `product-review` | fresh | comparison | 产品对比、测评 |
-| `nature-flow` | fresh | flow | 健康流程、自然主题 |
-
-**Impact & Opinion**:
-
-| Preset | Style | Layout | Best For |
-|--------|-------|--------|----------|
-| `warning` | bold | list | 避坑指南、重要提醒 |
-| `versus` | bold | comparison | 正反对比 |
-| `clean-quote` | minimal | sparse | 金句、极简封面 |
-| `pro-summary` | minimal | balanced | 专业总结、商务内容 |
-
-**Trend & Entertainment**:
-
-| Preset | Style | Layout | Best For |
-|--------|-------|--------|----------|
-| `retro-ranking` | retro | list | 复古排行、经典盘点 |
-| `throwback` | retro | balanced | 怀旧分享 |
-| `pop-facts` | pop | list | 趣味冷知识 |
-| `hype` | pop | sparse | 炸裂封面、惊叹分享 |
-
-**Poster & Editorial**:
-
-| Preset | Style | Layout | Best For |
-|--------|-------|--------|----------|
-| `poster` | screen-print | sparse | 海报风封面、影评书评 |
-| `editorial` | screen-print | balanced | 观点文章、文化评论 |
-| `cinematic` | screen-print | comparison | 电影对比、戏剧张力 |
-
-Full prompt-fragment definitions: `references/style-presets.md`.
+26 presets grouped by scenario (knowledge, lifestyle, impact, trend, poster). Read `references/style-presets.md` when the user passes `--preset` or when recommending a preset in Step 2.
 
 ## Auto-Selection
 
@@ -226,22 +171,7 @@ Match content signals to the best combo. First row whose keywords appear wins; f
 
 ## Style × Layout Matrix
 
-Compatibility scores (✓✓ highly recommended, ✓ works well, ✗ avoid). Use when the user picks a non-default combo and you want to flag a poor match.
-
-|              | sparse | balanced | dense | list | comparison | flow | mindmap | quadrant |
-|--------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| cute         | ✓✓ | ✓✓ | ✓  | ✓✓ | ✓  | ✓  | ✓  | ✓  |
-| fresh        | ✓✓ | ✓✓ | ✓  | ✓  | ✓  | ✓✓ | ✓  | ✓  |
-| warm         | ✓✓ | ✓✓ | ✓  | ✓  | ✓✓ | ✓  | ✓  | ✓  |
-| bold         | ✓✓ | ✓  | ✓  | ✓✓ | ✓✓ | ✓  | ✓  | ✓✓ |
-| minimal      | ✓✓ | ✓✓ | ✓✓ | ✓  | ✓  | ✓  | ✓  | ✓  |
-| retro        | ✓✓ | ✓✓ | ✓  | ✓✓ | ✓  | ✓  | ✓  | ✓  |
-| pop          | ✓✓ | ✓✓ | ✓  | ✓✓ | ✓✓ | ✓  | ✓  | ✓  |
-| notion       | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓✓ |
-| chalkboard   | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓  | ✓✓ | ✓✓ | ✓  |
-| study-notes  | ✗  | ✓  | ✓✓ | ✓✓ | ✓  | ✓  | ✓✓ | ✓  |
-| screen-print | ✓✓ | ✓✓ | ✗  | ✓  | ✓✓ | ✓  | ✗  | ✓✓ |
-| sketch-notes | ✓  | ✓✓ | ✓✓ | ✓✓ | ✓  | ✓✓ | ✓✓ | ✓  |
+When the user picks a non-default style + layout combo, check `references/style-layout-matrix.md` and flag poor matches (✗).
 
 ## Outline Strategies
 
@@ -255,30 +185,7 @@ Three differentiated approaches — each produces a structurally different outli
 
 ## Reference Images
 
-User-supplied refs are **separate from** the internal "image-1 as anchor" chain (Step 3) — they layer on top of it.
-
-**Intake**: via `--ref <files...>` or paths pasted in conversation.
-- File path → copy to `refs/NN-ref-{slug}.{ext}`
-- Pasted with no path → ask for the path, or extract style traits as a text fallback
-
-**Usage modes** (per reference):
-
-| Usage | Effect |
-|-------|--------|
-| `direct` | Pass the file to the backend (typically on image 1 only, so the anchor propagates through the chain) |
-| `style` | Extract style traits and append to every card's prompt body |
-| `palette` | Extract hex colors and append to every card's prompt body |
-
-Record refs in each affected card's prompt frontmatter:
-
-```yaml
-references:
-  - ref_id: 01
-    filename: 01-ref-brand.png
-    usage: direct
-```
-
-At generation time: verify files exist. Image 1 with `usage: direct` + backend that accepts refs → pass via the backend's ref parameter (becomes the chain anchor). Images 2+ keep using image-1 as `--ref` per Step 3 — do NOT re-stack user refs on top (avoids conflicting signals). For `style`/`palette`, embed extracted traits in every prompt.
+Only when the user supplies refs (`--ref <files...>` or pasted paths): read `references/reference-images.md` for intake, usage modes (`direct` / `style` / `palette`), prompt frontmatter, and how refs combine with the image-1 anchor chain.
 
 ## File Layout
 
@@ -425,30 +332,21 @@ Images: N total
 | Content (middle) | Core value per image | `balanced` / `dense` / `list` / `comparison` / `flow` |
 | Ending (last) | CTA / summary | `sparse` or `balanced` |
 
-For the style × layout compatibility matrix, see the **Style × Layout Matrix** above.
+For the style × layout compatibility matrix, see `references/style-layout-matrix.md`.
 
 ## Image Modification
 
-| Action | How |
-|--------|-----|
-| Edit | Update `prompts/NN-{type}-{slug}.md` **first**, then regenerate with the same session ID |
-| Add | Specify position, create prompt, generate, renumber subsequent files `NN+1`, update outline |
-| Delete | Remove files, renumber subsequent `NN-1`, update outline |
-
-Always update the prompt file before regenerating — it's the source of truth and makes changes reproducible.
-
-Text correction policy:
-
-- If a card's title, body copy, tags, or any other rendered text is misspelled, garbled, hard to read, or visually weak, do not patch the bitmap with code.
-- For text-correction regenerations, write a new prompt file and a new output path so the flawed candidate is preserved for comparison.
-- Post-processing is limited to crop, resize, compression, or format conversion that does not alter text or the main composition.
+When the user asks to edit, add, delete, or fix text on a card after generation, read `references/image-modification.md` first. Always update the prompt file before regenerating, and never patch bitmap text with code.
 
 ## References
 
 | File | Content |
 |------|---------|
 | `references/confirmation.md` | Verbatim AskUserQuestion copy for every confirmation path |
-| `references/style-presets.md` | Full preset shortcut definitions |
+| `references/style-presets.md` | Full preset shortcut definitions, presets grouped by scenario |
+| `references/style-layout-matrix.md` | Style × layout compatibility scores |
+| `references/reference-images.md` | User-supplied reference image intake and usage |
+| `references/image-modification.md` | Edit / add / delete cards, text correction policy |
 | `references/presets/<style>.md` | Per-style element definitions |
 | `references/palettes/<name>.md` | Per-palette color definitions |
 | `references/elements/canvas.md` | Aspect ratios, safe zones, grid layouts |
