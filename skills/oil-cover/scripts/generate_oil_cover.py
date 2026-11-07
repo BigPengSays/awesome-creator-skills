@@ -3,7 +3,7 @@
 Generate oil-cover Xiaohongshu and Bilibili covers with Zenmux.
 
 The script reads the oil-cover reference rules, asks Gemini to select/plan a
-cover, then calls gpt-image-2 to generate the final cover images.
+cover, then calls the configured image model to generate the final cover images.
 """
 
 from __future__ import annotations
@@ -52,8 +52,8 @@ def _resolve_skill_dir() -> Path:
 SKILL_DIR = _resolve_skill_dir()
 DEFAULT_RULES_FILE = SKILL_DIR / "references" / "cover-rules.md"
 DEFAULT_API_BASE = "https://zenmux.ai/api/v1"
-DEFAULT_ANALYSIS_MODEL = "google/gemini-3.5-flash"
-DEFAULT_IMAGE_MODEL = "openai/gpt-image-2"
+DEFAULT_ANALYSIS_MODEL = "google/gemini-3.8-flash"
+DEFAULT_IMAGE_MODEL = "openai/gpt-image-2.5-flare"
 
 USER_CONFIG_FILE = Path(
     os.environ.get("OIL_COVER_CONFIG", str(Path.home() / ".oil-cover" / "config.json"))
@@ -97,28 +97,27 @@ CREATOR_PORTRAIT_LAYOUTS = {
         "width_ratio": 0.55,
         "top_ratio": 0.58,
         "right_ratio": -0.06,
-        "safe_area": "x=48%-100%, y=56%-100%",
     },
     "4x3": {
         "width_ratio": 0.38,
         "top_ratio": 0.40,
         "right_ratio": -0.03,
-        "safe_area": "x=60%-100%, y=37%-100%",
     },
     "16x9": {
         "width_ratio": 0.32,
         "top_ratio": 0.40,
         "right_ratio": 0.02,
-        "safe_area": "x=62%-100%, y=37%-100%",
     },
 }
 RETRYABLE_HTTP_CODES = {408, 429, 500, 502, 503, 504}
 AUTO_PRODUCT_LOGOS = [
+    (r"\b(?:feishu|lark)(?:\s+cli)?\b|飞书(?:\s*CLI)?", "feishu.png"),
     (r"\bkimi(?:\s+k3)?\b|月之暗面|Moonshot(?:\s*AI)?", "kimi.png"),
     (r"\bclaude\s+code\b|Claude Code|ClaudeCode|claude-code", "claude-code.png"),
     (r"\bcodex\b|Codex|代码智能体|Coding Agent", "codex-openai.png"),
     (r"\bchatgpt\b|ChatGPT|\bopenai\b|OpenAI", "openai.png"),
     (r"\bgemini\b|Gemini", "gemini.png"),
+    (r"\bgrok(?:\s*\d+(?:\.\d+)?)?\b|Grok|xAI", "grok.png"),
     (r"\banthropic\b|Anthropic", "anthropic.png"),
     (r"\bclaude\b|Claude", "claude.png"),
     (r"\bcursor\b|Cursor", "cursor.png"),
@@ -194,7 +193,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--api-base", default=DEFAULT_API_BASE)
     parser.add_argument("--analysis-model", default=DEFAULT_ANALYSIS_MODEL)
     parser.add_argument("--image-model", default=DEFAULT_IMAGE_MODEL)
-    parser.add_argument("--api-key", default="", help="Optional API key. Prefer ZENMUX_API_KEY.")
+    parser.add_argument("--api-key", default="", help="已停用明文参数，请使用可信运行环境或外部凭据文件")
     parser.add_argument(
         "--api-key-file",
         type=Path,
@@ -294,12 +293,14 @@ def read_text(path: Path | None, limit: int = 60000) -> str:
 
 
 def api_key_from_args(args: argparse.Namespace) -> str:
-    key = args.api_key or os.environ.get("ZENMUX_API_KEY", "")
+    if args.api_key:
+        raise ValueError("--api-key 已停用；请从可信运行环境提供 ZENMUX_API_KEY，勿在命令中传密钥")
+    key = os.environ.get("ZENMUX_API_KEY", "")
     if not key and args.api_key_file and args.api_key_file.exists():
         key = args.api_key_file.read_text(encoding="utf-8").strip()
     if not key and not args.dry_run:
         fail(
-            f"ZENMUX_API_KEY is not set. Export it, put it in {DEFAULT_API_KEY_FILE}, or pass --dry-run."
+            "API Key 未配置。请按 references/api-key-setup.md 使用本机页面并通过 run 入口执行，或用 --dry-run 检查本地计划。"
         )
     return key
 
@@ -569,25 +570,27 @@ def infer_auto_logo_paths(args: argparse.Namespace, subtitle_text: str) -> list[
     if args.logo:
         return []
 
-    primary_text = "\n".join(part for part in [args.title, args.topic] if part)
-    fallback_text = subtitle_text[:4000]
+    # 有标题或主题时不从字幕补品牌；主产品缺资产也不能换成次要品牌。
+    search_texts = [text for text in (args.title, args.topic) if text.strip()]
+    if not search_texts:
+        search_texts = [subtitle_text[:4000]]
 
-    matched: list[Path] = []
-    seen: set[str] = set()
-    for text in [primary_text, fallback_text]:
+    for text in search_texts:
         if not text.strip():
             continue
+        matched: list[Path] = []
+        seen: set[str] = set()
         for pattern, filename in AUTO_PRODUCT_LOGOS:
             if filename in seen:
                 continue
             if re.search(pattern, text, flags=re.I):
+                seen.add(filename)
                 path = PRODUCT_LOGO_DIR / filename
                 if path.exists():
                     matched.append(path)
-                    seen.add(filename)
-        if matched:
-            break
-    return matched[:3]
+        if seen:
+            return matched[:3]
+    return []
 
 
 def convert_svg_to_png(src: Path, dst: Path) -> None:
@@ -695,14 +698,12 @@ def creator_portrait_plan(enabled: bool, overlay: dict[str, Any] | None = None) 
             "enabled": False,
             "mode": "none",
             "placement": "none",
-            "reserve_base_area": False,
         }
     return {
         "enabled": True,
         "mode": "local_code_composite",
         "asset": str((overlay or {}).get("path", DEFAULT_CREATOR_PORTRAIT_OVERLAY["path"])),
         "placement": "lower-right, right-edge anchored, bottom-clipped",
-        "reserve_base_area": True,
         "layouts": CREATOR_PORTRAIT_LAYOUTS,
     }
 
@@ -717,9 +718,7 @@ def creator_portrait_prompt_guard(aspect_key: str) -> str:
     )
     return (
         " Local portrait composite guard: keep the generated base entirely person-free. "
-        f"Reserve the bottom-right overlay-safe area {layout['safe_area']}; do not place the title, product "
-        "logo, small labels, or primary evidence there. Continue the background and only noncritical screen "
-        "detail beneath that area; do not draw a portrait, silhouette, placeholder, empty card, webcam bubble, "
+        "Do not draw a portrait, silhouette, placeholder, empty card, webcam bubble, "
         f"avatar, mascot, or character. After generation, deterministic local code will composite {CREATOR_NAME}'s "
         f"transparent paper-cut portrait at {layout['width_ratio']:.0%} of canvas width, {right_placement}, "
         f"top {layout['top_ratio']:.0%}, with natural bottom/right edge clipping."
@@ -827,15 +826,14 @@ def build_analysis_messages(
         "and remove irrelevant navigation, long transcripts, old subtitles, random avatars, paths, timestamps, and tiny noisy text. "
         +
         (
-            "The generated base must stay completely person-free. Reserve the deterministic lower-right portrait overlay-safe "
-            "area described below so the title, logo, labels, and primary evidence remain unobstructed. Do not draw the creator, "
+            "The generated base must stay completely person-free. Do not draw the creator, "
             "a silhouette, a placeholder, an avatar, a webcam bubble, a mascot, or any other person. A local code step adds the "
             "single supplied transparent paper-cut creator portrait after generation. "
             if args.default_creator_portrait
             else "This cover must stay completely person-free: do not add any human, face, creator portrait, avatar, webcam bubble, mascot, or character. "
         )
         +
-        "The final image generator is Zenmux openai/gpt-image-2. The local script only extracts frames, "
+        f"The final image generator is Zenmux {args.image_model}. The local script only extracts frames, "
         "copies files, saves prompts, calls Zenmux APIs"
         +
         (
@@ -855,18 +853,19 @@ def build_analysis_messages(
         "same instruction in different words, do not give conflicting numbers or directions, and never rely "
         "on post-processing to fix the prompt. Prefer a tight, unambiguous prompt over a long padded one. "
         "Visual quality bar, fold these naturally into the one prompt without padding: "
-        "(1) design an intentional colour scheme with real atmosphere: a clean light base (white, light "
-        "gray, or a very pale tinted paper) carrying a soft pastel colour atmosphere of 1-3 neighbouring "
-        "hues that blend gently at the edges/corners/behind the screen — name the hues explicitly, for "
-        "example dusty periwinkle + soft pink, or cream + pale gold. Sample hues from the frame or logo "
-        "but soften them to a creamy/dusty pastel; never the raw high-saturation UI colour (no acid lime, "
-        "no neon green, no electric blue, no fluorescent blocks) and never a full-spectrum rainbow. The "
-        "atmosphere must be clearly visible — a nearly colorless gray canvas reads as unfinished — yet "
-        "stay soft and airy. Pair it with one pastel keyword chip on the title whose hue echoes the "
-        "atmosphere; "
+        "(1) design an intentional colour scheme with real atmosphere and a high-contrast focal point: "
+        "a clean light base (white, light gray, or a very pale tinted paper) carrying a soft pastel colour "
+        "atmosphere of 1-3 neighbouring hues that blend gently at the edges/corners/behind the screen — name "
+        "the hues explicitly, for example dusty periwinkle + soft pink, or cream + pale gold. Sample atmosphere "
+        "hues from the frame or logo and soften them to a creamy/dusty pastel (never acid/neon or full-spectrum "
+        "rainbow on the background). Pair that soft background with ONE bold, high-contrast solid rounded pill "
+        "capsule enclosing line 2 of the title (e.g., vibrant coral red #F26B5B, warm amber #F07B3F, deep cobalt "
+        "#3B66F5, or rich emerald #2E8B57) with bold pure white text (#FFFFFF) inside, while line 1 stays deep "
+        "graphite (#1E2328) with a matching brush underline and 2 subtle impact ticks beside the pill; "
         "(2) make the screen/browser object intentionally overflow and get clipped by at least one canvas "
         "edge, showing only about 80%-95% of it while keeping a visible top-left window edge, for a premium "
-        "editorial close-up with real depth, never a small fully-centered complete screenshot; "
+        "editorial close-up with real depth, never a small fully-centered complete screenshot; preserve high-contrast "
+        "dark cards, timelines, or highlight bars inside the screen so it pops against the light background; "
         "(3) ground the screen with a soft graphite drop shadow plus a subtle contact shadow; "
         "(4) when the evidence is a row of cards or thumbnails, show 3 oversized cards fully plus a 4th "
         "clipped at the edge, not a flat strip of small ones; "
@@ -876,13 +875,15 @@ def build_analysis_messages(
         "0-degree rotation / no diagonal edge' default in the rules; keep all UI text readable and avoid "
         "extreme skew, fisheye, warping, or heavy rotation; "
         "(6) make the main title unmistakably large — the covers live in phone and desktop feeds: in the 3:4 portrait "
-        "prompt each title line spans about 90%-96% of the safe-area width with a cap height around 8%-12% "
-        "of the canvas height; in the 4:3 landscape prompt each title line's cap height is about 11%-15% of "
-        "the canvas height with 3-6 characters per line; treat the 4:3 cover as the Bilibili homepage primary "
-        "and the 16:9 cover as a separate personal-space companion; in the 16:9 prompt use the same cap-height "
+        "prompt each title line spans about 90%-96% of the safe-area width with a cap height around 10%-14% "
+        "of the canvas height; in the 4:3 landscape prompt each title line's cap height is about 16%-22% of "
+        "the canvas height with strictly 2 short lines of 3-5 characters per line; treat the 4:3 cover as the Bilibili homepage primary "
+        "and the 16:9 cover as a separate personal-space companion; in the 16:9 prompt use the same 16%-22% cap-height "
         "range and keep the title as the first anchor; "
         "when unsure, go bigger and break the title into "
-        "two short lines instead of shrinking it. "
+        "two short lines instead of shrinking it. Brand emphasis belongs in a readable logo/name lockup above the title, "
+        "not an extra headline or a reason to shrink the locked title. Remove optional subtitles and labels before "
+        "reducing headline size. Keep the headline dominant in the FINAL portrait-composited image. "
         "Return strict JSON only."
     )
     user_text = f"""
@@ -943,7 +944,6 @@ Output strict JSON with this schema:
     "enabled": {str(bool(args.default_creator_portrait)).lower()},
     "mode": "{'local_code_composite' if args.default_creator_portrait else 'none'}",
     "placement": "{'lower-right, right-edge anchored, bottom-clipped' if args.default_creator_portrait else 'none'}",
-    "reserve_base_area": {str(bool(args.default_creator_portrait)).lower()},
     "reason": ""
   }},
   "color_plan": {{
@@ -989,18 +989,18 @@ Important:
 - Choosing selected_frame is the single biggest quality lever. The candidate frames have already been locally prefiltered for technical quality (sharpness, brightness, content) and spread across the video, so they should all be reasonably crisp — spend your judgement on WHICH one best represents the subject: prefer the frame that most clearly shows the named tool/product actually in use (its real interface, panel, result, or action), fully visible, clean, and large. Still reject any that slipped through: blurry/motion-blurred, fade/transition, near-empty intros, loading states, mostly-plain-text, or frames where the main evidence is occluded, cropped, or tiny. If several frames are similar, pick the cleanest and most on-topic; list the next best ones in backup_frames.
 - The three prompts must explicitly mention exact 3:4, exact 4:3, and exact 16:9 respectively.
 - The prompts must include the mandatory visible background sentence from the rules.
-- The color_plan must follow the cover colour system from the rules: a clean light base plus a soft pastel atmosphere of 1-3 neighbouring hues, and one keyword-chip accent echoing the atmosphere. Write gradient_source as the named pastel hues (e.g. "dusty periwinkle + soft pink") and accent as the chip colour — creamy/dusty versions, never the raw saturated UI colour, never neon or full-spectrum rainbow.
-- The prompts must tell gpt-image-2 to create one complete final cover in one image.
+- The color_plan must follow the cover colour system from the rules: a clean light base plus a soft pastel atmosphere of 1-3 neighbouring hues on the background, paired with a bold, high-contrast solid pill capsule on line 2 of the title (e.g. coral red #F26B5B, warm amber #F07B3F, cobalt #3B66F5, or emerald #2E8B57) with pure white bold text (#FFFFFF). Write gradient_source as the named pastel background hues (e.g. "dusty periwinkle + soft pink") and accent as the solid pill colour.
+- The prompts must tell {args.image_model} to create one complete final cover in one image.
 - The prompts must preserve real tutorial evidence from the selected frame and remove unrelated people/webcam/avatar/subtitles from the source screen and rebuilt UI.
-- {"The prompts must keep the generated base person-free and reserve the lower-right portrait overlay-safe area. For 3:4 reserve x=48%-100%, y=56%-100%; for 4:3 reserve x=60%-100%, y=37%-100%; for 16:9 reserve x=62%-100%, y=37%-100%. Put no title, logo, label, or primary evidence there. Continue only background and noncritical screen detail under it; never draw a placeholder or portrait. The local script will composite the fixed transparent paper-cut portrait after generation." if args.default_creator_portrait else "The prompts must not add a creator portrait. Keep the final cover completely person-free: no human face, no avatar, no webcam bubble, no mascot, no character, and no portrait thumbnail."}
+- {"The prompts must keep the generated base person-free. Never draw a placeholder or portrait. The local script will composite the fixed transparent paper-cut portrait after generation." if args.default_creator_portrait else "The prompts must not add a creator portrait. Keep the final cover completely person-free: no human face, no avatar, no webcam bubble, no mascot, no character, and no portrait thumbnail."}
 - {"Do not request or depend on the creator portrait as a generation reference. The portrait is applied later at a fixed layout: 3:4 = 55% canvas width, 6% past the right edge, top 58%; 4:3 = 38% canvas width, 3% past the right edge, top 40%; 16:9 = 32% canvas width, 2% inside the right edge, top 40%." if args.default_creator_portrait else "Use software UI evidence, product logo, workflow chips, cursor marks, panels, and text hierarchy as the personal-brand signal instead of any person or face."}
-- The prompts must not copy the selected screenshot as-is. They must specify a screenshot distillation plan: keep only 2-3 essential UI signals, remove noisy sidebars/long text/unrelated details, and rebuild the screen area as a clean real-feeling UI.
+- The prompts must not copy the selected screenshot as-is. They must specify a screenshot distillation plan: keep only 2-3 essential UI signals, remove noisy sidebars/long text/unrelated details, and rebuild the screen area as a clean real-feeling UI that retains high-contrast dark cards, timelines, or highlight bars against the light background.
 - The prompts must include a visual communication plan: the one-glance subject, the primary evidence, the maximum size of supporting evidence, and what to delete/crop if the primary evidence becomes too small.
 - If the primary evidence is a row/grid/gallery/list of result cards, cover thumbnails, generated images, or comparison examples, the prompts must make those results large and readable as the dominant gallery. Do not shrink them into a faithful full-workspace screenshot.
-- The prompts must include a title decoration plan: the title area cannot be plain text only. Add 1-2 tasteful, content-related title accents such as a subtle keyword highlight, thin underline, small workflow label, cursor mark, bracket, or UI state chip derived from the current title, screenshot, subtitle, topic, or product identity.
+- The prompts must include a title decoration plan: enclose line 2 of the title in a bold, high-contrast solid rounded pill capsule with pure white bold text (#FFFFFF), keep line 1 in deep graphite (#1E2328) with a matching brush underline under the key term, and add 1-2 content-related accents such as subtle impact ticks beside the pill or a small product/workflow label above the title.
 - The prompts must not ask for local post-processing.
 - {subtitle_instruction}
-- For the 4:3 and 16:9 horizontal prompts, the main title must be the first visual anchor, while the selected screen evidence remains large and readable. Treat 4:3 as the Bilibili homepage primary upload asset and 16:9 as a separate personal-space companion. All prompts must state the title size explicitly (portrait: each line spans ~90%-96% of the safe-area width; landscape: cap height ~11%-15% of canvas height) so the title cannot come out small.
+- For the 4:3 and 16:9 horizontal prompts, the main title must be the first visual anchor, while the selected screen evidence remains large and readable. Treat 4:3 as the Bilibili homepage primary upload asset and 16:9 as a separate personal-space companion. All prompts must state the title size explicitly (portrait: each line spans ~90%-96% of the safe-area width with cap height ~10%-14%; landscape: cap height ~16%-22% of canvas height, strictly 2 short lines of 3-5 characters each, with line 2 enclosed in a bold high-contrast solid colour pill with white text) so the title cannot come out small.
 """
     content: list[dict[str, Any]] = [{"type": "text", "text": user_text}]
     for item in frames:
@@ -1196,9 +1196,118 @@ def strip_external_subtitle(prompt: str) -> str:
     return prompt.strip()
 
 
+def exact_title_lines(title: str, suggested_lines: Any = None) -> list[str]:
+    """Split a locked operator title without dropping or rewriting any text."""
+    value = " ".join(title.split())
+    if not value:
+        return []
+    if isinstance(suggested_lines, list) and suggested_lines and all(
+        isinstance(line, str) and line.strip() for line in suggested_lines
+    ):
+        candidates = [" ".join(line.split()) for line in suggested_lines]
+        position = 0
+        valid = True
+        for index, line in enumerate(candidates):
+            if not value.startswith(line, position):
+                valid = False
+                break
+            position += len(line)
+            if index < len(candidates) - 1:
+                if value[position:position + 1] == " ":
+                    position += 1
+                elif re.search(r"[A-Za-z0-9_.-]$", line) and re.match(
+                    r"[A-Za-z0-9_.-]", candidates[index + 1]
+                ):
+                    valid = False
+                    break
+        if valid and position == len(value):
+            return candidates
+    words = value.split(" ")
+    if len(words) == 1:
+        if len(value) == 1 or re.search(r"[A-Za-z0-9]", value):
+            return [value]
+        midpoint = max(1, len(value) // 2)
+        return [value[:midpoint], value[midpoint:]]
+    split_at = min(
+        range(1, len(words)),
+        key=lambda index: abs(len(" ".join(words[:index])) - len(" ".join(words[index:]))),
+    )
+    return [" ".join(words[:split_at]), " ".join(words[split_at:])]
+
+
+def lock_known_title(args: argparse.Namespace, analysis: dict[str, Any]) -> list[str]:
+    """Keep a supplied cover title exact in analysis and every generation prompt."""
+    if not args.title or not str(args.title).strip():
+        return []
+    exact_title = " ".join(str(args.title).split())
+    title = analysis.setdefault("title", {})
+    if not isinstance(title, dict):
+        title = {}
+        analysis["title"] = title
+    lines = exact_title_lines(exact_title, title.get("line_breaks"))
+    notes: list[str] = []
+    if title.get("main") != exact_title or title.get("line_breaks") != lines:
+        notes.append("locked the operator-supplied title verbatim.")
+    title["main"] = exact_title
+    title["line_breaks"] = lines
+
+    title_instruction = (
+        f"Title text: {json.dumps(exact_title, ensure_ascii=False)} with exact line breaks "
+        f"{json.dumps(chr(10).join(lines), ensure_ascii=False)}"
+    )
+    quoted_text = r'''(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')'''
+    # Consume the complete title clause, including model-specific "on line N"
+    # syntax. Quoted tokens protect decimal points and punctuation in titles.
+    clause_boundary = (
+        r"(?:[,;]\s*|\s+)(?:with\s+)?(?:a\s+)?"
+        r"(?:(?:optional|short|smaller|external)\s+)*subtitle\b"
+        r"|[.;](?=\s|$)|\n"
+        r"|\b(?:Composition|Colour system|Color system|Text style|Title decoration):"
+    )
+    title_clause = rf"Title text:\s*(?:{quoted_text}|(?!{clause_boundary}).)*"
+    title_rendering_guard = (
+        "Title rendering guard: render only the locked title text, with each word appearing "
+        "only as often as in that title. Apply highlights to existing title glyphs; do not add "
+        "another copy of a title word in a chip, badge, or decoration. If an emphasized phrase "
+        "crosses a title line break, style its existing fragments in place."
+    )
+    prompts = analysis.get("prompts", {})
+    if isinstance(prompts, dict):
+        for key, item in prompts.items():
+            if not isinstance(item, dict):
+                continue
+            prompt = str(item.get("prompt", ""))
+            replacements = 0
+
+            def replace_title(_match: re.Match[str]) -> str:
+                nonlocal replacements
+                replacements += 1
+                return title_instruction if replacements == 1 else ""
+
+            locked, count = re.subn(
+                title_clause,
+                replace_title,
+                prompt,
+                flags=re.I | re.S,
+            )
+            if not count:
+                locked = title_instruction + ".\n" + prompt
+            if title_rendering_guard not in locked:
+                locked += "\n" + title_rendering_guard
+            if locked != prompt:
+                item["prompt"] = locked
+                notes.append(f"{key}: locked exact title text in generation prompt.")
+    return notes
+
+
 def product_logo_guard(logos: list[dict[str, str]]) -> str:
     if not logos:
-        return ""
+        return (
+            " Product identity guard: no verified product logo reference is supplied. "
+            "Do not draw, invent, approximate, or substitute any standalone product logo, app icon, or brand mark. "
+            "Do not promote a supporting brand mentioned in the transcript. Use the exact product-name text and "
+            "the selected screenshot's real UI evidence for identity."
+        )
     names = ", ".join(Path(item.get("path", "")).name for item in logos if item.get("path"))
     return (
         " Product identity guard: use the supplied logo reference image"
@@ -1310,9 +1419,9 @@ def hard_rule_backfill(
         notes.append(f"{aspect_key}: backfilled contact shadow.")
 
     logo_guard = product_logo_guard(logos)
-    if logo_guard and "Product identity guard:" not in prompt and "logo reference" not in low:
+    if logo_guard and "Product identity guard:" not in prompt:
         prompt += logo_guard
-        notes.append(f"{aspect_key}: backfilled product logo reference.")
+        notes.append(f"{aspect_key}: backfilled product identity guard.")
 
     return prompt, notes
 
@@ -1328,14 +1437,20 @@ def apply_script_guards(
     Unlike the legacy link, this does NOT append distillation / visual / crop /
     decoration / layout guards onto every prompt. Those are the model's job now.
     We only enforce non-negotiables such as exact aspect, mandatory background,
-    depth cues, real logo, and the deterministic creator-overlay safe area when
-    the prompt omitted them.
+    depth cues, real logo, and the person-free base when the prompt omitted them.
     """
     if not isinstance(analysis, dict):
         return analysis
     logos = logos or []
     analysis["creator_portrait_plan"] = creator_portrait_plan(args.default_creator_portrait)
+    if not logos:
+        analysis["logo_plan"] = {
+            "outside_logo_or_mark": "",
+            "source": "",
+            "reason": "No verified logo reference matched the primary title/topic; keep identity text-and-UI-only.",
+        }
 
+    title_lock_notes = lock_known_title(args, analysis)
     title = analysis.setdefault("title", {})
     if isinstance(title, dict) and not args.allow_subtitle:
         title["subtitle"] = ""
@@ -1344,7 +1459,7 @@ def apply_script_guards(
     if not isinstance(prompts, dict):
         return analysis
 
-    postprocess_notes: list[str] = []
+    postprocess_notes: list[str] = list(title_lock_notes)
     for key, item in prompts.items():
         if not isinstance(item, dict):
             continue
@@ -1370,7 +1485,7 @@ def apply_script_guards(
             and "Local portrait composite guard:" not in prompt
         ):
             prompt += creator_portrait_prompt_guard(key)
-            postprocess_notes.append(f"{key}: reserved deterministic creator portrait overlay area.")
+            postprocess_notes.append(f"{key}: kept the base person-free for the local portrait composite.")
 
         item["prompt"] = prompt
 

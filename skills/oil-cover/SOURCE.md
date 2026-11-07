@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/oil-oil/oil-cover
 - Path: `.`
 - Ref: `main`
-- Pinned commit: `3a882c051532b7225879079117c0efbed5e1b5dd`
+- Pinned commit: `9e7f286bc8b0976b546b7712b9d4c0aec42a2ac9`
 - License: MIT
-- Synced at: 2026-08-14T06:06:36.113Z
+- Synced at: 2026-11-07T09:33:40.689Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
