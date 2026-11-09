@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/JimLiu/baoyu-skills
 - Path: `skills/baoyu-comic`
 - Ref: `main`
-- Pinned commit: `6b7a2e417500561a5ecdd0b168332f4142584617`
+- Pinned commit: `ca703c2d7c2c4399a1dc0cf82224f8551e05a96d`
 - License: MIT
-- Synced at: 2026-08-14T03:01:20.189Z
+- Synced at: 2026-11-09T10:49:42.567Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
