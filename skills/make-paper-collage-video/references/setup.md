@@ -42,4 +42,49 @@ npm run provider:status -- --compact-json
 
 The bootstrap owns npm installation and `.venv`; do not ask the human to activate Python manually.
 
+`npm install` may report dependency audit advisories. Those are not a production
+gate: `doctor -- --ready` is. Do not run `npm audit fix` on your own initiative —
+it can move the pinned runtime out from under `runtime-build.json` and invalidate
+every fingerprint the project has already recorded. Report the advisory and let
+the human decide.
+
+The bootstrap ignores OS bookkeeping entries (`.DS_Store`, `Thumbs.db`, and
+friends) when deciding whether a target directory is empty, and names the actual
+blocking entries when it refuses.
+
+For an existing workspace, inspect identity without writing:
+
+```bash
+node <plugin-root>/scripts/bootstrap-workspace.mjs \
+  --target=<cwd> --status-json
+```
+
+The JSON reports loaded Skill/installed plugin version, workspace marker and
+package versions, declared and recomputed runtime fingerprints, required
+commands, canonical process cwd/target identity, the exact upgrade command, and
+preserved user scopes. Production requires both `compatible=true` and
+`productionSessionCompatible=true`. If runtime identity is compatible but
+`session.targetMatchesCwd=false`, the plugin is not stale: the Codex task was
+started with the wrong primary local workspace. Stop and start a new task from
+the target; do not upgrade, copy managed runtime files, change extended
+attributes, or continue through a separately authorized shell path. Run status
+once per session/environment identity; do not repeat it after it passes unless
+one of those inputs changes.
+
+If the target already has a workspace marker from another plugin version, the
+bootstrap stops instead of silently reusing stale runtime code. Upgrade the
+managed runtime explicitly:
+
+```bash
+node <plugin-root>/scripts/bootstrap-workspace.mjs \
+  --target=<absolute-writable-workspace> --upgrade --install
+```
+
+Upgrade replaces only packaged schemas, scripts, renderer source, fixtures,
+tests, starter-demo, and dependency manifests. It preserves user projects,
+`public/projects` and `dist` entries other than starter-demo,
+`providers.local.json`, installed dependency/cache directories, and unrelated
+user files. `providers.json` is merged so existing selections remain while new
+optional capabilities become available.
+
 If setup fails, preserve the target and report the failed check, workspace path, safe resume command, and one required permission/dependency/provider action. Do not proceed to generation until required local checks pass.
