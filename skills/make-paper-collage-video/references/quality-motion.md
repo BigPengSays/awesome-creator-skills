@@ -22,11 +22,15 @@ unless the execution tree still reaches that file. A passing file does not prove
 that a person is inside a boat or trees remain above water. Both current quality
 scopes must pass.
 
-Run `project:quality <slug> prepare` after files exist. Then generate a fillable review batch with `project:quality <slug> scaffold --output=projects/<slug>/quality-review-scaffold.json --reviewer=<reviewer>`. The scaffold lists required/pending checks and current evidence records as `{file, sha256}` but never pre-populates `passedChecks`; inspect original-resolution assets in small same-type batches, make real decisions, and record the edited file. SHA-256 changes invalidate affected file reviews; changing a bound semantic contract or generation family also invalidates them.
+Run `project:quality <slug> prepare` after files exist. Then generate a review batch with `project:quality <slug> scaffold --output=projects/<slug>/quality-review-scaffold.json --reviewer=human:<id>`. The scaffold lists required/pending checks and current evidence records as `{file, sha256}` but never pre-populates `passedChecks`. Generate its contact sheet and show the current evidence to the human. Automatic code and AI may organize or measure evidence, but only the human decides seams, clipping, occlusion, damage, identity/style continuity, facing, loop cadence, depth, and composition. SHA-256 changes invalidate affected reviews; changing a bound semantic contract or generation family also invalidates them.
 
-The schema-v3 scaffold binds the complete report fingerprint, every target fingerprint, and every evidence-file hash. A composite is eligible only when a proof report contains both its current id and current fingerprint; scaffold generation stops instead of attaching an older same-id proof. `record-batch` rejects the whole input atomically when a report, target, or evidence file has changed, so an old scaffold cannot approve removed targets, miss new ones, or present stale frames. Generate a current bound review surface with `project:quality <slug> contact-sheet --input=projects/<slug>/quality-review-scaffold.json`; its index records the report fingerprint, source evidence hashes, and generated page hashes. Never display an older unbound contact sheet as current.
+The schema-v4 scaffold binds the complete report fingerprint, every target fingerprint, and every evidence-file hash, and adds per-composite `evidenceClasses` (`full`/`crop`/`debug`/`temporal`) plus a fingerprint-bound temporal evidence strip for every motion-bearing composite. A composite is eligible only when a proof report contains both its current id and current fingerprint; scaffold generation stops instead of attaching an older same-id proof. Motion-bearing targets (whole-film `motion-contract`, `style-target`, `state-sequence`, `spatial-contract`, `looping-environment`, `parallax-rig`, `motif-field`, `canonical-container`, `event`, `editorial-transition`) fail closed when the temporal strip is missing or stale — static full/crop/debug frames alone cannot pass a motion review. `record-batch` rejects the whole input atomically when a report, target, evidence file, or temporal evidence has changed, so an old scaffold cannot approve removed targets, miss new ones, or present stale frames. Generate a current bound review surface with `project:quality <slug> contact-sheet --input=projects/<slug>/quality-review-scaffold.json`; its index records the report fingerprint, source evidence hashes, and generated page hashes. Never display an older unbound contact sheet as current.
 
-Generating a non-empty scaffold starts one quality-review metric session and persists the scaffold's current evidence paths and hashes in the report; a successful `record-batch` closes it. If reviews remain, the command writes `quality-review-scaffold.pending.json`, reports the exact remaining IDs, and starts the next review session. The edited batch normally submits reviewer, pass/fail checks, and note. Omit `evidenceFiles` to inherit the current fingerprint-bound set, or provide it explicitly only to override that set. Keep those operations adjacent to the actual inspection so the session remains useful. The window intentionally includes host vision/tool orchestration and must not be described as raw model inference latency.
+Generating a non-empty scaffold starts one quality-review metric session and persists the scaffold's current evidence paths and hashes in the report. If the human approves the complete current surface, `accept-human --reviewer=human:<id> --note="<human wording>"` records all pending checks once and closes the session. If the human identifies defects, use the fingerprint-bound batch to record only the explicit failures; after revision, generate one new current surface. Any pass/fail payload with a non-human reviewer or empty note is rejected. Omit `evidenceFiles` to inherit the current fingerprint-bound set, or provide it explicitly only to override that set.
+
+### Early Batch Review
+
+Do not hold all human review until every asset exists. After a production batch completes, run `scaffold --assets=<id,...>` or `--scene=<sceneId>`: this writes a `reviewScope=batch` subset scaffold to `quality-review-scaffold.batch.json` (its contact sheets go to a separate `-batch` directory), show that sheet to the human, and record the decision with the same `accept-human`/`record-batch` commands against the batch scaffold. Reviews are per-asset, so an early decision is recorded once and the final full review only covers what remains. A batch scaffold binds the same current report fingerprint as a full one — recording new work invalidates it, so regenerate rather than reuse. Batch review is optional and never blocks production; the final `assertQualityReady` semantics are unchanged.
 
 Registered members add topology-sensitive asset checks: `silhouette-fidelity`, `negative-space-clean`, and `background-leak-free`. A `supported-subject` composite also requires `motion-isolation-clean`. Passing any of those checks requires `evidenceFiles` from the current proof bundle. `key-edge-clean` only detects matte/color contamination; hard 0/255 alpha can pass that check while still deleting a limb or carrying background pixels.
 
@@ -133,7 +137,7 @@ fingerprint-bound.
   "reviews": [
     {
       "assetId": "traveler-subject",
-      "reviewer": "host-vision",
+      "reviewer": "human:reviewer",
       "passedChecks": ["subject-complete", "edge-clean", "silhouette-fidelity", "negative-space-clean", "background-leak-free"],
       "failedChecks": [],
       "evidenceFiles": [
@@ -202,11 +206,11 @@ batch file, using `compositeId` instead of `assetId`:
 Semantic targets use ids such as `semantic:recurring-cast:cast-comparison`. When a target spans scenes, inspect every generated crop together before passing continuity. When a mechanism target is reviewed, explicitly compare its crop with the declared parts, connections, load paths, degrees of freedom, forbidden forms, and reference evidence.
 
 ```bash
-npm run project:quality -- <slug> record-batch --input=<reviews.json> --quiet
+npm run project:quality -- <slug> accept-human --reviewer=human:<id> --note="<human approval wording>" --quiet
 ```
 
 Never pass a semantic check merely to unblock production. Changing a member, mask, group transform, boundary, anchor, keyframe, event, scene transition, or proof time changes the composite fingerprint and invalidates that review.
-Replacing or editing a recorded evidence file also invalidates its review. At the style gate, each member review must reference that proof bundle's alpha mask, checkerboard, tight crop, and motion-stress sheet; the composite review must reference its full/crop/debug proof frames and member motion-stress sheets. An unrelated screenshot cannot satisfy the gate.
+Replacing or editing a recorded evidence file also invalidates its review. During production review, each member decision must reference that proof bundle's alpha mask, checkerboard, tight crop, and motion-stress sheet; the composite decision must reference its full/crop/debug proof frames and member motion-stress sheets. An unrelated screenshot cannot satisfy the review.
 
 Quality also creates exactly one `motion-contract:whole-film` target whenever a
 compiled motion contract exists. Review establish/action/settle phrase coverage,
@@ -268,6 +272,9 @@ changes do not leave an orphaned one- or two-character tail.
 - `spatial-contract/gait`: all requested registered locomotion states occur inside the window, measured state changes per second meet the authored minimum, `activeUntil` does not precede the final locomotion proof, and the last active transition is close enough to the window end to reject a terminal freeze. If an exit sequence follows, additionally prove its ordered brake/landing/contact states and the final held contact state.
 - `spatial-contract/travel-facing`: the assembled pre-camera subject path has the authored signed displacement, contains no reverse segment, every active state both declares and visibly exhibits the expected facing, and a matching `gait` contract proves that the moving character is actually cycling locomotion states. Inspect the arrow overlay and both endpoint crops; metadata alone cannot pass the human `travel-facing-readable` check.
 - `spatial-contract/path-locomotion`: the assembled subject travels the required physical screen and optical-depth distance and directions; perspective scale and dynamic depth order visibly follow `z`; rendered rotation stays within the authored heading-error and turn-rate limits; every requested registered locomotion state cycles at the minimum cadence through the proof window; camera follow binds the same target and coherent world; and every sampled viewport stays inside declared world bounds. Inspect start, every named turn/depth reversal, end, the 3D path polyline, depth values, and heading arrows. Human review must pass `path-travel-clean`, `path-heading-readable`, `turn-continuity-clean`, `depth-projection-readable`, `depth-order-clean`, `camera-follow-coverage-clean`, and `locomotion-cycle-bound`.
+- `spatial-contract/occlusion`: when `in-front-of-subject`, the foreground paints above the subject and its alpha-tight bounds overlap the subject at every proof time; the subject is never lifted above the foreground merely to stay visible. Inspect the debug overlay and both alpha masks; declared metadata alone cannot pass.
+- `spatial-contract/action-sequence`: establish/action/peak/settle phases are strictly ordered and resolve their states and signed travel; the narration cue fires inside the window and every listed actor owns a trajectory/occlusion contract. Inspect the phase crops and cue labels together, never only the final endpoint.
+- Registered geometry: every registered pose-family/layer family passes alpha-tight centroid, baseline, aspect/proportion, and scale drift limits, and silhouette-facing agrees with the declared facing; a mirrored or drifting member fails before review.
 - Alpha-topology inspection treats detached components as intentional when
   their full-canvas bounds are declared by a current `semanticSliceBinding`, or
   when the asset is a typed multi-component scenery/foreground strip or a
@@ -339,6 +346,14 @@ whitespace normalization, use ordered cue ranges inside
 the narration window, and cover at least 80% of that window. The renderer uses
 duration-aware fades, so a short cue never receives overlapping interpolation
 stops, and places the subtitle inside the active responsive safe area.
+
+When a scene has a local conflict (a bird, title, or foreground that the
+global safe area cannot avoid), author `editorial.sceneDirecting[]` with
+`subtitlePlacement`: a per-scene anchor, safe-area rectangle, and exclusion
+zones. The runtime renders cues inside that scene rect, and the subtitle
+contract rejects any scene whose placement still intersects a non-subtitle
+exclusion zone. The encoded subtitle sheet is the review surface for the
+resolved placement.
 
 The final report repeats those machine checks and extracts one frame from the
 encoded video for every narrated scene into `subtitle-contact-sheet.jpg`. Treat
