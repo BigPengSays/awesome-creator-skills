@@ -11,11 +11,17 @@ Read this only when creating/changing project files or diagnosing validation/sta
 | `production-metrics.json` | Versioned wall-clock segments and observation-window summaries for production monitoring |
 | `storyboard.json` | Approved schema-v12 motion direction, beat performance roles/treatments, editorial authoring, scene boundaries, layer source packages, and compiler-owned motion/edit/directing/proof plans and fingerprints |
 | `motion-language-card.json` | Human-readable whole-film action grammar, pacing, scene phrases, final holds, exceptions, and approval/execution fingerprints |
-| `motion-approval.json` | Attributable style/voice-gate approval binding the human note, Style Profile, motion fingerprints, and style proof |
-| `project.json` | Frozen executable Style Profile, compiled motion contract, materialized theme, Creative Plan v4 ceilings/cap/source-package decision, and v12 Remotion execution tree |
-| `requests/*.json` | Per-output generation/import request plus exact style/composition binding |
+| `dist/<slug>/visual-blueprint/index.json` | Same-source low-resolution full-film animatic, every-scene keyframes, motion clips, source coverage, and exact geometry/timing/runtime fingerprint |
+| `visual-blueprint-review-request.json` | Hash-bound list of the current visual artifacts that must be shown to the human |
+| `visual-blueprint-review-receipt.json` | Host-attributed current user-message decision bound to that request |
+| `visual-blueprint-approval.json` | Attributable human approval of the current visual blueprint |
+| `motion-approval.json` | Attributable style/voice-gate approval binding the human note, Style Profile, motion fingerprints, and visual blueprint |
+| `project.json` | Frozen executable Style Profile, compiled motion contract, materialized theme, Creative Plan v4 ceilings/cap/source-package decision, exact provider-root plan, and v12 Remotion execution tree |
+| `sound-effect-plan.json` | Deduplicated compiled sound cues, provider outputs, and exact scene/beat/event bindings |
+| `requests/*.json` | Per-output generation/import request plus exact style/composition/provider-root binding |
 | `semantic-contracts.json` | Reusable identity, topology, mechanism, diagram, and evidence-target invariants |
 | `generation-attempts.jsonl` | Append-only quota reservation and real provider-attempt outcomes |
+| `failure-circuit.jsonl` | Append-only command/provider/human-review failures and explicit circuit resolutions |
 | `assets-manifest.json` | Provider provenance, source families, fingerprints, hashes, and active/superseded/rejected/recovery-source lifecycle |
 | `world-topology-proof.json` | Provider-free current-world structure proof required before any looping-environment image attempt |
 | `quality-report.json` | Hash-bound current asset/composite quality plus non-current asset history |
@@ -24,27 +30,39 @@ Read this only when creating/changing project files or diagnosing validation/sta
 
 Never ask the human to edit machine JSON. Paths in `project.json` are relative to `public/`; production artifacts are relative to the workspace root. A confirmed project must carry `intake.schemaVersion=2` plus a complete `styleProfile` snapshot whose catalog/profile fingerprints still match the current built-in catalog. Pending intake must keep `styleProfile=null`.
 
-`production-metrics.json` records wrapped command time, quality-review sessions, and image-attempt windows. Its `summary.aiReview.percentOfObservation` is the comparison field for AI-review share. Review sessions include host-model inspection, tool orchestration, and any pause before `record-batch`; image attempts likewise include the full reserve-to-close window. The runtime does not estimate provider-only inference time or tokens when the host does not expose them. `summary.unattributedMs` is deliberately unlabeled because it can contain human waits, agent work, or uninstrumented operations. A lazily created file for an older project reports partial coverage.
+`production-metrics.json` records wrapped command time, human quality-review sessions, and image-attempt windows. Current visual decisions appear under `summary.byCategory["human-review"]`; the legacy `summary.aiReview` field remains an explicit measurement of any automated review work and should normally stay zero for visual pass/fail. Review sessions include evidence presentation and the wait until the human decision; image attempts likewise include the full reserve-to-close window. The runtime does not estimate provider-only inference time or tokens when the host does not expose them. `summary.unattributedMs` is deliberately unlabeled because it can contain human waits, agent work, or uninstrumented operations. A lazily created file for an older project reports partial coverage.
 
 ## Normal State Path
 
 | Stage | Successful action | Next |
 |---|---|---|
 | `capability-review` | `project:intake`, `project:scenarios`, then `project:confirm-concept` | `style-review` after intake and combined scenario/profile/budget/provider approval |
-| `style-review` | `approve-style-voice` | `asset-production` |
+| `style-review` | one style sample + displayed `project:visual-blueprint`, then `project:visual-review ... approve` with a current human receipt | `asset-production` |
 | `asset-production` | `project:assets-ready` | `preview` |
 | `preview` | successful `project:preview` | `human-review` |
 | `human-review` | `approve-preview` | `final-render` |
 | `final-render` | successful `project:render` | `complete` |
 
-The combined confirmation is the normal path. Composition proof is machine evidence inside the existing style or asset stage, not a fourth human gate.
+The combined confirmation is the normal path. The visual blueprint is the
+single existing style/voice decision surface, not a new stage. Composition and
+technical proofs remain machine evidence inside asset production, not another
+human gate.
 
 `complete` is the only local terminal stage. After a human separately authorizes
 a named external destination/action, `approve-publish` records that exact
 authorization while leaving the stage at `complete`; it is an audit event, not
 an additional stage.
 
-After `request-preview-revision`, a directing-only change uses `project:revise-preview-directing`. It preserves approved concept/style semantics, recompiles the edited authoring fields against the existing motion budget, records `directing-revision.json`, invalidates old render/proof artifacts, and creates execution-sync work items. Concept, factual, provider, or production-profile changes still require their owning approval path.
+After `request-preview-revision`, a directing-only change uses
+`project:revise-preview-directing`. It preserves approved concept/style
+semantics, recompiles the edited authoring fields against the existing motion
+budget, synchronizes the changed execution tree, and writes storyboard,
+project, revision report, and production state as one transaction. If a new
+state/source cannot be inferred, a scoped `--execution` candidate must provide
+it; unresolved or out-of-scope execution changes fail before any write. The
+command invalidates old render/proof artifacts and creates revalidation work
+items. Concept, factual, provider, or production-profile changes still require
+their owning approval path.
 
 An explicitly approved image-budget increase after concept approval uses
 `project:increase-image-budget`. It leaves the production stage and original
@@ -54,7 +72,7 @@ used/reserved counts, profile ceiling, timestamp, and human note. The command
 is increase-only and rejects missing approval, broken revision chains, or a cap
 above the current profile hard ceiling. Never hand-edit the machine plan.
 
-Those execution-sync work items are delivery gates, not advisory history.
+Those post-revision validation work items are delivery gates, not advisory history.
 `project:assets-ready` may atomically complete pending/in-progress
 `directing-revision-*` items only after the current seal proves that the
 storyboard and project execution tree are synchronized and all dependent
@@ -72,23 +90,27 @@ report, and contact-sheet artifact. A `locked-static` scene may lower only the
 three motion-scene floors recorded in `profilePromiseRevision`; state-family,
 layer, call, and semantic-action promises remain fixed.
 
-`approve-style-voice` requires a current schema-v7
-`style-motion-proof.json` with `scope=style`, bound to the compiler-owned
-multidimensional `styleProofPlan`, both motion-contract fingerprints, and its complete target list. The
-plan covers the highest semantic-risk classes, every concrete coupled
-relationship, and state-sequence behavior while minimizing distinct source
-families. Every selected target, including `free`, must have at least one
-structured composite with current full-resolution frame/crop/debug evidence.
-Registered or semantic targets additionally bind member hashes, timing/proof
-inputs, runtime build, and source family. Ordinary coupled families require
-per-member alpha/checkerboard/tight/motion-stress evidence. A
-`registered-depth-stack` instead adds neutral reconstruction, reference
-comparison, checkerboard exploded members, and both extremes of all three
-responsive reveal envelopes. A stack with `subjectTravelEnvelope` additionally
-proves both subject-only lower-left/upper-right extremes in all three profiles.
-Participating asset/composite semantic checks must
-already be recorded. This is an executable precondition inside `style-review`,
-not another approval state.
+`project:visual-review ... approve` requires a current schema-v2 visual
+blueprint, its hash-bound review request, a host-attributed user-message receipt,
+and exactly one active story-specific style sample. A free-text
+`approve-style-voice` note, blanket autonomy, user absence, silence, or a
+machine result cannot mint approval. The blueprint contract is derived from
+the final schema-v12 execution tree while omitting only replaceable source
+paths, hashes, and provider provenance. It therefore binds every scene,
+duration, transform, z-order, camera, state-facing/playback schedule, path,
+event, proof time, and transition to the current runtime. The renderer retains
+real sources already present and substitutes deterministic labeled proxies only
+for missing production sources. The review package contains a complete
+low-resolution animatic, start/middle/end frames for every scene, and short
+clips for motion-bearing scenes. The blueprint records whether current project
+audio was retained or which narration/music/event sounds were omitted or
+replaced by silence. Machine checks establish coverage, existence, hashes,
+freshness, and this disclosure only; a human makes the visual decision after
+the media is actually displayed. Approval atomically writes the review receipt,
+`visual-blueprint-approval.json`, `motion-approval.json`, and production state. Every
+non-style-sample provider request and `project:assets-ready` require that
+approval to remain current. Replacing a proxy with a real source is legal;
+changing the visual contract requires a new blueprint and human decision.
 
 A mixed-surface registered sheet records the untouched provider-native RGB/RGBA
 file as the provider root. `assets:derive-registered-family` is the only formal
@@ -118,12 +140,41 @@ pair.
 Schema v12 is the only supported Project, Storyboard Authoring, and Compiled
 Storyboard contract. Creative Plan v4 owns the approved profile, its planning
 ceiling, and `approvedImageBudget`: the narrower exact attempt cap authorized by
-the human. The storyboard compiler owns
+the human. Creative Plan v4 is a section **inside `project.json`** — there is no
+separate `creative-plan.json` file. The storyboard compiler owns
 `directingSummary.generationBudget`, including exact structural source-package
 calls, pose-sheet calls, reserve, local derivatives, and avoided calls. Concept
-approval copies the compiled `sourcePackageDecision` exactly and requires
-`budgetDecision.imageAttemptLimit`; it records expected calls and the profile
-ceiling at approval time. Provider requests cannot silently add or change a
+approval requires an exact `sourcePackageDecision`, which is a four-key
+projection of that budget (`requiredProviderImageCalls`,
+`expectedProviderImageCalls`, `hardCeiling`, `sourcePackagePlans`) — not the
+whole `generationBudget` object. Do not rebuild it by hand: take it from
+`project:storyboard -- <slug> --input=<file> --json`, or let
+`project:confirm-concept -- <slug> --scaffold` emit the entire selection file.
+Concept approval also requires `budgetDecision.imageAttemptLimit`; it records
+expected calls and the profile ceiling at approval time.
+
+### What each call count includes
+
+The scenario card and the compiled storyboard deliberately count on different
+bases, so their numbers are not expected to match. Reconciling them by hand is
+the wrong move — take each from its own owner.
+
+| Field | Owner | Style sample | Pose-sheet calls | Pose-sheet avoided calls |
+| --- | --- | --- | --- | --- |
+| `providerEstimate.expectedImageCalls` | scenario card | included (always 1) | included | — |
+| `providerEstimate.avoidedCalls` | scenario card | — | — | included |
+| `generationBudget.requiredProviderImageCalls` | storyboard | **excluded** | included | — |
+| `generationBudget.expectedProviderImageCalls` | storyboard | **excluded** | included | — |
+| `generationBudget.avoidedCalls` | storyboard | — | — | **excluded** |
+
+On the storyboard side `expectedProviderImageCalls` is by construction equal to
+`requiredProviderImageCalls`; there is no reserve added between them. The one
+style sample is authorized separately at the style gate, which is why the
+storyboard budget never carries it. `generationBudget.avoidedCalls` counts only
+what layered source packages avoid; the isolated-state calls a pose sheet avoids
+are reported by the scenario card and by `summary.directing.avoidedIsolatedStateCalls`.
+
+Provider requests cannot silently add or change a
 layer package afterward, and storyboard call-count drift invalidates the budget
 approval. A scene has
 `composition.nodes`; nodes are recursive `asset`, `state-sequence`,
@@ -136,17 +187,32 @@ regenerate their equivalent output from the latest contract when needed. There
 is no legacy loader, dual schema, deprecated field, compatibility adapter, or
 version-conditioned renderer branch.
 
-Layer-capable planning and storyboard source-package strategy names and costs
-are identical. `rigid-master` costs one provider call,
-`registered-layer-sheet` costs one and produces three deterministic members,
-while `context-preserving-layer-edits` costs four and produces the same three
-members from full-canvas edits. Planning additionally counts an ordinary
-`single-background` as one call with no derivatives; it is not copied into the
-compiled layer-package decision. The scenario compiler rejects any
-hand-authored provider/local/avoided count that disagrees with these contracts.
-A low-resolution registered sheet is not made acceptable merely because its
-members preserve a complete canvas; viewport-filling members must also retain
-sufficient provider-native pixels at their maximum display scale.
+Layer-capable planning and storyboard source-package strategy names and
+per-strategy call/derivative costs are identical and defined once in
+`layer-complete-assets.md`; the scenario compiler rejects any hand-authored
+provider/local/avoided count that disagrees. Planning additionally counts an
+ordinary `single-background` as one call with no derivatives; it is not copied
+into the compiled layer-package decision. A low-resolution registered sheet is
+not made acceptable merely because its members preserve a complete canvas;
+viewport-filling members must also retain sufficient provider-native pixels at
+their maximum display scale.
+
+Every scenario-bound plan compiles one fingerprinted `providerRootPlan`. It has
+exactly one root for the story-specific style sample, every
+`single-background`, every role/call of each structured source package, and
+every provider pose sheet not owned by a canonical container. Its root count
+must equal `expectedProviderImageCalls`; an estimate without that exact
+inventory is not executable approval.
+
+Every scenario-bound `provider-generation` or `provider-edit` image request
+binds exactly one current root through `scenarioRootBinding`. The request must
+also match that root's scene, source package/role, or pose family. A
+`manual-import`, local SVG/Canvas drawing, deterministic derivative, unrelated
+provider output, or stale plan binding cannot fulfill a root. At
+`project:assets-ready`, every root must resolve exactly once to an active
+provider record or a formally registered rejected-output `recovery-source`.
+Missing, duplicate, manually substituted, unknown, or stale roots are hard
+errors and are included in the assets-ready seal.
 
 For a scenario-bound plan, the generic scene-count motion budget is only the
 minimum baseline. `project:plan` may raise `maxPoseSheetCalls`,
@@ -455,12 +521,12 @@ before/at/after frames.
   responsive/transition plans, `directing`, fingerprints, risk ranking, or
   pose-sheet grids. `project:storyboard` deterministically compiles those
   derived fields and default transition recipes, then rejects drift.
-- Scene id, blueprint, compiled `compositionPlan`, proof ids/times/assertions/stateAssertions, and beat ids must match the approved storyboard. Beat-bound, treatment-bound, and state-bound proof intent is immutable.
+- Scene id, blueprint, compiled `compositionPlan`, proof ids/times/assertions/stateAssertions, and beat ids must match the approved storyboard. Beat-bound, treatment-bound, and state-bound proof intent is immutable. `stateAssertions` are execution/proof coverage, not story meaning; changing them routes through deterministic directing sync instead of fabricating a semantic revision.
 - A compiled continuous target must exist and have visible keyframe/idle motion. `parallax-camera` additionally requires enabled camera parallax and a real depth spread. `scroll-world-x` instead requires one matching `looping-environment` whose axis, direction, distance, speed bounds, ground/tracked ids, seam proof ids, start phase, optional normalized `activeFrom` cue, optional terminal `activeUntil` lock, or `frozen=true` lock, and ordered strip roles/depths exactly match the compiler-owned plan. Before `activeFrom`, the world phase is held; when `activeUntil` is present the completed phase remains locked thereafter, otherwise the full authored travel completes by scene end. A frozen world holds phase throughout and must provide `world-lock-clean` evidence; a terminally locked travelling world must provide both its ordinary world-motion evidence and `world-lock-clean`. A compiled path target must exist as one matching `state-sequence` with exact `motion.path`, independent compiled loop playback, explicit camera-follow decision, and one matching `path-locomotion` spatial contract; ordinary x/y/rotation keyframes are forbidden on that target. A compiled `motif-field` target must exist with the exact preset, distribution, count, cycles, bounds, exclusions, and optional world binding; a world-bound target must resolve to an actual top-level looping world strip. A compiled visibility target must have a matching persistent event and truthful initial state; a compiled generic graphic target must exist as the declared editable node. A compiled `role=visual-sfx` graphic must be editable typography with exact text, start hidden, bind the same beat and discrete `soundCue`, and execute synchronized `fade-scale` show, declared emphasis, and `fade-scale` hide around its Profile-bounded duration. Every compiled state family must exist as one matching `state-sequence` node including its resolved playback plan.
 - Each scene has establish, action/peak, and final proof moments; final remains at or after `0.82` and proofs stay outside scene-boundary intervals.
 - A final state assertion must resolve to one fully opaque state, remain outside any state crossfade for at least that transition duration, and preserve the asserted state through the scene end.
 - Every node keyframe path starts at `0`, ends at `1`, and authors at least one of `offsetX`, `offsetY`, `scale`, `rotation`, or `opacity`; legacy node-keyframe `x`/`y` is invalid rather than ambiguously interpreted.
-- `scene.events` is the only visual/sound event source. Every storyboard beat has one or more ordered events; event drift is at most `0.035` normalized units.
+- `scene.events` is the only visual/sound event source. Every storyboard beat has one or more ordered events; event drift is at most `0.035` normalized units. Every compiled sound plan entry binds the exact registered output path to its approved beat; narration never satisfies `soundCue`.
 - A visibility event targets an existing composition node and persists after its window. A first `show` requires `visibility.initial=hidden`; a first `hide` requires an initially visible node. Supported transitions are `cut`, `fade-rise`, and `fade-scale`.
 - Emphasis events are transient and use the bounded actions from `schemas/composition.schema.json`, including `drop-impact` and `carve`. They do not control persistent visibility.
 - Bind a critical event to `proofTimeId`. Transient emphasis/hold proof remains inside its action window; visibility proof may show the settled persistent state after the action starts and before the same target's next visibility change. If the approved beat names audio, at least one matching event owns both that proof id and the sound.
@@ -480,13 +546,32 @@ hidden pixels are complete. It never treats a cache entry as current without
 matching source/config/registered-derivation/render-size/runtime fingerprints
 and existing evidence files. `--force` disables frame, composite, and
 asset-evidence reuse and records that decision in the report.
-`project:assets-ready` rejects missing/stale proof fingerprints, open generation
-reservations, missing or exceeded human-approved attempt caps, pending/failed asset or composite quality,
+`project:assets-ready` first recomputes the checked-in `runtime-build.json` and
+rejects any locally drifted schema, validator, quality, or rendering surface.
+It rejects missing/stale proof fingerprints, open generation reservations,
+missing or exceeded human-approved attempt caps, incomplete provider-root
+realization, pending/failed asset or composite quality,
 and audio without either a passing preflight or a fingerprinted, explicitly
 accepted calibration decision. It then writes `assets-ready-seal.json`. Low-level
 `project:advance ... assets-ready` and both render modes only accept a current
 seal; any project, source media, storyboard, quality, subtitle, or runtime change
 invalidates it and routes back through the canonical command.
+
+Automatic quality code may measure file readability, dimensions, alpha
+topology, registration, fingerprints, timing bindings, and proof completeness.
+It may not decide seams, clipping, occlusion appearance, damaged artwork,
+identity/style continuity, facing readability, loop cadence, depth readability,
+or overall composition. Those semantic checks require `reviewer=human:<id>` and
+the human's note. Generate one current fingerprint-bound contact sheet, show it
+to the human, and use `accept-human` for one whole-surface approval.
+
+Every wrapped production failure records the operation, input fingerprint, and
+normalized failure signature in `failure-circuit.jsonl`. One unchanged failed
+input is blocked even with `--force`. The second occurrence of the same failure
+opens a circuit and stops autonomous retries until an explicit human resolution
+is appended with `project:failures`. A changed input that succeeds resolves a
+single prior command failure; it never auto-resolves an open circuit or a human
+review stop.
 
 Fix a wrong mask, crop, anchor, registration, or derivative without another human decision when the approved meaning and budget remain unchanged. Regenerate `project:style-proof` or `project:composition-proof` after the fix; member hashes invalidate prior evidence automatically. Return to concept only when the relationship meaning changes. Return to provider/budget approval only for a provider switch or budget increase. Never hide a contract failure with arbitrary z-index, pixel nudges, or a coarse polygon matte.
 
