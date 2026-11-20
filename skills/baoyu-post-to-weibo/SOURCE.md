@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/JimLiu/baoyu-skills
 - Path: `skills/baoyu-post-to-weibo`
 - Ref: `main`
-- Pinned commit: `6b7a2e417500561a5ecdd0b168332f4142584617`
+- Pinned commit: `bf1ff076e25f8da4a339eb1c8cf03361fea5ea4c`
 - License: MIT
-- Synced at: 2026-08-14T03:00:56.648Z
+- Synced at: 2026-11-20T10:51:40.197Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
