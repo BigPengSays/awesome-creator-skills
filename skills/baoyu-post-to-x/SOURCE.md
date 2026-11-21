@@ -5,8 +5,8 @@ This directory is a mirror. Copyright remains with the original authors.
 - Repository: https://github.com/JimLiu/baoyu-skills
 - Path: `skills/baoyu-post-to-x`
 - Ref: `main`
-- Pinned commit: `6b7a2e417500561a5ecdd0b168332f4142584617`
+- Pinned commit: `bf1ff076e25f8da4a339eb1c8cf03361fea5ea4c`
 - License: MIT
-- Synced at: 2026-08-14T02:13:59.191Z
+- Synced at: 2026-11-21T10:35:34.391Z
 
 Do not edit these files to customize behavior. Local patches belong outside this mirror, or mark the catalog entry `sync: false`.
