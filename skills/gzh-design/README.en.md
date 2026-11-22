@@ -1,3 +1,5 @@
+> 🏠 **Main repository: [github.com/isjiamu/gzh-design-skill](https://github.com/isjiamu/gzh-design-skill) ｜ Mirror on AtomGit**: [atomgit.com/zuiyn/gzh-design-skill](https://atomgit.com/zuiyn/gzh-design-skill)
+
 > 🤝 **A joint project by Jiamu × [Moyu Xiaoli (摸鱼小李)](https://mp.weixin.qq.com/s/EMahAzgfAbRQrYukWE7_IQ)** — the components, theme design and quality bar are shaped by both authors' hands-on WeChat publishing practice. Special thanks to Xiaoli.
 
 <div align="center">
