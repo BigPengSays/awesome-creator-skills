@@ -15,9 +15,21 @@ Draft minimum coherent beats and estimate spoken duration before resolving the p
 
 ## Run Intake Before Cost Planning
 
-For a title-only request, run `project:intake -- <slug> --json` immediately
-after `project:new`. Show every returned local style-card image before the Ask
-Question UI, then collect:
+For a title-only request, run the following immediately after `project:new`,
+using the plugin root from the Skill path actually loaded into the task:
+
+```bash
+npm run project:intake -- <slug> --json \
+  --presentation-root=<plugin-root>/assets/remotion-template
+```
+
+The command verifies that the workspace and loaded-plugin catalogs have the same
+complete fingerprint. It returns a runtime path plus a separately authorized
+presentation path for each card. Show every returned `presentationPath` before
+the Ask Question UI; never show `runtimePath`, copy the files, remove extended
+attributes, or fall back to a different cache. If one cannot actually be
+displayed, stop at intake and report the host media/workspace scope failure.
+Then collect:
 
 - `16:9` (1920×1080) or `9:16` (1080×1920);
 - one of the current catalog entries, identified by its returned id and label;
@@ -77,14 +89,12 @@ basis, final-film effect, and these compiled figures:
 - local derivatives and provider calls avoided;
 - `profilePromise` and planned fulfillment.
 
-Layer-capable scenario source packages use the same production names and exact
-costs as the storyboard compiler: `rigid-master` is 1 provider call with no
-local members, `registered-layer-sheet` is 1 call plus 3 deterministic
-full-canvas members and 3 avoided calls, and
-`context-preserving-layer-edits` is 4 calls plus 3 local members and no avoided
-calls. An ordinary `single-background` is also one call with no derivatives,
-but it is intentionally not a compiled layer package. Do not use any other
-planning-only aliases or hand-author different counts. Before proposing a
+Layer-capable scenario source packages use the exact strategy names and
+compiled per-strategy call/derivative counts defined in
+`layer-complete-assets.md`; the scenario compiler rejects any hand-authored
+count that disagrees. An ordinary `single-background` is one call with no
+derivatives, but it is intentionally not a compiled layer package. Do not use
+any other planning-only aliases. Before proposing a
 registered sheet for a viewport-filling environment, compare the
 provider-native sheet cell dimensions with the largest authored display size
 and camera zoom. A 2x2 package that would make one full-screen member
@@ -113,9 +123,21 @@ drift returns to this same gate with a revised exact card.
 
 The resulting Creative Plan remains schema v4 but adds `storyScope`,
 `scenarioBinding`, and `profilePromise`. The scenario and option fingerprints
-prevent a stale card from authorizing a changed plan. `project:plan --json`
-re-displays the exact decision. Direct `--duration/--scenes/--profile` planning
-remains a compatibility path, not the default title-only workflow.
+prevent a stale card from authorizing a changed plan. `project:plan -- <slug>
+--json` with no other flag is a read-only display of the resolved decision.
+Re-running it with `--scenario=` re-selects; when the option and its fingerprint
+are unchanged this is idempotent and preserves `resolvedAt`/`selectedAt`, so a
+`planDecision` already copied into a concept selection stays valid. Direct
+`--duration/--scenes/--profile` planning remains a compatibility path, not the
+default title-only workflow.
+
+Do not hand-author the scenario input from prose. `project:scenarios` reports
+every violation it finds in one run, and the exact per-option floors
+(`minLocalMotionTargets` and friends) come from `profilePromise` rather than a
+formula you have to rediscover. `localMotionTargets[].preset` and
+`sourcePackages[].strategy` are drawn from the same executable vocabulary the
+storyboard compiler uses, so a plan that passes this gate cannot become
+unexecutable at compile time.
 
 The profile has both ceilings and floors. Motion/image budgets cap spending and
 complexity. `profilePromise` requires the storyboard to meet the selected
