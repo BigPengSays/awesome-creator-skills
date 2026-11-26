@@ -50,10 +50,12 @@ intent, exception, or Style Profile change invalidates the approval.
 This contract does not add a fourth gate. `project:storyboard` writes
 `motion-language-card.json`. At the existing story-specific style and fictional
 voice gate, show that card beside the style sample, voice audition, and 3–5
-second proof. `project:style-proof` must bind both fingerprints. On explicit approval,
-`approve-style-voice` writes `motion-approval.json` with the human note, Style
-Profile binding, both motion fingerprints, style-proof plan fingerprint, and
-style-proof artifact hash.
+second proof. `project:style-proof` must bind both fingerprints. On explicit
+approval of the current displayed review request,
+`project:visual-review ... approve --receipt=<host-attributed-receipt>` writes
+`motion-approval.json` with the reviewer, receipt fingerprint, human note,
+Style Profile binding, both motion fingerprints, and current visual-blueprint
+artifact hash. A free-text `approve-style-voice` call cannot create this record.
 
 `project:assets-ready` rejects a missing or semantically stale motion approval.
 Directing-only revisions may preserve the human approval, but changed exact
@@ -80,3 +82,10 @@ together and pass the six contract checks only with current evidence:
 One attractive style sample is not whole-film motion proof. The final quality
 target binds the exact contract, runtime surface, scenes, events, transitions,
 editorial fingerprint, and participating asset hashes.
+
+The whole-film target is temporal-bound: it must carry a current
+fingerprint-bound motion strip sampled across the film's proof moments, and
+the schema-v4 scaffold refuses to generate, render, or record a review when
+that strip is missing or stale. Multi-actor narration additionally requires
+every active actor to own a trajectory/occlusion contract covering the
+narration window; a single endpoint crop can never stand in for those checks.
